@@ -31,4 +31,6 @@
   C:\Users\X421\AppData\Local\Arm\Packs\Keil\STM32F4xx_DFP\2.17.1\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr.h \
   C:\Users\X421\AppData\Local\Arm\Packs\Keil\STM32F4xx_DFP\2.17.1\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr_ex.h \
   C:\Users\X421\AppData\Local\Arm\Packs\Keil\STM32F4xx_DFP\2.17.1\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_uart.h \
-  C:\Users\X421\AppData\Local\Arm\Packs\Keil\STM32F4xx_DFP\2.17.1\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_usart.h
+  C:\Users\X421\AppData\Local\Arm\Packs\Keil\STM32F4xx_DFP\2.17.1\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_usart.h \
+  C:\Users\X421\AppData\Local\Arm\Packs\Keil\MDK-Middleware\7.16.0\Board\Board_Buttons.h \
+  C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdio.h
