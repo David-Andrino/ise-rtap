@@ -19,6 +19,12 @@
 /* ARM::CMSIS:RTOS2:Keil RTX5:Library:5.5.4 */
 #define RTE_CMSIS_RTOS2                 /* CMSIS-RTOS2 */
         #define RTE_CMSIS_RTOS2_RTX5            /* CMSIS-RTOS2 Keil RTX5 */
+/* Keil.ARM Compiler::Compiler:Event Recorder:DAP:1.5.1 */
+#define RTE_Compiler_EventRecorder
+          #define RTE_Compiler_EventRecorder_DAP
+/* Keil.ARM Compiler::Compiler:I/O:STDOUT:ITM:1.2.0 */
+#define RTE_Compiler_IO_STDOUT          /* Compiler I/O: STDOUT */
+          #define RTE_Compiler_IO_STDOUT_ITM      /* Compiler I/O: STDOUT ITM */
 /* Keil::CMSIS Driver:USART:2.16 */
 #define RTE_Drivers_USART1              /* Driver USART1 */
         #define RTE_Drivers_USART2              /* Driver USART2 */

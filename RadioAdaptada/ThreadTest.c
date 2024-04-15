@@ -35,7 +35,6 @@ void ThreadTest (void *argument) {
 	osDelay(500);
 	
 	printf("========== SINTONIZAR FRECUENCIA ==========\n");
-	printf("========== PULSA ESPACIO ==========\n");
 	uint32_t freq = 97000;
 	osMessageQueuePut(mainToRadioQueue, &freq, NULL, osWaitForever);
 	
@@ -92,8 +91,9 @@ void ThreadTest (void *argument) {
 		printf("========== TEST INCORRECTO ==========\n");
 	}
 	
-	printf("========== ESPERAMOS 5 SEGUNDOS ==========\n");
-	osDelay(5000);
+	printf("========== ESPERAMOS 10 SEGUNDOS ==========\n");
+	osDelay(10000);
+	
 	
 	printf("========== APAGAMOS LA RADIO ==========\n");	
 	msgMainRadio = POWEROFF;

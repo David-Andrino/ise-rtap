@@ -39,6 +39,7 @@ int Init_MP3 (void) {
 }
  
 void ThreadMP3(void *argument) {
+	//Set volume to max (30)
 	USARTcmd[3] = 0x06;
 	USARTcmd[6] = 0x1E;
 	USARTdrv->Send(USARTcmd,USART_LEN);
