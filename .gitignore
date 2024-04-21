@@ -1,0 +1,6 @@
+.vscode/
+**/Objects/
+**/Listings/
+**/DebugConfig/
+**/*.uvguix.*
+**/*.scvd
