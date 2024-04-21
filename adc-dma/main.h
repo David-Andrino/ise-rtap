@@ -46,8 +46,6 @@
 /* Exported functions ------------------------------------------------------- */
   /* Exported thread functions,  
   Example: extern void app_main (void *arg); */
-  
-extern uint8_t guarreria;
 
 #endif /* __MAIN_H */
 

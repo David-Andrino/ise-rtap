@@ -1,6 +1,5 @@
 #include "../main.h"
 #include "adc.h"
-#include <Board_LED.h>
 
 #define ADC_GPIO GPIOA
 #define ADC_PIN  GPIO_PIN_3
@@ -20,14 +19,19 @@ static int adc_tim_init(void);
 static int tmp_tim_init(void);
 static int adc_dma_init(void);
 
-static void adc_dma_halfCallback(DMA_HandleTypeDef* hdma);
-static void adc_dma_fullCallback(DMA_HandleTypeDef* hdma);
+static sampling_Callback halfCb = NULL;
+static sampling_Callback fullCb = NULL;
 
 void DMA2_Stream4_IRQHandler(void) {
     HAL_DMA_IRQHandler(&hdma);
 }    
 
-int sampling_init() {
+int sampling_init(sampling_Callback firstHalfCb, sampling_Callback secondHalfCb) {
+    if (firstHalfCb != NULL) 
+        halfCb = firstHalfCb;
+    if (secondHalfCb != NULL)
+        fullCb = secondHalfCb;
+    
     return tmp_tim_init() | 
            adc_tim_init() | 
            adc_init()     | 
@@ -104,8 +108,6 @@ static int tmp_tim_init(void) {
         return -1;
     }
     
-    LED_Initialize();
-    
     return 0;
 }
 
@@ -181,11 +183,10 @@ void sampling_stop(void) {
 }
 
 void HAL_ADC_ConvHalfCpltCallback(ADC_HandleTypeDef* hadc) {
-
+    if (halfCb != NULL) halfCb();
 }
 
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc) {
-    guarreria = 2;
-    sampling_stop();
+    if (fullCb != NULL) fullCb();
 }
 

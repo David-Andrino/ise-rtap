@@ -40,8 +40,8 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "adc/adc.h"
-#include <string.h>
-#include <stdio.h>
+#include "adc/test-adc.h"
+// #include <EventRecorder.h>
 
 #ifdef _RTE_
 #include "RTE_Components.h"             // Component selection
@@ -81,17 +81,16 @@ uint32_t HAL_GetTick (void) {
   * @{
   */
   
-uint8_t guarreria = 0;
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
+
 /* Private function prototypes -----------------------------------------------*/
-static void      SystemClock_Config(void);
-static void      Error_Handler(void);
-static uint16_t  buffer[2048];
-static uint16_t* half_buf = &buffer[1024];
+static void SystemClock_Config(void);
+static void Error_Handler(void);
+static void samplingFullCb(void);
 
 /* Private functions ---------------------------------------------------------*/
 /**
@@ -101,7 +100,6 @@ static uint16_t* half_buf = &buffer[1024];
   */
 int main(void)
 {
-  memset(buffer, 0xFA, 2048 * sizeof(uint16_t));
   
   /* STM32F4xx HAL library initialization:
        - Configure the Flash prefetch, Flash preread and Buffer caches
@@ -117,6 +115,8 @@ int main(void)
   /* Configure the system clock to 168 MHz */
   SystemClock_Config();
   SystemCoreClockUpdate();
+  // EventRecorderInitialize(EventRecordAll, 1);  
+  
 
   /* Add your application code here
      */
@@ -132,18 +132,7 @@ int main(void)
   osKernelStart();
 #endif
 
-  int ret = sampling_init();
-  sampling_start(buffer, 2048);
-
-  while (!guarreria);
-
-  for (int i = 0; i < 64; i++) {
-      for (int j = 0; j < 32; j++) {
-        printf("%04.4X ", buffer[32*i + j]);
-        HAL_Delay(1);
-      }
-      printf("\n");
-  }
+  test_adc();
   
   /* Infinite loop */
   while (1)
@@ -263,5 +252,7 @@ void assert_failed(uint8_t* file, uint32_t line)
 /**
   * @}
   */ 
+  
+
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

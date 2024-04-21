@@ -201,7 +201,7 @@
             <NoZi2>0</NoZi2>
             <NoZi3>0</NoZi3>
             <NoZi4>0</NoZi4>
-            <NoZi5>0</NoZi5>
+            <NoZi5>1</NoZi5>
             <Ro1Chk>0</Ro1Chk>
             <Ro2Chk>0</Ro2Chk>
             <Ro3Chk>0</Ro3Chk>
@@ -403,6 +403,16 @@
               <FileType>5</FileType>
               <FilePath>.\adc\adc.h</FilePath>
             </File>
+            <File>
+              <FileName>test-adc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\adc\test-adc.c</FilePath>
+            </File>
+            <File>
+              <FileName>test-adc.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\adc\test-adc.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -446,7 +456,11 @@
       <component Cbundle="ARM Compiler" Cclass="Compiler" Cgroup="Event Recorder" Cvariant="DAP" Cvendor="Keil" Cversion="1.4.0" condition="Cortex-M Device">
         <package name="ARM_Compiler" schemaVersion="1.6.3" url="http://www.keil.com/pack/" vendor="Keil" version="1.6.3"/>
         <targetInfos>
-          <targetInfo name="Target 1"/>
+          <targetInfo name="Target 1">
+            <mem>
+              <RVCTZI>5</RVCTZI>
+            </mem>
+          </targetInfo>
         </targetInfos>
       </component>
       <component Cbundle="ARM Compiler" Cclass="Compiler" Cgroup="I/O" Csub="STDOUT" Cvariant="ITM" Cvendor="Keil" Cversion="1.2.0" condition="ARMCC Cortex-M with ITM">
