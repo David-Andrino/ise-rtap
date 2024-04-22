@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real Time Audio Processor</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="tab">
+        <td>
+            <a href="/index.html" style="padding: 14px 16px; color: black;">
+                <img src="imgs/RTAP.png" alt="Logo" style="height: 65px;">
+            </a>
+        </td>
+        <td>
+            <a href="/radio.html" style="padding: 14px 16px;color: black;">Radio</a>
+        </td>
+        <td>
+            <a href="/mp3.html" style="padding: 14px 16px;color: black;">MP3</a>
+        </td>
+        <td>
+            <a href="/filtros.html" style="padding: 14px 16px;color: black;">Filtros</a>
+        </td>
+        <td>
+            <p>16-07-24 19:49:50</p> <!-- Fecha y hora del RTC-->
+        </td>
+    </div>
+    <div id="paginaPrincipal" class="tabcontent" style="display:block;">
+        <h1 style="text-align: center;">Real Time Audio Processor</h1>
+        <table class="container">
+            <tr>
+                <th colspan="3">
+                    <p>Elige camino de audio:</p>
+                </th>
+                <th colspan="3">
+                    <p>Bajo Consumo:</p>
+                </th>
+                <th colspan="3">
+                    <p>Consumo:</p>
+                </th>
+            </tr>
+            <tr>
+                <td colspan="3" >
+                    <input type="radio" id="entrada_radio" name="entrada" value="radio" checked>
+                    <label for="entrada_radio" style="font-size: 20px;">Radio</label>
+
+                    <input type="radio" id="entrada_mp3" name="entrada" value="mp3">
+                    <label for="entrada_mp3" style="font-size: 20px;">MP3</label>
+                    <br><br>
+                    <input type="radio" id="salida_altavoz" name="salida" value="altavoz" checked>
+                    <label for="salida_altavoz" style="font-size: 20px;">Altavoz</label>
+
+                    <input type="radio" id="salida_cascos" name="salida" value="cascos">
+                    <label for="salida_cascos" style="font-size: 20px;">Cascos</label>
+                </td>
+                <td colspan="3">
+                    <!-- Rounded switch -->
+                    <label class="switch">
+                        <input type="checkbox">
+                        <span class="slider round"></span>
+                    </label>
+                </td>
+                <td colspan="3" class="gauge-column">
+                    <div class="gauge-container">
+                        <div id="jg1"></div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.4/raphael-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/justgage/1.2.9/justgage.min.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function (event) {
+            var maxx = 2;
+
+            var jg1 = new JustGage({
+                id: "jg1",
+                value: 1,
+                min: 0,
+                max: maxx,
+                title: "Score",
+                label: "",
+                pointer: true,
+                textRenderer: function (val) {
+                    return (val + ' A' );
+                },
+                onAnimationEnd: function () {
+                    console.log('f: onAnimationEnd()');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
