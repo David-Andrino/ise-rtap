@@ -71,7 +71,7 @@ int adc_tim_init(void) {
     __HAL_RCC_TIM2_CLK_ENABLE();
     htim.Instance = TIM2;
     
-    htim.Init.Prescaler = 4;
+    htim.Init.Prescaler = 9;
     htim.Init.Period = 174;
     
     if (HAL_TIM_Base_Init(&htim)) {

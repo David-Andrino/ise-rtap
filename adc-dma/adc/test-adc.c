@@ -26,6 +26,7 @@ void test_adc() {
         snprintf(line + 5*j, 6, "%04.4X ", buffer[32*i + j]);
       }
       printf("%s\n", line);
+      fflush(NULL);
       HAL_Delay(100);
   }
 }
