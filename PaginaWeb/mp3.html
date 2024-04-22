@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real Time Audio Processor</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="tab">
+    <td>
+        <a href="/index.html" style="padding: 14px 16px; color: black;">
+            <img src="imgs/RTAP.png" alt="Logo" style="height: 65px;">
+        </a>
+    </td>
+    <td>
+        <a href="/radio.html" style="padding: 14px 16px;color: black;">Radio</a>
+    </td>
+    <td>
+        <a href="/mp3.html" style="padding: 14px 16px;color: black;">MP3</a>
+    </td>
+    <td>
+        <a href="/filtros.html" style="padding: 14px 16px;color: black;">Filtros</a>
+    </td>
+    <td>
+        <p>16-07-24 19:49:50</p> <!-- Fecha y hora del RTC-->
+    </td>
+</div>
+    <div id="mp3" class="tabcontent" style="display:block;">
+        <h1 style="text-align: center;">Real Time Audio Processor</h1>
+        <table class="container">
+            <tr>
+                <th colspan="4">
+                    <p>Canciones:</p>
+                </th>
+                <th colspan="4">
+                    <p>Control:</p>
+                </th>
+                <th colspan="4">
+                    <p>Volumen:</p>
+                </th>
+                <th colspan="4">
+                    <p>Salida:</p>
+                </th>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <select name="canciones" id="listacaniones">
+                        <option value="default">Selecciona una canción</option>
+                        <option value="cancion1">Canción 1</option>
+                        <option value="cancion2">Canción 2</option>
+                        <option value="cancion3">Canción 3</option>
+                        <option value="cancion4">Canción 4</option>
+                        <option value="cancion5">Canción 5</option>
+                    </select>
+                </td>
+                <td colspan="4">
+                    <div class="control-container">
+                        <button type="button" class="botoncircular" style="margin-right: 5px;">
+                            <img src="imgs/play-pausex32.png" alt="pause-play" style="width: 60%; margin-top: 10%;">
+                        </button>
+                        <button type="button" class="botoncircular" style="margin-right: 5px;">
+                            <img src="imgs/prev-songx32.png" alt="prev-song" style="width: 60%; margin-top: 10%;">
+                        </button>
+
+                        <button type="button" class="botoncircular" style="margin-right: 5px;">
+                            <img src="imgs/next-songx32.png" alt="next-song" style="width: 60%; margin-top: 10%;">
+                        </button>
+                        <button type="button" class="botoncircular" style="margin-right: 5px;">
+                            <img src="imgs/loopx32.png" alt="loop-song" style="width: 60%; margin-top: 10%;">
+                        </button>
+                    </div>
+                </td>
+
+                <td colspan="4" >
+                    <input type="range" id="vol" name="vol" min="0" max="100">
+                    <button class="botoncircular" style="font-family: 'Noto Emoji'">&#128263</button>
+                </td>
+
+                <td colspan="4">
+                    <input type="radio" id="salida_altavoz" name="salida" value="altavoz" checked>
+                    <label for="salida_altavoz" style="font-size: 20px;">Altavoz</label>
+
+                    <input type="radio" id="salida_cascos" name="salida" value="cascos">
+                    <label for="salida_cascos" style="font-size: 20px; margin-top: 10%;">Cascos</label>
+                </td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>
