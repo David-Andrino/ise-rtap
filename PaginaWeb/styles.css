@@ -9,7 +9,7 @@
 .tab a{
   font-size: 150%;
   margin-right: 20px;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
   text-decoration: none;
 }
 
@@ -19,7 +19,7 @@
   font-size:100%;
   width: 100%;
   margin-right: 30px;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
 .tab button {
@@ -378,7 +378,7 @@ display: flex;
 
 .slider-container input[type="range"] {
   appearance: slider-vertical;
-  margin-right: -10px; /* Ajusta este valor según prefieras */
+  margin-right: -50px; /* Ajusta este valor según prefieras */
   /* Otros estilos según tus necesidades */
 }
 
@@ -386,5 +386,7 @@ display: flex;
   text-align: center;
   font-size: 12px;
   margin-top: 5px;
-  margin-left: 10%;
+  margin-left: 60%;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 60%;
 }
