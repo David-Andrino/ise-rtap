@@ -31,12 +31,12 @@ int sampling_init(sampling_Callback firstHalfCb, sampling_Callback secondHalfCb)
 
 static int adc_init(void) {
     __HAL_RCC_GPIOA_CLK_ENABLE();
-    GPIO_InitTypeDef gpioPA3 = {
-        .Pin = GPIO_PIN_3,
+    GPIO_InitTypeDef gpioPA6 = {
+        .Pin = GPIO_PIN_6,
         .Mode = GPIO_MODE_ANALOG,
         .Pull = GPIO_NOPULL
     };
-    HAL_GPIO_Init(GPIOA, &gpioPA3);
+    HAL_GPIO_Init(GPIOA, &gpioPA6);
     
     __HAL_RCC_ADC1_CLK_ENABLE();
     hadc.Instance = ADC1;
@@ -56,7 +56,7 @@ static int adc_init(void) {
     }
     
     ADC_ChannelConfTypeDef sConfig = { 
-        .Channel      = ADC_CHANNEL_3,
+        .Channel      = ADC_CHANNEL_6,
         .Rank         = 1,
         .SamplingTime = ADC_SAMPLETIME_56CYCLES
     };
@@ -71,8 +71,8 @@ int adc_tim_init(void) {
     __HAL_RCC_TIM2_CLK_ENABLE();
     htim.Instance = TIM2;
     
-    htim.Init.Prescaler = 9;
-    htim.Init.Period = 174;
+    htim.Init.Prescaler = 44;
+    htim.Init.Period = 99;
     
     if (HAL_TIM_Base_Init(&htim)) {
         return -1;

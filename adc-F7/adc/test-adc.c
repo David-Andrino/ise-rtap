@@ -5,7 +5,7 @@
 #include <string.h>
 #include <stdio.h>
 
-static int done = 0;
+static volatile int done = 0;
 static uint16_t  buffer[2048];
 static uint16_t* half_buf = &buffer[1024];
 
@@ -14,6 +14,7 @@ static int tmp_tim_init(void);
 static TIM_HandleTypeDef htmptim = { 0 };
 
 void test_adc() {
+  memset(buffer, 0xFA, 2048);
   tmp_tim_init();
   int ret = sampling_init(NULL, samplingFullCb);
   sampling_start(buffer, 2048);
