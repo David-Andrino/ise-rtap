@@ -1,0 +1,392 @@
+.tab {
+  overflow: hidden;
+  border:1px solid #ccc;
+  background-color: #f1f1f1;
+  display: flex;
+  align-items: center;
+}
+
+.tab a{
+  font-size: 150%;
+  margin-right: 20px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  text-decoration: none;
+}
+
+.tab p {
+  position: relative;
+  text-align: right; /* Alinea el texto a la derecha */
+  font-size:100%;
+  width: 100%;
+  margin-right: 30px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.tab button:hover {
+  background-color: #ddd;
+}
+
+.tab button.active {
+  background-color: #ccc;
+}
+
+/* Estilo de los contenidos de las pestañas */
+.tabcontent {
+  display: none;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-top: none;
+  font-size: x-large;
+}
+
+
+/* Estilo para ocultar los inputs tipo radio */
+input[type="radio"] {
+  display: none;
+}
+
+/* Estilo para los labels de los inputs tipo radio */
+input[type="radio"] + label {
+  display: inline-block;
+  margin-right: 10px; /* Espacio entre cada radio button */
+  padding: 8px 12px; /* Espacio dentro del label */
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Estilo para los labels de los inputs tipo radio cuando están seleccionados */
+input[type="radio"]:checked + label {
+  background-color: #007bff; /* Color de fondo cuando está seleccionado */
+  color: rgb(255, 255, 255); /* Color del texto cuando está seleccionado */
+}
+
+/* Estilo para el encabezado h1 */
+h1 {
+  font-family:'Courier New', Courier, monospace;
+  font-size: 35px; /* Tamaño de fuente */
+  font-weight: bold; /* Grosor de la fuente */
+  color: #333; /* Color del texto */
+  margin-bottom: 10px; /* Espacio debajo del encabezado */
+}
+
+/* Estilo para el párrafo p */
+p {
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 20px; /* Tamaño de fuente */
+  line-height: 1.5; /* Altura de línea */
+  color: #000000; /* Color del texto */
+  margin-bottom: 20px; /* Espacio debajo del párrafo */
+}
+
+.container {
+    text-align: center; /* Centra los elementos horizontalmente */
+}
+
+.inputs-container {
+    display: flex;
+    flex-direction: column; /* Apila los elementos verticalmente */
+    align-items: center; /* Centra los elementos horizontalmente */
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+table {
+  width: calc(100% - 40px);
+}
+
+td,th{
+  width: 30%;
+  padding: 0 50px;
+}
+
+input:checked + .slider {
+    background-color: #2196F3;
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+    border-radius: 34px;
+
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.container table {
+    width: 100%;
+}
+
+.container td {
+    text-align: center;
+}
+
+.gauge-column {
+    align-items: center;
+    justify-content: center;
+    margin: 50px;
+}
+
+.gauge-container {
+    height: 100%; /* Ajusta la altura para alinear verticalmente con el texto "Consumo:" */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.botonsint {
+  display: inline-block;
+  font-size: 16px;
+  padding: 10px 20px;
+  color: #030303;
+  background-color: white;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  text-align: center;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+  margin-top: 5%;
+}
+
+.botonsint:hover {
+  background-color: #80c1f7;
+  cursor: pointer;
+  color: white;
+}
+
+
+.botonsint:active {
+  background-color: #111;
+  transform: scale(0.9);
+  cursor: pointer;
+  background-color: #2196F3;
+  color: white;
+}
+
+.botoncircular {
+  display: inline-block;
+  font-size: 24px;
+  width: 50px;
+  height: 50px;
+  color: #030303;
+  background-color: white;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  text-align: center;
+  line-height: 25px;
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+
+.botoncircular:hover {
+  background-color: #80c1f7;
+  cursor: pointer;
+  color: white;
+}
+
+
+.botoncircular:active {
+  background-color: #111;
+  transform: scale(0.9);
+  cursor: pointer;
+  background-color: #2196F3;
+  color: white;
+}
+
+.control-container{
+display: flex;
+}
+
+.play_contain {
+	width: 50px;
+	height: 50px;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+
+	transform: translate(-50%, -50%);
+	-webkit-transform: translate(-50%, -50%);
+}
+
+.play_btn {
+	background-color: transparent;
+	width: 50px;
+	height: 50px;
+	cursor: pointer;
+
+	-o-transition:.25s;
+	-ms-transition:.25s;
+	-moz-transition:.25s;
+	-webkit-transition:.25s;
+	transition:.25s;
+}
+
+.play_btn span {
+	background-color: #fff;
+	width: 100%;
+	height: 2px;
+	position: absolute;
+
+	-ms-transform-origin: 0% 0%;
+	-webkit-transform-origin: 0% 0%;
+	transform-origin: 0% 0%;
+
+	-o-transition:.25s;
+	-ms-transition:.25s;
+	-moz-transition:.25s;
+	-webkit-transition:.25s;
+	transition:.25s;
+}
+
+.play_btn span:nth-child(1) {
+	top: 25%;
+	left: 50%;
+
+	transform: rotate(30deg)translate(-50%, -50%);
+	-webkit-transform: rotate(30deg)translate(-50%, -50%);
+
+	transition-timing-function: cubic-bezier(.75,0,.9,1);
+	-webkit-transition-timing-function: cubic-bezier(.75,0,.9,1);
+}
+
+.trigger .play_btn span:nth-child(1) {
+	top: 50% !important;
+	left: 70% !important;
+
+	transform: rotate(-90deg)translate(-50%, -50%) !important;
+	-webkit-transform: rotate(-90deg)translate(-50%, -50%) !important;
+}
+
+.play_btn span:nth-child(2) {
+	top: 50%;
+	left: 5%;
+
+	transform: rotate(90deg)translate(-50%, -50%);
+	-webkit-transform: rotate(90deg)translate(-50%, -50%);
+
+	transition-timing-function: cubic-bezier(0.5,0.5,0.25,1.5);
+	-webkit-transition-timing-function: cubic-bezier(0.5,0.5,0.25,1.5);
+}
+
+.trigger .play_btn span:nth-child(2) {
+	top: 50% !important;
+	left: 30% !important;
+
+	transform: rotate(90deg)translate(-50%, -50%) !important;
+	-webkit-transform: rotate(90deg)translate(-50%, -50%) !important;
+
+	-webkit-transition-delay: .5s;
+	transition-delay: .5s;
+}
+
+.play_btn span:nth-child(3) {
+	top: 75%;
+	left: 50%;
+
+	transform: rotate(-30deg)translate(-50%, -50%);
+	-webkit-transform: rotate(-30deg)translate(-50%, -50%);
+
+	transition-timing-function: cubic-bezier(.75,0,.9,1);
+	-webkit-transition-timing-function: cubic-bezier(.75,0,.9,1);
+}
+
+.trigger .play_btn span:nth-child(3) {
+	top: 50% !important;
+	left: 70% !important;
+
+	transform: rotate(90deg)translate(-50%, -50%) !important;
+	-webkit-transform: rotate(90deg)translate(-50%, -50%) !important;
+
+	-webkit-transition-delay: .25s;
+	transition-delay: .25s;
+}
+
+.slider-row {
+  display: flex;
+  flex-direction: row;
+}
+.slider-row input[type="range"] {
+  margin: 0;
+}
+
+.slider-container {
+  display: flex;
+  gap: 0; /* Sin espacio entre los sliders */
+}
+
+.slider-container input[type="range"] {
+  appearance: slider-vertical;
+  margin-right: -50px; /* Ajusta este valor según prefieras */
+  /* Otros estilos según tus necesidades */
+}
+
+.slider-label {
+  text-align: center;
+  font-size: 12px;
+  margin-top: 5px;
+  margin-left: 60%;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 60%;
+}
