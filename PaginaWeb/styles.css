@@ -390,3 +390,11 @@ display: flex;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   font-size: 60%;
 }
+
+input[type=text], select, textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  resize: vertical;
+}
