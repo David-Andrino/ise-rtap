@@ -16,8 +16,8 @@
  * DMA, copia dichas medidas a un buffer.
  * 
  * Perifericos utilizados:
- *   - GPIO PA3
- *   - ADC1 CH3
+ *   - GPIO PA6
+ *   - ADC1 CH6
  *   - TIM2
  *   - DMA2 Stream4
  * 
