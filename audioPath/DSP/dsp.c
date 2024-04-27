@@ -1,15 +1,16 @@
 #include "../main.h"
 #include "dsp.h"
 #include "arm_math.h"
+#include "../DSP/audioConfig.h"
 
 static TIM_HandleTypeDef htim = {0};
 
 int dsp_tim_init(void) {
-    __HAL_RCC_TIM2_CLK_ENABLE();
-    htim.Instance = TIM2;
+    __DSP_TIM_ENABLE();
+    htim.Instance = DSP_TIM_INSTANCE;
 
-    htim.Init.Prescaler = 9;
-    htim.Init.Period = 174;
+    htim.Init.Prescaler = DSP_TIM_PRESCALER;
+    htim.Init.Period =    DSP_TIM_PERIOD;
 
     if (HAL_TIM_Base_Init(&htim)) {
         return -1;

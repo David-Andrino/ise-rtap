@@ -1,6 +1,7 @@
 #include "adc.h"
 
 #include "../main.h"
+#include "../DSP/audioConfig.h"
 
 static ADC_HandleTypeDef hadc = {0};
 static DMA_HandleTypeDef hdma = {0};
@@ -13,7 +14,7 @@ static int adc_dma_init(void);
 static sampling_Callback halfCb = NULL;
 static sampling_Callback fullCb = NULL;
 
-void DMA2_Stream4_IRQHandler(void) { HAL_DMA_IRQHandler(&hdma); }
+void SAMPLING_DMA_ISR(void) { HAL_DMA_IRQHandler(&hdma); }
 
 int sampling_init(sampling_Callback firstHalfCb,
                   sampling_Callback secondHalfCb) {
@@ -26,19 +27,19 @@ int sampling_init(sampling_Callback firstHalfCb,
 }
 
 static int adc_init(void) {
-    __HAL_RCC_GPIOA_CLK_ENABLE();
-    GPIO_InitTypeDef gpioPA3
-        = {.Pin = GPIO_PIN_3, .Mode = GPIO_MODE_ANALOG, .Pull = GPIO_NOPULL};
-    HAL_GPIO_Init(GPIOA, &gpioPA3);
+    __SAMPLING_GPIO_ENABLE();
+    GPIO_InitTypeDef gpioADC
+        = {.Pin = SAMPLING_GPIO_PIN, .Mode = GPIO_MODE_ANALOG, .Pull = GPIO_NOPULL};
+    HAL_GPIO_Init(SAMPLING_GPIO_PORT, &gpioADC);
 
-    __HAL_RCC_ADC1_CLK_ENABLE();
-    hadc.Instance = ADC1;
+    __SAMPLING_ADC_ENABLE();
+    hadc.Instance = SAMPLING_ADC;
     hadc.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV8;
     hadc.Init.Resolution = ADC_RESOLUTION_12B;
     hadc.Init.ScanConvMode = DISABLE;
     hadc.Init.ContinuousConvMode = DISABLE;
     hadc.Init.DiscontinuousConvMode = DISABLE;
-    hadc.Init.ExternalTrigConv = ADC_EXTERNALTRIGCONV_T2_TRGO;
+    hadc.Init.ExternalTrigConv = SAMPLING_DAC_TRIGGER;
     hadc.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_RISING;
     hadc.Init.DataAlign = ADC_DATAALIGN_RIGHT;
     hadc.Init.NbrOfConversion = 1;
@@ -48,7 +49,7 @@ static int adc_init(void) {
         return -1;
     }
 
-    ADC_ChannelConfTypeDef sConfig = {.Channel = ADC_CHANNEL_3,
+    ADC_ChannelConfTypeDef sConfig = {.Channel = SAMPLING_ADC_CHANNEL,
                                       .Rank = 1,
                                       .SamplingTime = ADC_SAMPLETIME_56CYCLES};
     if (HAL_ADC_ConfigChannel(&hadc, &sConfig)) {
@@ -60,15 +61,15 @@ static int adc_init(void) {
 
 static int adc_dma_init() {
     /* DMA controller clock enable */
-    __HAL_RCC_DMA2_CLK_ENABLE();
+    __SAMPLING_DMA_ENABLE();
 
     /* DMA interrupt init */
     /* DMA2_Stream4_IRQn interrupt configuration */
-    HAL_NVIC_SetPriority(DMA2_Stream4_IRQn, 0, 0);
-    HAL_NVIC_EnableIRQ(DMA2_Stream4_IRQn);
+    HAL_NVIC_SetPriority(SAMPLING_DMA_IRQn, 0, 0);
+    HAL_NVIC_EnableIRQ(SAMPLING_DMA_IRQn);
 
-    hdma.Instance = DMA2_Stream4;
-    hdma.Init.Channel = DMA_CHANNEL_0;
+    hdma.Instance = SAMPLING_DMA_INSTANCE;
+    hdma.Init.Channel = SAMPLING_DMA_CHANNEL;
     hdma.Init.Direction = DMA_PERIPH_TO_MEMORY;
     hdma.Init.PeriphInc = DMA_PINC_DISABLE;
     hdma.Init.MemInc = DMA_MINC_ENABLE;
@@ -81,7 +82,7 @@ static int adc_dma_init() {
         return -1;
     }
 
-    __HAL_LINKDMA(&hadc, DMA_Handle, hdma);
+    __HAL_LINKDMA(&hadc, SAMPLING_DMA_HANDLE, hdma);
 
     return 0;
 }
