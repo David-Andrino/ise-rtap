@@ -1,7 +1,7 @@
 #include "adc.h"
 
-#include "../main.h"
 #include "../DSP/audioConfig.h"
+#include "../main.h"
 
 static ADC_HandleTypeDef hadc = {0};
 static DMA_HandleTypeDef hdma = {0};
@@ -28,8 +28,11 @@ int sampling_init(sampling_Callback firstHalfCb,
 
 static int adc_init(void) {
     __SAMPLING_GPIO_ENABLE();
-    GPIO_InitTypeDef gpioADC
-        = {.Pin = SAMPLING_GPIO_PIN, .Mode = GPIO_MODE_ANALOG, .Pull = GPIO_NOPULL};
+    GPIO_InitTypeDef gpioADC = {
+        .Pin = SAMPLING_GPIO_PIN,
+        .Mode = GPIO_MODE_ANALOG,
+        .Pull = GPIO_NOPULL,
+    };
     HAL_GPIO_Init(SAMPLING_GPIO_PORT, &gpioADC);
 
     __SAMPLING_ADC_ENABLE();

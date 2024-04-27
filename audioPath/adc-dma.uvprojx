@@ -448,6 +448,11 @@
               <FileType>5</FileType>
               <FilePath>.\DSP\dspThread.h</FilePath>
             </File>
+            <File>
+              <FileName>audioConfig.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\dsp\audioConfig.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

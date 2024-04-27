@@ -18,13 +18,16 @@ static void fullBufferCb(void);
 
 // BORRAR: TEST
 static TIM_HandleTypeDef htmptim = {0};
+
 static int tmp_tim_init(void) {
     __HAL_RCC_GPIOD_CLK_ENABLE();
     __HAL_RCC_TIM4_CLK_ENABLE();
-    GPIO_InitTypeDef tmpTimGPIO = {.Pin = GPIO_PIN_12,
-                                   .Mode = GPIO_MODE_AF_PP,
-                                   .Alternate = GPIO_AF2_TIM4,
-                                   .Pull = GPIO_NOPULL};
+    GPIO_InitTypeDef tmpTimGPIO = {
+                      .Pin = GPIO_PIN_12,
+                      .Mode = GPIO_MODE_AF_PP,
+                      .Alternate = GPIO_AF2_TIM4,
+                      .Pull = GPIO_NOPULL,
+    };
     HAL_GPIO_Init(GPIOD, &tmpTimGPIO);
 
     htmptim.Instance = TIM4;
@@ -34,9 +37,11 @@ static int tmp_tim_init(void) {
         return -1;
     }
 
-    TIM_OC_InitTypeDef tmpTimChannel = {.OCMode = TIM_OCMODE_TOGGLE,
-                                        .OCPolarity = TIM_OCPOLARITY_HIGH,
-                                        .OCFastMode = TIM_OCFAST_DISABLE};
+    TIM_OC_InitTypeDef tmpTimChannel = {
+                      .OCMode = TIM_OCMODE_TOGGLE,
+                      .OCPolarity = TIM_OCPOLARITY_HIGH,
+                      .OCFastMode = TIM_OCFAST_DISABLE,
+    };
 
     if (HAL_TIM_OC_ConfigChannel(&htmptim, &tmpTimChannel, TIM_CHANNEL_1)) {
         return -1;
@@ -75,7 +80,7 @@ int DSP_Init(void) {
     if (dsp_tim_init() != 0) {
         return -1;
     }
-    
+
     // BORRAR: TEST
     tmp_tim_init();
     // FIN TEST
@@ -83,20 +88,17 @@ int DSP_Init(void) {
     return 0;
 }
 
-void halfBufferCb(void) {
-    osThreadFlagsSet(dsp_tid, HALF_FLAG);
-}
+void halfBufferCb(void) { osThreadFlagsSet(dsp_tid, HALF_FLAG); }
 
-void fullBufferCb(void) {
-    osThreadFlagsSet(dsp_tid, FULL_FLAG);
-}
+void fullBufferCb(void) { osThreadFlagsSet(dsp_tid, FULL_FLAG); }
 
 static void DSP_Thread(void* arg) {
     uint16_t* in;
     uint16_t* out;
 
     while (1) {
-        int flag = osThreadFlagsWait(HALF_FLAG | FULL_FLAG, osFlagsWaitAny, osWaitForever);
+        int flag = osThreadFlagsWait(HALF_FLAG | FULL_FLAG, osFlagsWaitAny,
+                                     osWaitForever);
         if (flag == HALF_FLAG) {
             in = inBuffer;
             out = outBuffer;
@@ -105,6 +107,5 @@ static void DSP_Thread(void* arg) {
             out = &outBuffer[DSP_BUFSIZE / 2];
         }
         processSamples(in, out);
-        
     }
 }

@@ -37,8 +37,7 @@ typedef void (*sampling_Callback)(void);
  *                     procesar la segunda mitad del buffer
  * @return 0 si se ha realizado correctamente. Otro valor si no.
  **/
-int sampling_init(sampling_Callback firstHalfCb,
-                  sampling_Callback secondHalfCb);
+int sampling_init(sampling_Callback firstHalfCb, sampling_Callback secondHalfCb);
 
 /**
  * Arranca la adquisicion de datos sobre el buffer.
@@ -49,8 +48,8 @@ int sampling_init(sampling_Callback firstHalfCb,
 int sampling_start(uint16_t* buffer, uint32_t bufSize);
 
 /**
-* Detiene la adquisicion de datos.
-**/
+ * Detiene la adquisicion de datos.
+ **/
 void sampling_stop(void);
 
 #endif
