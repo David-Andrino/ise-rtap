@@ -36,7 +36,7 @@ int dsp_tim_init(void) {
 }
 
 void processSamples(uint16_t* in, uint16_t* out) {
-    static uint16_t yprev = 0x9000;
+    static uint16_t yprev = 0;
     
     for (int i = 0; i < DSP_BUFSIZE / 2; i++) {
         yprev = (in[i] + yprev)/2;

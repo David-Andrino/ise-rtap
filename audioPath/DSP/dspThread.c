@@ -28,7 +28,7 @@ static int tmp_tim_init(void) {
     HAL_GPIO_Init(GPIOD, &tmpTimGPIO);
 
     htmptim.Instance = TIM4;
-    htmptim.Init.Prescaler = 999;
+    htmptim.Init.Prescaler = 1999;
     htmptim.Init.Period = 20;
     if (HAL_TIM_OC_Init(&htmptim)) {
         return -1;
