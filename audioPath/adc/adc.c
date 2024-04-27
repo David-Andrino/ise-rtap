@@ -14,7 +14,7 @@ static int adc_dma_init(void);
 static sampling_Callback halfCb = NULL;
 static sampling_Callback fullCb = NULL;
 
-void SAMPLING_DMA_ISR(void) { HAL_DMA_IRQHandler(&hdma); }
+void DMA2_Stream4_IRQHandler(void) { HAL_DMA_IRQHandler(&hdma); }
 
 int sampling_init(sampling_Callback firstHalfCb,
                   sampling_Callback secondHalfCb) {
@@ -49,9 +49,11 @@ static int adc_init(void) {
         return -1;
     }
 
-    ADC_ChannelConfTypeDef sConfig = {.Channel = SAMPLING_ADC_CHANNEL,
-                                      .Rank = 1,
-                                      .SamplingTime = ADC_SAMPLETIME_56CYCLES};
+    ADC_ChannelConfTypeDef sConfig = {
+        .Channel = SAMPLING_ADC_CHANNEL,
+        .Rank = 1,
+        .SamplingTime = ADC_SAMPLETIME_56CYCLES,
+    };
     if (HAL_ADC_ConfigChannel(&hadc, &sConfig)) {
         return -1;
     }
