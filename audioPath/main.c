@@ -41,7 +41,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 
-#include "DSP/dsp.h"
+#include "DSP/dspThread.h"
 // #include <EventRecorder.h>
 
 #ifdef _RTE_

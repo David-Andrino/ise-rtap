@@ -3,13 +3,11 @@
 #include "../main.h"
 
 static ADC_HandleTypeDef hadc = {0};
-static TIM_HandleTypeDef htim = {0};
 static DMA_HandleTypeDef hdma = {0};
 
 static int convs = 0, value = 0;
 
 static int adc_init(void);
-static int adc_tim_init(void);
 static int adc_dma_init(void);
 
 static sampling_Callback halfCb = NULL;
@@ -24,7 +22,7 @@ int sampling_init(sampling_Callback firstHalfCb,
     if (secondHalfCb != NULL)
         fullCb = secondHalfCb;
 
-    return adc_tim_init() | adc_init() | adc_dma_init();
+    return adc_init() | adc_dma_init();
 }
 
 static int adc_init(void) {
@@ -54,37 +52,6 @@ static int adc_init(void) {
                                       .Rank = 1,
                                       .SamplingTime = ADC_SAMPLETIME_56CYCLES};
     if (HAL_ADC_ConfigChannel(&hadc, &sConfig)) {
-        return -1;
-    }
-
-    return 0;
-}
-
-int adc_tim_init(void) {
-    __HAL_RCC_TIM2_CLK_ENABLE();
-    htim.Instance = TIM2;
-
-    htim.Init.Prescaler = 9;
-    htim.Init.Period = 174;
-
-    if (HAL_TIM_Base_Init(&htim)) {
-        return -1;
-    }
-
-    TIM_ClockConfigTypeDef sClockConfig
-        = {.ClockSource = TIM_CLOCKSOURCE_INTERNAL};
-    if (HAL_TIM_ConfigClockSource(&htim, &sClockConfig)) {
-        return -1;
-    }
-
-    TIM_MasterConfigTypeDef sMasterConfig
-        = {.MasterOutputTrigger = TIM_TRGO_UPDATE,
-           .MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE};
-    if (HAL_TIMEx_MasterConfigSynchronization(&htim, &sMasterConfig)) {
-        return -1;
-    }
-
-    if (HAL_TIM_Base_Start(&htim)) {
         return -1;
     }
 

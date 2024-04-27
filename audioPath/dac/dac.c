@@ -2,15 +2,13 @@
 
 #include "../main.h"
 
-static TIM_HandleTypeDef htim = {0};
 static DAC_HandleTypeDef hdac = {0};
 static DMA_HandleTypeDef hdma = {0};
 
 static int dac_init(void);
-static int dac_tim_init(void);
 static int dac_dma_init(void);
 
-int audio_init() { return dac_tim_init() | dac_init() | dac_dma_init(); }
+int audio_init() { return dac_init() | dac_dma_init(); }
 
 static int dac_init(void) {
     __HAL_RCC_GPIOA_CLK_ENABLE();
@@ -27,37 +25,6 @@ static int dac_init(void) {
            .DAC_OutputBuffer = DAC_OUTPUTBUFFER_ENABLE};
 
     HAL_DAC_ConfigChannel(&hdac, &dacChannel, DAC_CHANNEL_1);
-
-    return 0;
-}
-
-int dac_tim_init(void) {
-    __HAL_RCC_TIM2_CLK_ENABLE();
-    htim.Instance = TIM2;
-
-    htim.Init.Prescaler = 9;
-    htim.Init.Period = 174;
-
-    if (HAL_TIM_Base_Init(&htim)) {
-        return -1;
-    }
-
-    TIM_ClockConfigTypeDef sClockConfig
-        = {.ClockSource = TIM_CLOCKSOURCE_INTERNAL};
-    if (HAL_TIM_ConfigClockSource(&htim, &sClockConfig)) {
-        return -1;
-    }
-
-    TIM_MasterConfigTypeDef sMasterConfig
-        = {.MasterOutputTrigger = TIM_TRGO_UPDATE,
-           .MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE};
-    if (HAL_TIMEx_MasterConfigSynchronization(&htim, &sMasterConfig)) {
-        return -1;
-    }
-
-    if (HAL_TIM_Base_Start(&htim)) {
-        return -1;
-    }
 
     return 0;
 }

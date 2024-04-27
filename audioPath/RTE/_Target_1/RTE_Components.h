@@ -34,6 +34,8 @@
 #define RTE_DEVICE_HAL_COMMON
 /* Keil::Device:STM32Cube HAL:Cortex:1.8.1 */
 #define RTE_DEVICE_HAL_CORTEX
+/* Keil::Device:STM32Cube HAL:DAC:1.8.1 */
+#define RTE_DEVICE_HAL_DAC
 /* Keil::Device:STM32Cube HAL:DMA:1.8.1 */
 #define RTE_DEVICE_HAL_DMA
 /* Keil::Device:STM32Cube HAL:EXTI:1.8.1 */
