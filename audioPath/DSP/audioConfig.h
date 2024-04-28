@@ -1,6 +1,9 @@
 #ifndef AUDIO_CONFIG_H
 #define AUDIO_CONFIG_H
 
+// Tamano del buffer de procesado, el del adc y dac es el doble
+#define DSP_BUFSIZE 2048
+
 #define SAMPLING_GPIO_PIN        GPIO_PIN_3
 #define SAMPLING_GPIO_PORT       GPIOA
 #define SAMPLING_DMA_IRQn        DMA2_Stream4_IRQn

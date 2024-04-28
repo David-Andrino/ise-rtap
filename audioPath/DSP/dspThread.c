@@ -3,14 +3,15 @@
 #include "../adc/adc.h"
 #include "../dac/dac.h"
 #include "../main.h"
+#include "audioConfig.h"
 #include "dsp.h"
 
 #define HALF_FLAG 0x01
 #define FULL_FLAG 0x02
 
 static osThreadId_t dsp_tid;
-static uint16_t     inBuffer[DSP_BUFSIZE] = {0};
-static uint16_t     outBuffer[DSP_BUFSIZE] = {0};
+static uint16_t     inBuffer[2 * DSP_BUFSIZE] = {0};
+static uint16_t     outBuffer[2 * DSP_BUFSIZE] = {0};
 
 static void DSP_Thread(void* arg);
 static void halfBufferCb(void);
@@ -32,7 +33,7 @@ static int tmp_tim_init(void) {
 
     htmptim.Instance = TIM4;
     htmptim.Init.Prescaler = 1999;
-    htmptim.Init.Period = 20;
+    htmptim.Init.Period = 209;
     if (HAL_TIM_OC_Init(&htmptim)) {
         return -1;
     }
@@ -65,7 +66,7 @@ int DSP_Init(void) {
         return -1;
     }
 
-    if (sampling_start(inBuffer, DSP_BUFSIZE) != 0) {
+    if (sampling_start(inBuffer, 2 * DSP_BUFSIZE) != 0) {
         return -1;
     }
 
@@ -73,11 +74,11 @@ int DSP_Init(void) {
         return -1;
     }
 
-    if (audio_start(outBuffer, DSP_BUFSIZE) != 0) {
+    if (audio_start(outBuffer, 2 * DSP_BUFSIZE) != 0) {
         return -1;
     }
 
-    if (dsp_tim_init() != 0) {
+    if (dsp_init() != 0) {
         return -1;
     }
 
@@ -97,14 +98,13 @@ static void DSP_Thread(void* arg) {
     uint16_t* out;
 
     while (1) {
-        int flag = osThreadFlagsWait(HALF_FLAG | FULL_FLAG, osFlagsWaitAny,
-                                     osWaitForever);
+        int flag = osThreadFlagsWait(HALF_FLAG | FULL_FLAG, osFlagsWaitAny, osWaitForever);
         if (flag == HALF_FLAG) {
             in = inBuffer;
             out = outBuffer;
         } else {
-            in = &inBuffer[DSP_BUFSIZE / 2];
-            out = &outBuffer[DSP_BUFSIZE / 2];
+            in = &inBuffer[DSP_BUFSIZE];
+            out = &outBuffer[DSP_BUFSIZE];
         }
         processSamples(in, out);
     }

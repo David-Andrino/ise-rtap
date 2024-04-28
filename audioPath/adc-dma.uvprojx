@@ -453,6 +453,11 @@
               <FileType>5</FileType>
               <FilePath>.\dsp\audioConfig.h</FilePath>
             </File>
+            <File>
+              <FileName>eqCoefficients.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\DSP\eqCoefficients.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
