@@ -25,7 +25,7 @@ AlignConsecutiveDeclarations:
   AlignFunctionPointers: true
   PadOperators: false
 AlignConsecutiveMacros:
-  Enabled: false
+  Enabled: true
   AcrossEmptyLines: false
   AcrossComments: false
   AlignCompound: false
@@ -92,7 +92,7 @@ BreakBeforeTernaryOperators: true
 BreakConstructorInitializers: BeforeColon
 BreakInheritanceList: BeforeColon
 BreakStringLiterals: true
-ColumnLimit: 80
+ColumnLimit: 0
 CommentPragmas: "^ IWYU pragma:"
 CompactNamespaces: false
 ConstructorInitializerIndentWidth: 4
