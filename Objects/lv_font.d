@@ -1,0 +1,50 @@
+./objects/lv_font.o: \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\font\lv_font.c \
+  RTE\LVGL\lv_conf_cmsis.h RTE\_Target_1\Pre_Include_Global.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\font\lv_font.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\font\..\lv_conf_internal.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\font\..\lv_conf_kconfig.h \
+  lv_conf.h C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdint.h \
+  C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stddef.h \
+  C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdbool.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\font\lv_symbol_def.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\font\..\draw\lv_draw_buf.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\font\..\draw\..\misc\lv_area.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\font\..\draw\..\misc\..\lv_conf_internal.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\font\..\draw\..\misc\lv_types.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\font\..\draw\..\misc\lv_color.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\font\..\draw\..\misc\lv_assert.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\font\..\draw\..\misc\lv_log.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\font\..\draw\..\misc\..\stdlib\lv_mem.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\font\..\draw\..\misc\..\stdlib\..\lv_conf_internal.h \
+  C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\string.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\font\..\draw\..\misc\..\stdlib\..\misc\lv_types.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\font\..\draw\..\misc\lv_math.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\font\..\draw\..\misc\lv_palette.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\font\..\draw\..\misc\lv_color_op.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\font\..\draw\..\stdlib\lv_string.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\font\..\draw\lv_image_dsc.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\font\..\draw\..\lv_conf_internal.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\font\..\misc\lv_area.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\font\..\misc\lv_types.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\font\..\misc\cache\lv_cache.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\font\..\misc\cache\lv_cache_entry.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\font\..\misc\cache\..\..\osal\lv_os.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\font\..\misc\cache\..\..\osal\..\lv_conf_internal.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\font\..\misc\cache\..\..\osal\..\misc\lv_types.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\font\..\misc\cache\..\..\osal\lv_os_none.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\font\..\misc\cache\..\lv_types.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\font\..\misc\cache\lv_cache_private.h \
+  C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdlib.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\font\..\misc\cache\_lv_cache_lru_rb.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\font\..\misc\cache\lv_image_cache.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\font\..\misc\lv_text.h \
+  C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdarg.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\font\..\draw\..\misc\..\font\lv_font.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\font\..\draw\..\misc\..\stdlib\lv_sprintf.h \
+  C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\inttypes.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\font\..\misc\lv_utils.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\font\..\draw\..\misc\..\draw\lv_draw_buf.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\font\..\misc\lv_log.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\font\..\misc\lv_assert.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\font\..\stdlib\lv_string.h
