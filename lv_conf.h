@@ -79,6 +79,7 @@
  * - LV_OS_WINDOWS
  * - LV_OS_CUSTOM */
 #define LV_USE_OS   LV_OS_NONE
+//#define LV_USE_OS  LV_OS_CMSIS_RTOS2
 
 #if LV_USE_OS == LV_OS_CUSTOM
     #define LV_OS_CUSTOM_INCLUDE <stdint.h>

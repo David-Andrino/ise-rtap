@@ -5,6 +5,8 @@
 
 void lv_gui(void);
 //void lv_demo_widgets_start_slideshow(void);
+void async_cb(void * data);
+void consumo_async_cb(void * data);
 
 typedef struct{
 	uint8_t vol;					  		// Volumen general del sistema

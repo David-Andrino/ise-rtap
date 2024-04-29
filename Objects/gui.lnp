@@ -5,6 +5,7 @@
 ".\objects\stm32f7xx_it.o"
 ".\objects\tft.o"
 ".\objects\touchpad.o"
+".\objects\img_hand.o"
 ".\objects\ft6x06.o"
 ".\objects\otm8009a.o"
 ".\objects\stm32f769i_discovery.o"

@@ -1,4 +1,6 @@
 #include "gui.h"
+#include "stdio.h"
+#include "math.h"
 
 #if LV_USE_STDLIB_MALLOC == LV_STDLIB_BUILTIN && LV_MEM_SIZE < (38ul * 1024ul)
     #error Insufficient memory. Please set LV_MEM_SIZE to at least 38KB (38ul * 1024ul).  48KB is recommended.
@@ -17,6 +19,34 @@ typedef enum {
     DISP_LARGE,
 } disp_size_t;
 
+lv_obj_t * scale_consumo; 	// Tiene que ser global para modificarlo desde async_cb
+static lv_obj_t * needle_consumo;
+lv_obj_t * label_consumo;
+
+/**********************
+ *      Coeficientes
+ **********************/
+static lv_obj_t * label_coef;
+void async_cb(void * data){
+    char str[32]; /* Buffer to hold the string */
+		int *n = ((int*) data);
+    /* Format the new string. Replace this with your actual calculation result */
+    sprintf(str, "Coeficiente %d: %d", n[0], n[1]);
+
+    /* Set the new text */
+    lv_label_set_text(label_coef, str);
+}
+void consumo_async_cb(void * data){
+	char str[32]; /* Buffer to hold the string */
+	int *n = ((int*) data);
+	int consumo = abs(n[1] % 2000);
+	/* Format the new string. Replace this with your actual calculation result */
+	sprintf(str, "Consumo actual %d mA", consumo);
+
+	/* Set the new text */
+	lv_label_set_text(label_consumo, str);
+	lv_scale_set_line_needle_value(scale_consumo, needle_consumo, 80, consumo);
+}
 /**********************
  *  STATIC PROTOTYPES
  **********************/
@@ -24,6 +54,14 @@ static void home_create(lv_obj_t * parent);
 static void create_radio_content(lv_obj_t * tabview);
 static void create_mp3_content(lv_obj_t * tabview);
 static void create_filters_content(lv_obj_t * tabview);
+
+static void crear_panel_titulo      (lv_obj_t * container);
+static void crear_panel_consumo     (lv_obj_t * container);
+static void crear_panel_freq        (lv_obj_t * container);
+static void crear_panel_seek 				(lv_obj_t * container);
+static void crear_panel_salida 			(lv_obj_t * container);
+static void crear_panel_camino_audio(lv_obj_t * container);
+static void crear_panel_volumen     (lv_obj_t * container, lv_obj_t * vol_slider);
 
 static void ta_event_cb(lv_event_t * e);
 static void slider_event_cb(lv_event_t * e);
@@ -38,6 +76,9 @@ static void headphones_cb(lv_event_t * e) {}
 static void speakers_cb(lv_event_t * e) {}
 static void mute_cb(lv_event_t * e);
 static void save_cb(lv_event_t * e){}
+static void mp3_cb(lv_event_t * e){}
+static void radio_cb(lv_event_t * e){}
+
 /**********************
  *  STATIC VARIABLES
  **********************/
@@ -46,10 +87,12 @@ static disp_size_t disp_size;
 static lv_obj_t * tv;
 static lv_style_t style_text_muted;
 static lv_style_t style_title;
+static lv_style_t style_subtitle;
 static lv_style_t style_icon;
 static lv_style_t style_bullet;
 
 static const lv_font_t * font_large;
+static const lv_font_t * font_medium;
 static const lv_font_t * font_normal;
 
 static lv_obj_t * label_volumen;
@@ -68,6 +111,7 @@ static gui_data_t data = {
 void lv_gui(){
 	disp_size = DISP_LARGE;
 	font_large = LV_FONT_DEFAULT;
+	font_medium = LV_FONT_DEFAULT;
 	font_normal = LV_FONT_DEFAULT;
 	int32_t tab_h;
 	tab_h = 70;
@@ -76,6 +120,11 @@ void lv_gui(){
 		font_large     = &lv_font_montserrat_24;
 #else
         LV_LOG_WARN("LV_FONT_MONTSERRAT_24 is not enabled. Using LV_FONT_DEFAULT instead.");
+#endif
+#if LV_FONT_MONTSERRAT_18
+		font_medium     = &lv_font_montserrat_18;
+#else
+        LV_LOG_WARN("LV_FONT_MONTSERRAT_18 is not enabled. Using LV_FONT_DEFAULT instead.");
 #endif
 #if LV_FONT_MONTSERRAT_16
 		font_normal    = &lv_font_montserrat_16;
@@ -93,7 +142,10 @@ void lv_gui(){
 
 	lv_style_init(&style_title);
 	lv_style_set_text_font(&style_title, font_large);
-
+	
+	lv_style_init(&style_subtitle);
+	lv_style_set_text_font(&style_subtitle, font_medium);
+	
 	lv_style_init(&style_icon);
 	lv_style_set_text_color(&style_icon, lv_theme_get_color_primary(NULL));
 	lv_style_set_text_font(&style_icon, font_large);
@@ -131,235 +183,116 @@ void lv_gui(){
 	create_radio_content(t2);
 	create_mp3_content(t3);
 	create_filters_content(t4);
-//color_changer_create(tv);
+//  color_changer_create(tv);
 }
 
 
-static void home_create(lv_obj_t * parent){
-	lv_obj_t * panel1 = lv_obj_create(parent);
-	lv_obj_set_height(panel1, LV_SIZE_CONTENT);
-
-//    LV_IMAGE_DECLARE(img_demo_widgets_avatar);
-//    lv_obj_t * avatar = lv_image_create(panel1);
-//    lv_image_set_src(avatar, &img_demo_widgets_avatar);
-//    lv_image_set_src(avatar, "A:lvgl/demos/widgets/assets/avatar.png")
-
-	lv_obj_t * name = lv_label_create(panel1);
-	lv_label_set_text(name, TITLE);
-	lv_obj_add_style(name, &style_title, 0);
-
-	lv_obj_t * dsc = lv_label_create(panel1);
-	lv_obj_add_style(dsc, &style_text_muted, 0);
-	lv_label_set_text(dsc, "No se que poner pero queda bonito (Nombres ?)");
-	lv_label_set_long_mode(dsc, LV_LABEL_LONG_WRAP);
-
-	lv_obj_t * email_icn = lv_label_create(panel1);
-	lv_obj_add_style(email_icn, &style_icon, 0);
-	lv_label_set_text(email_icn, LV_SYMBOL_ENVELOPE);
-
-	lv_obj_t * email_label = lv_label_create(panel1);
-	lv_label_set_text(email_label, "david feo");
-
-	lv_obj_t * call_icn = lv_label_create(panel1);
-	lv_obj_add_style(call_icn, &style_icon, 0);
-	lv_label_set_text(call_icn, LV_SYMBOL_CALL);
-
-	lv_obj_t * call_label = lv_label_create(panel1);
-	lv_label_set_text(call_label, "o los nombres aqui? ");
-
-	lv_obj_t * invite_btn = lv_button_create(panel1);
-	lv_obj_add_state(invite_btn, LV_STATE_DISABLED);
-	lv_obj_set_height(invite_btn, LV_SIZE_CONTENT);
-
-	/*Create a keyboard*/
-	lv_obj_t * kb = lv_keyboard_create(lv_screen_active());
-	lv_obj_add_flag(kb, LV_OBJ_FLAG_HIDDEN);
-
-	/*Create the second panel*/
-	lv_obj_t * panel2 = lv_obj_create(parent);
-	lv_obj_set_height(panel2, LV_SIZE_CONTENT);
-
-	lv_obj_t * panel2_title = lv_label_create(panel2);
-	lv_label_set_text(panel2_title, "Elige camino de audio: ");
-	lv_obj_add_style(panel2_title, &style_title, 0);
-
-	lv_obj_t * salida_audio_label = lv_label_create(panel2);
-	lv_label_set_text(salida_audio_label, "MP3 o Cascos");
-	lv_obj_add_style(salida_audio_label, &style_text_muted, 0);
-
-	lv_obj_t * user_name = lv_textarea_create(panel2);
-	lv_textarea_set_one_line(user_name, true);
-	lv_textarea_set_placeholder_text(user_name, "Esto deberia ser un boton");
-	lv_obj_add_event_cb(user_name, ta_event_cb, LV_EVENT_ALL, kb);
-
-	lv_obj_t * audio_source_label = lv_label_create(panel2);
-	lv_label_set_text(audio_source_label, "Aqui va lo de altavoz o cascos");
-	lv_obj_add_style(audio_source_label, &style_text_muted, 0);
-
-	lv_obj_t * gender = lv_dropdown_create(panel2);
-	lv_dropdown_set_options_static(gender, "Deberia\nser\nun\nboton");
-
+static void home_create(lv_obj_t * tabview){
+	/* Titulo */
+	lv_obj_t * panel_title = lv_obj_create(tabview);
+	crear_panel_titulo(panel_title);
+	
+	/* Camino de audio */
+	lv_obj_t * panel_salida = lv_obj_create(tabview);
+	lv_obj_set_height(panel_salida, LV_SIZE_CONTENT);
+	lv_obj_set_width(panel_salida, LV_SIZE_CONTENT);
+	crear_panel_camino_audio(panel_salida);
+	
+//	/Create a keyboard /
+//	lv_obj_t * kb = lv_keyboard_create(lv_screen_active());
+//	lv_obj_add_flag(kb, LV_OBJ_FLAG_HIDDEN);
+//	lv_obj_add_event_cb(user_name, ta_event_cb, LV_EVENT_ALL, kb);
  
 	/*Create the third panel*/
-	lv_obj_t * panel3 = lv_obj_create(parent);
-	lv_obj_t * panel3_title = lv_label_create(panel3);
-	lv_label_set_text(panel3_title, "Consumo");
-	lv_obj_add_style(panel3_title, &style_title, 0);
+	lv_obj_t * panel_consumo = lv_obj_create(tabview);
+  crear_panel_consumo(panel_consumo);
+		
+//	lv_obj_t * label_bajo_consumo = lv_label_create(panel_consumo);
+//	lv_label_set_text(label_bajo_consumo, "Bajo consumo");
+//	lv_obj_add_style(label_bajo_consumo, &style_text_muted, 0);
 
-	lv_obj_t * consumo_label = lv_label_create(panel3);
-	lv_label_set_text(consumo_label, "Aqui va un widget");
-	lv_obj_add_style(consumo_label, &style_text_muted, 0);
-
-	lv_obj_t * slider1 = lv_slider_create(panel3);
-	lv_obj_set_width(slider1, LV_PCT(95));
-	lv_obj_add_event_cb(slider1, slider_event_cb, LV_EVENT_ALL, NULL);
-	lv_obj_add_flag(slider1, LV_OBJ_FLAG_SEND_DRAW_TASK_EVENTS);
-	lv_obj_refresh_ext_draw_size(slider1);
-
-	lv_obj_t * bajo_consumo_label = lv_label_create(panel3);
-	lv_label_set_text(bajo_consumo_label, "Bajo consumo");
-	lv_obj_add_style(bajo_consumo_label, &style_text_muted, 0);
-
-	lv_obj_t * sw1 = lv_switch_create(panel3);
-	
-	
-	static int32_t grid_main_col_dsc[] = {LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
+//	lv_obj_t * sw1 = lv_switch_create(panel_consumo);
+		
+	static int32_t grid_main_col_dsc[] = {LV_GRID_FR(1), LV_GRID_FR(2), LV_GRID_TEMPLATE_LAST};
 	static int32_t grid_main_row_dsc[] = {LV_GRID_CONTENT, LV_GRID_CONTENT, LV_GRID_TEMPLATE_LAST};
 
-	/*Create the top panel*/
-	static int32_t grid_1_col_dsc[] = {LV_GRID_CONTENT, 5, LV_GRID_CONTENT, LV_GRID_FR(2), LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
-	static int32_t grid_1_row_dsc[] = {LV_GRID_CONTENT, LV_GRID_CONTENT, 10, LV_GRID_CONTENT, LV_GRID_CONTENT, LV_GRID_TEMPLATE_LAST};
+	lv_obj_set_grid_dsc_array(tabview, grid_main_col_dsc, grid_main_row_dsc);
+	
+	/* Colocacion paneles*/
+	lv_obj_set_grid_cell(panel_salida,  LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_STRETCH, 0, 1);
+	lv_obj_set_grid_cell(panel_consumo, LV_GRID_ALIGN_STRETCH, 1, 1, LV_GRID_ALIGN_STRETCH, 0, 1);
+	lv_obj_set_grid_cell(panel_title,   LV_GRID_ALIGN_STRETCH, 0, 2, LV_GRID_ALIGN_STRETCH, 1, 1);
+}
 
-	static int32_t grid_2_col_dsc[] = {LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
-	static int32_t grid_2_row_dsc[] = {
-			LV_GRID_CONTENT,  /*Title*/
-			5,                /*Separator*/
-			LV_GRID_CONTENT,  /*Box title*/
-			30,               /*Boxes*/
-			5,                /*Separator*/
-			LV_GRID_CONTENT,  /*Box title*/
-			30,               /*Boxes*/
+static void create_radio_content(lv_obj_t * tabview) {
+	lv_obj_t * panel_titulo = lv_obj_create(tabview);
+	crear_panel_titulo(panel_titulo);
+	
+	lv_obj_t * panel_freq = lv_obj_create(tabview);
+	lv_obj_set_height(panel_freq, LV_SIZE_CONTENT);
+	lv_obj_set_width(panel_freq, LV_SIZE_CONTENT);
+	crear_panel_freq(panel_freq);
+	
+	lv_obj_t * panel_seek = lv_obj_create(tabview);
+	lv_obj_set_height(panel_seek, LV_SIZE_CONTENT);
+	lv_obj_set_width(panel_seek , LV_SIZE_CONTENT);
+	crear_panel_seek(panel_seek);
+	
+	/* Volumen */
+	lv_obj_t * panel_vol = lv_obj_create(tabview);
+	lv_obj_set_height(panel_vol, LV_SIZE_CONTENT);
+	lv_obj_set_width(panel_vol , LV_SIZE_CONTENT);
+	label_volumen = lv_label_create(panel_vol);
+	lv_label_set_text_fmt(label_volumen, "Volumen");
+	lv_obj_add_style(label_volumen, &style_subtitle, 0);  
+	
+	volume_slider_radio = lv_slider_create(panel_vol);
+	lv_obj_add_event_cb(volume_slider_radio, volume_cb, LV_EVENT_VALUE_CHANGED, NULL);
+	lv_slider_set_value(volume_slider_radio, data.vol, LV_ANIM_ON);	
+	lv_slider_set_range(volume_slider_filtros, 0, 100);
+	
+	lv_obj_t * mute_btn = lv_btn_create(panel_vol);
+	lv_obj_add_event_cb(mute_btn, mute_cb, LV_EVENT_CLICKED, NULL);
+	lv_obj_t * label_play_btn = lv_label_create(mute_btn);
+	lv_label_set_text_fmt(label_play_btn, "%s  Mute", LV_SYMBOL_MUTE);
+	
+	static int32_t grid_vol_col_dsc[] = {LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
+	static int32_t grid_vol_row_dsc[] = {
+			LV_GRID_CONTENT,  /* Subtitulo */
+			5,                /* Separador */
+			LV_GRID_CONTENT,  /* Slider    */
+			5,                /* Separador */
+			LV_GRID_CONTENT,  /* Mute      */
 			LV_GRID_TEMPLATE_LAST
 	};
-
-	lv_obj_set_grid_dsc_array(parent, grid_main_col_dsc, grid_main_row_dsc);
-
-	lv_obj_set_grid_cell(panel1, LV_GRID_ALIGN_STRETCH, 0, 2, LV_GRID_ALIGN_CENTER, 0, 1);
-
-	lv_obj_set_grid_dsc_array(panel1, grid_1_col_dsc, grid_1_row_dsc);
-//        lv_obj_set_grid_cell(avatar, LV_GRID_ALIGN_CENTER, 0, 1, LV_GRID_ALIGN_CENTER, 0, 5);
-	lv_obj_set_grid_cell(name, LV_GRID_ALIGN_START, 2, 2, LV_GRID_ALIGN_CENTER, 0, 1);
-	lv_obj_set_grid_cell(dsc, LV_GRID_ALIGN_STRETCH, 2, 4, LV_GRID_ALIGN_START, 1, 1);
-	lv_obj_set_grid_cell(email_icn, LV_GRID_ALIGN_CENTER, 2, 1, LV_GRID_ALIGN_CENTER, 3, 1);
-	lv_obj_set_grid_cell(email_label, LV_GRID_ALIGN_START, 3, 1, LV_GRID_ALIGN_CENTER, 3, 1);
-	lv_obj_set_grid_cell(call_icn, LV_GRID_ALIGN_CENTER, 2, 1, LV_GRID_ALIGN_CENTER, 4, 1);
-	lv_obj_set_grid_cell(call_label, LV_GRID_ALIGN_START, 3, 1, LV_GRID_ALIGN_CENTER, 4, 1);
 	
-	lv_obj_set_grid_cell(invite_btn, LV_GRID_ALIGN_STRETCH, 5, 1, LV_GRID_ALIGN_CENTER, 3, 2);
-
-	lv_obj_set_grid_cell(panel2, LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_START, 1, 1);
-	lv_obj_set_grid_dsc_array(panel2, grid_2_col_dsc, grid_2_row_dsc);
-	lv_obj_set_grid_cell(panel2_title, LV_GRID_ALIGN_START, 0, 2, LV_GRID_ALIGN_CENTER, 0, 1);
-	lv_obj_set_grid_cell(user_name, LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_CENTER, 3, 1);
-	lv_obj_set_grid_cell(salida_audio_label, LV_GRID_ALIGN_START, 0, 1, LV_GRID_ALIGN_START, 2, 1);
-	lv_obj_set_grid_cell(gender, LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_CENTER, 6, 1);
-	lv_obj_set_grid_cell(audio_source_label, LV_GRID_ALIGN_START, 0, 1, LV_GRID_ALIGN_START, 5, 1);
-
-	lv_obj_set_grid_cell(panel3, LV_GRID_ALIGN_STRETCH, 1, 1, LV_GRID_ALIGN_STRETCH, 1, 1);
-	lv_obj_set_grid_dsc_array(panel3, grid_2_col_dsc, grid_2_row_dsc);
-	lv_obj_set_grid_cell(panel3_title, LV_GRID_ALIGN_START, 0, 2, LV_GRID_ALIGN_CENTER, 0, 1);
-	lv_obj_set_grid_cell(slider1, LV_GRID_ALIGN_CENTER, 0, 2, LV_GRID_ALIGN_CENTER, 3, 1);
-	lv_obj_set_grid_cell(consumo_label, LV_GRID_ALIGN_START, 0, 1, LV_GRID_ALIGN_START, 2, 1);
-	lv_obj_set_grid_cell(bajo_consumo_label, LV_GRID_ALIGN_START, 0, 1, LV_GRID_ALIGN_START, 5, 1);
+	lv_obj_set_grid_dsc_array(panel_vol, grid_vol_col_dsc, grid_vol_row_dsc);
+	
+	lv_obj_set_grid_cell(label_volumen,       LV_GRID_ALIGN_CENTER,  0, 1, LV_GRID_ALIGN_STRETCH, 0, 1);
+	lv_obj_set_grid_cell(volume_slider_radio, LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_STRETCH, 2, 1);
+	lv_obj_set_grid_cell(mute_btn,            LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_STRETCH, 4, 1);
+	
+	lv_obj_t * panel_salida = lv_obj_create(tabview);
+	lv_obj_set_height(panel_salida, LV_SIZE_CONTENT);
+	lv_obj_set_width(panel_salida , LV_SIZE_CONTENT);
+	crear_panel_salida(panel_salida);
+	
+	/* Define the grid */
+	static int32_t grid_col_dsc[] = {LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
+	static int32_t grid_row_dsc[] = {
+		LV_GRID_CONTENT,          
+		LV_GRID_CONTENT,  				 
+		LV_GRID_TEMPLATE_LAST
+	};
+	
+	lv_obj_set_grid_dsc_array(tabview, grid_col_dsc, grid_row_dsc);
+	
+	lv_obj_set_grid_cell(panel_freq,   LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_STRETCH, 0, 1);
+	lv_obj_set_grid_cell(panel_seek,   LV_GRID_ALIGN_STRETCH, 1, 1, LV_GRID_ALIGN_STRETCH, 0, 1);
+	lv_obj_set_grid_cell(panel_vol,    LV_GRID_ALIGN_STRETCH, 2, 1, LV_GRID_ALIGN_STRETCH, 0, 1);
+	lv_obj_set_grid_cell(panel_salida, LV_GRID_ALIGN_STRETCH, 3, 1, LV_GRID_ALIGN_STRETCH, 0, 1);
+	lv_obj_set_grid_cell(panel_titulo, LV_GRID_ALIGN_STRETCH, 0, 4, LV_GRID_ALIGN_STRETCH, 1, 1);
 }
-
-void create_radio_content(lv_obj_t * tabview) {
-    lv_obj_t * tab_radio = lv_obj_create(tabview);
-		lv_obj_set_height(tab_radio, LV_SIZE_CONTENT);
-		lv_obj_set_width(tab_radio, 750);
-	
-		lv_obj_t * name = lv_label_create(tab_radio);
-		lv_label_set_text(name, TITLE);
-		lv_obj_add_style(name, &style_title, 0);
-	
-    /* Create a frequency input */
-    lv_obj_t * frequency_input = lv_textarea_create(tab_radio);
-    lv_obj_set_width(frequency_input, LV_PCT(100));
-    lv_textarea_set_one_line(frequency_input, true);
-    lv_textarea_set_placeholder_text(frequency_input, "Introducir frecuencia [MHz]");
-//    lv_obj_add_event_cb(frequency_input, frequency_set_cb, LV_EVENT_VALUE_CHANGED, NULL);
-		lv_obj_add_event_cb(frequency_input, slider_event_cb, LV_EVENT_VALUE_CHANGED, NULL);
-		lv_obj_t * label_freq_input = lv_label_create(tab_radio);
-//		lv_obj_add_style(label_freq_input, &style, 0);
-		lv_label_set_text_fmt(label_freq_input, "Sintonizar una frecuencia [MHz]");
-		
-    /* Create seek up and down buttons */
-		lv_obj_t * label_seek = lv_label_create(tab_radio);
-//		lv_obj_add_style(label_seek, &style_title, 0);
-		lv_label_set_text_fmt(label_seek, "Buscar emisora");
-		
-    lv_obj_t * seek_up_btn = lv_btn_create(tab_radio);
-    lv_obj_add_event_cb(seek_up_btn, seek_up_cb, LV_EVENT_CLICKED, NULL);
-    lv_obj_t * label_seek_up = lv_label_create(seek_up_btn);
-		lv_label_set_text_fmt(label_seek_up, "Up");
-		
-		lv_obj_t * seek_down_btn = lv_btn_create(tab_radio);
-    lv_obj_add_event_cb(seek_down_btn, seek_down_cb, LV_EVENT_CLICKED, NULL);
-		lv_obj_t * label_seek_down = lv_label_create(seek_down_btn);
-		lv_label_set_text_fmt(label_seek_down, "Down");
-		
-    /* Create a volume slider */
-		label_volumen = lv_label_create(tab_radio);
-		lv_label_set_text_fmt(label_volumen, "Volumen");
-    volume_slider_radio = lv_slider_create(tab_radio);
-    lv_obj_add_event_cb(volume_slider_radio, volume_cb, LV_EVENT_VALUE_CHANGED, NULL);
-		lv_slider_set_value(volume_slider_radio, data.vol, LV_ANIM_OFF);
-		
-    /* Create headphones and speakers buttons */
-		lv_obj_t * label_salida = lv_label_create(tab_radio);
-		lv_label_set_text_fmt(label_salida, "Salida");
-    
-		lv_obj_t * headphones_btn = lv_btn_create(tab_radio);
-    lv_obj_add_event_cb(headphones_btn, headphones_cb, LV_EVENT_CLICKED, NULL);
-		lv_obj_t * label_headphones = lv_label_create(headphones_btn);
-		lv_label_set_text_fmt(label_headphones, "Cascos");
-		
-    lv_obj_t * speakers_btn = lv_btn_create(tab_radio);
-    lv_obj_add_event_cb(speakers_btn, speakers_cb, LV_EVENT_CLICKED, NULL);
-		lv_obj_t * label_altavoz = lv_label_create(speakers_btn);
-		lv_label_set_text_fmt(label_altavoz, "Altavoz");
-		
-		/* Define the grid */
-    static int32_t grid_col_dsc[] = {LV_GRID_FR(1), 10, LV_GRID_FR(1), 10, LV_GRID_FR(1), 10, LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
-    static int32_t grid_row_dsc[] = {
-			LV_GRID_CONTENT,           /* Title    */
-			LV_GRID_CONTENT,  				 /* Subtitle */
-			LV_GRID_CONTENT,                   
-			LV_GRID_CONTENT,           /* Box      */
-			LV_GRID_CONTENT,           /* Box      */
-			LV_GRID_TEMPLATE_LAST
-		};
-		
-    lv_obj_set_grid_dsc_array(tab_radio, grid_col_dsc, grid_row_dsc);
-		
-		lv_obj_set_grid_cell(tab_radio, LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_CENTER, 0, 1);
-		
-		lv_obj_set_grid_cell(name, LV_GRID_ALIGN_START, 0, 4, LV_GRID_ALIGN_START, 0, 1);
-		lv_obj_set_grid_cell(label_freq_input, LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_START, 1, 1);
-		lv_obj_set_grid_cell(frequency_input, LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_STRETCH, 2, 1);
-		
-		lv_obj_set_grid_cell(label_seek, LV_GRID_ALIGN_STRETCH, 2, 1, LV_GRID_ALIGN_STRETCH, 1, 1);
-		lv_obj_set_grid_cell(seek_up_btn, LV_GRID_ALIGN_STRETCH, 2, 1, LV_GRID_ALIGN_START, 2, 1);
-		lv_obj_set_grid_cell(seek_down_btn, LV_GRID_ALIGN_STRETCH, 2, 1, LV_GRID_ALIGN_START, 3, 1);
-		
-		lv_obj_set_grid_cell(label_volumen, LV_GRID_ALIGN_STRETCH, 4, 1, LV_GRID_ALIGN_START, 1, 1);
-		lv_obj_set_grid_cell(volume_slider_radio, LV_GRID_ALIGN_STRETCH, 4, 1, LV_GRID_ALIGN_START, 2, 1);
-		
-		lv_obj_set_grid_cell(label_salida, LV_GRID_ALIGN_STRETCH, 6, 1, LV_GRID_ALIGN_START, 1, 1);
-		lv_obj_set_grid_cell(headphones_btn, LV_GRID_ALIGN_STRETCH, 6, 1, LV_GRID_ALIGN_START, 2, 1);
-		lv_obj_set_grid_cell(speakers_btn, LV_GRID_ALIGN_STRETCH, 6, 1, LV_GRID_ALIGN_START, 3, 1);
-}
-
 
 
 static void create_mp3_content(lv_obj_t * tabview){
@@ -469,9 +402,9 @@ static void create_filters_content(lv_obj_t * tabview){
 	lv_obj_set_height(panel_config, LV_SIZE_CONTENT);
 	lv_obj_set_width(panel_config, LV_SIZE_CONTENT);
 	
-	lv_obj_t * panel3 = lv_obj_create(tabview);			     // Aqui el volumen
-	lv_obj_set_height(panel3, LV_SIZE_CONTENT);
-	lv_obj_set_width(panel3, LV_SIZE_CONTENT);
+	lv_obj_t * panel_vol = lv_obj_create(tabview);			     // Aqui el volumen
+	lv_obj_set_height(panel_vol, LV_SIZE_CONTENT);
+	lv_obj_set_width(panel_vol, LV_SIZE_CONTENT);
 	
 	lv_obj_t * panel_salida = lv_obj_create(tabview);			// Y aqui la salida
 	lv_obj_set_height(panel_salida, LV_SIZE_CONTENT);
@@ -486,16 +419,16 @@ static void create_filters_content(lv_obj_t * tabview){
 	#endif
 	
 	/* Titulo */
-	lv_obj_t * name = lv_label_create(panel_title);
-	lv_label_set_text(name, TITLE);
-	lv_obj_add_style(name, &style_title, 0);
+	crear_panel_titulo(panel_title);
 	
-	lv_obj_t * about = lv_label_create(panel_title);
-	lv_label_set_text(about, ABOUT);
+	label_coef = lv_label_create(panel_title);
+	lv_label_set_text(label_coef, "Patata");
 	
 	/* Ecualizador */
 	lv_obj_t * ecualizador_label = lv_label_create(panel1);
 	lv_label_set_text(ecualizador_label, "Ecualizador");
+	lv_obj_add_style(ecualizador_label, &style_subtitle, 0);
+	
 	/* Banda 1 */
 	lv_obj_t * slider_b1 = lv_slider_create(panel1);
 	lv_obj_set_size(slider_b1, 20, 150);
@@ -538,22 +471,42 @@ static void create_filters_content(lv_obj_t * tabview){
 	lv_obj_add_style(slider_b5_label, &style_text_muted, 0);
 	
 	/* Volumen */
-	label_volumen = lv_label_create(panel3);
+//	crear_panel_volumen(panel3, volume_slider_filtros);
+	/* Volumen */
+	lv_obj_set_height(panel_vol, LV_SIZE_CONTENT);
+	lv_obj_set_width(panel_vol , LV_SIZE_CONTENT);
+	label_volumen = lv_label_create(panel_vol);
 	lv_label_set_text_fmt(label_volumen, "Volumen");
-	volume_slider_filtros = lv_slider_create(panel3);
+	lv_obj_add_style(label_volumen, &style_subtitle, 0);  
+	
+	volume_slider_filtros = lv_slider_create(panel_vol);
 	lv_obj_add_event_cb(volume_slider_filtros, volume_cb, LV_EVENT_VALUE_CHANGED, NULL);
 	lv_slider_set_value(volume_slider_filtros, data.vol, LV_ANIM_ON);	
 //	lv_slider_set_range(volume_slider_filtros, 0, 100);
 	
-	lv_obj_t * mute_btn = lv_btn_create(panel3);
+	lv_obj_t * mute_btn = lv_btn_create(panel_vol);
 	lv_obj_add_event_cb(mute_btn, mute_cb, LV_EVENT_CLICKED, NULL);
 	lv_obj_t * label_play_btn = lv_label_create(mute_btn);
 	lv_label_set_text_fmt(label_play_btn, "%s  Mute", LV_SYMBOL_MUTE);
 	
-	/* Guardar configuracion */
-//	lv_obj_t * list_save = lv_list_create(panel_config);
-//	lv_list_add_text(list_save, "Guardar config");
+	static int32_t grid_vol_col_dsc[] = {LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
+	static int32_t grid_vol_row_dsc[] = {
+			LV_GRID_CONTENT,  /* Subtitulo */
+			5,                /* Separador */
+			LV_GRID_CONTENT,  /* Slider    */
+			5,                /* Separador */
+			LV_GRID_CONTENT,  /* Mute      */
+			LV_GRID_TEMPLATE_LAST
+	};
 	
+	lv_obj_set_grid_dsc_array(panel_vol, grid_vol_col_dsc, grid_vol_row_dsc);
+	
+	lv_obj_set_grid_cell(label_volumen,         LV_GRID_ALIGN_CENTER,  0, 1, LV_GRID_ALIGN_STRETCH, 0, 1);
+	lv_obj_set_grid_cell(volume_slider_filtros, LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_STRETCH, 2, 1);
+	lv_obj_set_grid_cell(mute_btn,              LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_STRETCH, 4, 1);
+	
+	
+	/* Guardar configuracion */
 	lv_obj_t * label_config = lv_label_create(panel_config);
 	lv_label_set_text_fmt(label_config, "Guardar config");
 	
@@ -564,28 +517,12 @@ static void create_filters_content(lv_obj_t * tabview){
 	lv_label_set_text_fmt(label_save_config_btn, "%s  Save", LV_SYMBOL_SAVE);
 	
 	/* Botones salida de audio */
-	lv_obj_t * label_salida = lv_label_create(panel_salida);
-	lv_label_set_text_fmt(label_salida, "Salida");
-    
-	lv_obj_t * headphones_btn = lv_btn_create(panel_salida);
-	lv_obj_add_event_cb(headphones_btn, headphones_cb, LV_EVENT_CLICKED, NULL);
-	lv_obj_t * label_headphones = lv_label_create(headphones_btn);
-	lv_label_set_text_fmt(label_headphones, "Cascos");
-		
-	lv_obj_t * speakers_btn = lv_btn_create(panel_salida);
-	lv_obj_add_event_cb(speakers_btn, speakers_cb, LV_EVENT_CLICKED, NULL);
-	lv_obj_t * label_altavoz = lv_label_create(speakers_btn);
-	lv_label_set_text_fmt(label_altavoz, "Altavoz");
-	
+	crear_panel_camino_audio(panel_salida);	
 	
 	/* Para la tab */
 	static int32_t grid_main_col_dsc[] = {LV_GRID_FR(2), LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
 	static int32_t grid_main_row_dsc[] = {LV_GRID_CONTENT, LV_GRID_CONTENT, LV_GRID_CONTENT, LV_GRID_TEMPLATE_LAST};
 	
-	/* Para el titulo */
-	static int32_t grid_1_col_dsc[] = {LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
-	static int32_t grid_1_row_dsc[] = {LV_GRID_CONTENT, LV_GRID_CONTENT, LV_GRID_TEMPLATE_LAST};
-
 	/* Para el ecualizador */
 	static int32_t grid_2_col_dsc[] = {LV_GRID_FR(1), 10, LV_GRID_FR(1), 10, LV_GRID_FR(1), 10, LV_GRID_FR(1), 10, LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
 	static int32_t grid_2_row_dsc[] = {
@@ -597,32 +534,10 @@ static void create_filters_content(lv_obj_t * tabview){
 			LV_GRID_TEMPLATE_LAST
 	};
 	
-	/* Para el volumen */
-	static int32_t grid_vol_col_dsc[] = {LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
-	static int32_t grid_vol_row_dsc[] = {
-			LV_GRID_CONTENT,  /* Subtitulo */
-			5,                /* Separador */
-			LV_GRID_CONTENT,  /* Slider    */
-			5,                /* Separador */
-			LV_GRID_CONTENT,  /* Mute      */
-			LV_GRID_TEMPLATE_LAST
-	};
-	
-	/* Para guardar configuración */
+	/* Para guardar configuraciï¿½n */
 	static int32_t grid_conf_col_dsc[] = {LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
 	static int32_t grid_conf_row_dsc[] = {
 			LV_GRID_CONTENT,  /* Subtitulo */
-			5,                /* Separador */
-			LV_GRID_CONTENT,  /* Boton     */
-			LV_GRID_TEMPLATE_LAST
-	};
-	
-	/* Para la salida de audio */
-	static int32_t grid_sal_col_dsc[] = {LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
-	static int32_t grid_sal_row_dsc[] = {
-			LV_GRID_CONTENT,  /* Subtitulo */
-			5,                /* Separador */
-			LV_GRID_CONTENT,  /* Boton     */
 			5,                /* Separador */
 			LV_GRID_CONTENT,  /* Boton     */
 			LV_GRID_TEMPLATE_LAST
@@ -632,10 +547,7 @@ static void create_filters_content(lv_obj_t * tabview){
 	
 	/* Titulo: Real Time Audio Processor & names. En el fondo de la pagina */
 	lv_obj_set_grid_cell(panel_title, LV_GRID_ALIGN_STRETCH, 0, 3, LV_GRID_ALIGN_STRETCH, 2, 1);
-	lv_obj_set_grid_dsc_array(panel_title, grid_1_col_dsc, grid_1_row_dsc);
-	
-	lv_obj_set_grid_cell(name, LV_GRID_ALIGN_CENTER, 0, 1, LV_GRID_ALIGN_STRETCH, 0, 1);
-	lv_obj_set_grid_cell(about,LV_GRID_ALIGN_CENTER, 0, 1, LV_GRID_ALIGN_STRETCH, 1, 1);
+	lv_obj_set_grid_cell(label_coef, LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_STRETCH, 2, 1);
 	
 	/* Ecualizador */
 	lv_obj_set_grid_cell(panel1, LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_STRETCH, 0, 2);
@@ -656,12 +568,7 @@ static void create_filters_content(lv_obj_t * tabview){
 	lv_obj_set_grid_cell(slider_b5_label, LV_GRID_ALIGN_CENTER, 8, 1, LV_GRID_ALIGN_STRETCH, 4, 1);
 	
 	/* Volumen */
-	lv_obj_set_grid_cell(panel3, LV_GRID_ALIGN_STRETCH, 1, 1, LV_GRID_ALIGN_STRETCH, 0, 1);
-	lv_obj_set_grid_dsc_array(panel3, grid_vol_col_dsc, grid_vol_row_dsc);
-	
-	lv_obj_set_grid_cell(label_volumen, LV_GRID_ALIGN_CENTER, 0, 1, LV_GRID_ALIGN_STRETCH, 0, 1);
-	lv_obj_set_grid_cell(volume_slider_filtros, LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_STRETCH, 2, 1);
-	lv_obj_set_grid_cell(mute_btn, LV_GRID_ALIGN_CENTER, 0, 1, LV_GRID_ALIGN_STRETCH, 4, 1);
+	lv_obj_set_grid_cell(panel_vol, LV_GRID_ALIGN_STRETCH, 1, 1, LV_GRID_ALIGN_STRETCH, 0, 1);
 	
 	/* Guardar config */
 	lv_obj_set_grid_cell(panel_config, LV_GRID_ALIGN_STRETCH, 1, 1, LV_GRID_ALIGN_STRETCH, 1, 1);
@@ -673,12 +580,8 @@ static void create_filters_content(lv_obj_t * tabview){
 	
 	/* Salida */
 	lv_obj_set_grid_cell(panel_salida, LV_GRID_ALIGN_STRETCH, 2, 1, LV_GRID_ALIGN_STRETCH, 0, 2);
-	lv_obj_set_grid_dsc_array(panel_salida, grid_sal_col_dsc, grid_sal_row_dsc);
-	
-	lv_obj_set_grid_cell(label_salida, LV_GRID_ALIGN_CENTER, 0, 1, LV_GRID_ALIGN_STRETCH, 0, 1);
-	lv_obj_set_grid_cell(headphones_btn, LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_STRETCH, 2, 1);
-	lv_obj_set_grid_cell(speakers_btn, LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_STRETCH, 4, 1);
-	
+
+
 //	lv_coord_t x = lv_obj_get_x(panel_title);
 //	lv_coord_t y = lv_obj_get_y(panel_title);
 //	lv_obj_set_layout(tabview, LV_LAYOUT_NONE);
@@ -723,8 +626,7 @@ static void drag_event_handler(lv_event_t * e){
     }
 }
 
-static void slider_event_cb(lv_event_t * e)
-{
+static void slider_event_cb(lv_event_t * e){
 	lv_event_code_t code = lv_event_get_code(e);
 	lv_obj_t * obj = lv_event_get_target(e);
 	
@@ -835,8 +737,6 @@ static void volume_cb(lv_event_t * e) {
    }
 }
 
-
-
 static void mute_cb(lv_event_t * e) {
 	static uint8_t prev_volume;
 	
@@ -888,8 +788,7 @@ static void mute_cb(lv_event_t * e) {
 		lv_anim_start(&a); lv_anim_start(&b); lv_anim_start(&c);
 	}
 }
-static void ta_event_cb(lv_event_t * e)
-{
+static void ta_event_cb(lv_event_t * e){
    lv_event_code_t code = lv_event_get_code(e);
    lv_obj_t * ta = lv_event_get_target(e);
    lv_obj_t * kb = lv_event_get_user_data(e);
@@ -918,8 +817,7 @@ static void ta_event_cb(lv_event_t * e)
    }
 }
 
-static void tabview_delete_event_cb(lv_event_t * e)
-{
+static void tabview_delete_event_cb(lv_event_t * e){
    lv_event_code_t code = lv_event_get_code(e);
 
    if(code == LV_EVENT_DELETE) {
@@ -928,4 +826,337 @@ static void tabview_delete_event_cb(lv_event_t * e)
        lv_style_reset(&style_icon);
        lv_style_reset(&style_bullet);
    }
+}
+
+static void crear_panel_titulo (lv_obj_t * container){
+	lv_obj_t * name = lv_label_create(container);
+	lv_label_set_text(name, TITLE);
+	lv_obj_add_style(name, &style_title, 0);
+	
+	lv_obj_t * about = lv_label_create(container);
+	lv_label_set_text(about, ABOUT);
+	
+	static int32_t grid_1_col_dsc[] = {LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
+	static int32_t grid_1_row_dsc[] = {LV_GRID_CONTENT, LV_GRID_CONTENT, LV_GRID_CONTENT, LV_GRID_TEMPLATE_LAST};
+
+	lv_obj_set_grid_dsc_array(container, grid_1_col_dsc, grid_1_row_dsc);
+	
+	lv_obj_set_grid_cell(name, LV_GRID_ALIGN_CENTER, 0, 1, LV_GRID_ALIGN_STRETCH, 0, 1);
+	lv_obj_set_grid_cell(about,LV_GRID_ALIGN_CENTER, 0, 1, LV_GRID_ALIGN_STRETCH, 1, 1);
+}
+
+LV_IMAGE_DECLARE(img_hand);
+
+lv_obj_t * needle_line;
+lv_obj_t * needle_img;
+
+static lv_style_t scale_consumo_section1_main_style;
+static lv_style_t scale_consumo_section1_indicator_style;
+static lv_style_t scale_consumo_section1_tick_style;
+static lv_style_t scale_consumo_section2_main_style;
+static lv_style_t scale_consumo_section2_indicator_style;
+static lv_style_t scale_consumo_section2_tick_style;
+static lv_style_t scale_consumo_section3_main_style;
+static lv_style_t scale_consumo_section3_indicator_style;
+static lv_style_t scale_consumo_section3_tick_style;
+
+static void scale_consumo_delete_event_cb(lv_event_t * e){
+   lv_event_code_t code = lv_event_get_code(e);
+
+   if(code == LV_EVENT_DELETE) {
+       lv_style_reset(&scale_consumo_section1_main_style);
+       lv_style_reset(&scale_consumo_section1_indicator_style);
+       lv_style_reset(&scale_consumo_section1_tick_style);
+       lv_style_reset(&scale_consumo_section2_main_style);
+       lv_style_reset(&scale_consumo_section2_indicator_style);
+       lv_style_reset(&scale_consumo_section2_tick_style);
+       lv_style_reset(&scale_consumo_section3_main_style);
+       lv_style_reset(&scale_consumo_section3_indicator_style);
+       lv_style_reset(&scale_consumo_section3_tick_style);
+   }
+}
+static void scale_consumo_anim_cb(void * var, int32_t v){
+   lv_obj_t * needle = lv_obj_get_child(var, 0);
+   lv_scale_set_image_needle_value(var, needle, v);
+
+   lv_obj_t * label = lv_obj_get_child(var, 1);
+   lv_label_set_text_fmt(label, "%"LV_PRId32, v);
+}
+
+static void crear_panel_consumo (lv_obj_t * container){
+	lv_obj_t * label_consumo_title = lv_label_create(container);
+	lv_label_set_text(label_consumo_title, "Consumo");
+	lv_obj_add_style(label_consumo_title, &style_subtitle, 0);
+	
+	label_consumo = lv_label_create(container);
+	lv_label_set_text(label_consumo, "Consumo actual: ");
+	lv_obj_set_layout(label_consumo, LV_LAYOUT_NONE);
+	lv_obj_set_pos(label_consumo, 0, 220);
+	
+	/* Create a scale object */ // Para cambiar el valor: lv_scale_set_line_needle_value(scale_consumo, needle_consumo, 80, valor);
+	scale_consumo = lv_scale_create(container);
+	lv_scale_set_mode(scale_consumo, LV_SCALE_MODE_ROUND_INNER);
+	lv_scale_set_post_draw(scale_consumo, true);
+	lv_obj_set_width(scale_consumo, 250);
+	lv_obj_update_layout(container);
+	lv_obj_set_height(scale_consumo, 250);
+	
+	lv_scale_set_range(scale_consumo, 0, 2000);
+	lv_scale_set_total_tick_count(scale_consumo,17);
+	lv_scale_set_major_tick_every(scale_consumo, 4);
+	lv_obj_set_style_length(scale_consumo, 10, LV_PART_ITEMS);
+	lv_obj_set_style_length(scale_consumo, 20, LV_PART_INDICATOR);
+	lv_scale_set_angle_range(scale_consumo, 225);
+	lv_scale_set_rotation(scale_consumo, 180);
+
+	lv_style_init(&scale_consumo_section1_main_style);
+	lv_style_set_arc_width(&scale_consumo_section1_main_style, 2);
+	lv_style_set_arc_color(&scale_consumo_section1_main_style, lv_palette_main(LV_PALETTE_GREEN));
+
+	lv_style_init(&scale_consumo_section1_indicator_style);
+	lv_style_set_line_width(&scale_consumo_section1_indicator_style, 2);
+	lv_style_set_line_color(&scale_consumo_section1_indicator_style, lv_palette_darken(LV_PALETTE_GREEN, 2));
+
+	lv_style_init(&scale_consumo_section1_tick_style);
+	lv_style_set_line_width(&scale_consumo_section1_tick_style, 1);
+	lv_style_set_line_color(&scale_consumo_section1_tick_style, lv_palette_darken(LV_PALETTE_GREEN, 2));
+
+	lv_style_init(&scale_consumo_section2_main_style);
+	lv_style_set_arc_width(&scale_consumo_section2_main_style, 2);
+	lv_style_set_arc_color(&scale_consumo_section2_main_style, lv_palette_main(LV_PALETTE_BLUE));
+
+	lv_style_init(&scale_consumo_section2_indicator_style);
+	lv_style_set_line_width(&scale_consumo_section2_indicator_style, 2);
+	lv_style_set_line_color(&scale_consumo_section2_indicator_style, lv_palette_darken(LV_PALETTE_BLUE, 2));
+
+	lv_style_init(&scale_consumo_section2_tick_style);
+	lv_style_set_line_width(&scale_consumo_section2_tick_style, 1);
+	lv_style_set_line_color(&scale_consumo_section2_tick_style, lv_palette_darken(LV_PALETTE_BLUE, 2));
+
+	lv_style_init(&scale_consumo_section3_main_style);
+	lv_style_set_arc_width(&scale_consumo_section3_main_style, 2);
+	lv_style_set_arc_color(&scale_consumo_section3_main_style, lv_palette_main(LV_PALETTE_RED));
+
+	lv_style_init(&scale_consumo_section3_indicator_style);
+	lv_style_set_line_width(&scale_consumo_section3_indicator_style, 2);
+	lv_style_set_line_color(&scale_consumo_section3_indicator_style, lv_palette_darken(LV_PALETTE_RED, 2));
+
+	lv_style_init(&scale_consumo_section3_tick_style);
+	lv_style_set_line_width(&scale_consumo_section3_tick_style, 1);
+	lv_style_set_line_color(&scale_consumo_section3_tick_style, lv_palette_darken(LV_PALETTE_RED, 2));
+
+	lv_obj_add_event_cb(scale_consumo, scale_consumo_delete_event_cb, LV_EVENT_DELETE, NULL);
+	
+	lv_scale_section_t * section;
+	section = lv_scale_add_section(scale_consumo);
+	lv_scale_section_set_range(section, 0, 500);
+	lv_scale_section_set_style(section, LV_PART_MAIN, &scale_consumo_section1_main_style);
+	lv_scale_section_set_style(section, LV_PART_INDICATOR, &scale_consumo_section1_indicator_style);
+	lv_scale_section_set_style(section, LV_PART_ITEMS, &scale_consumo_section1_tick_style);
+	section = lv_scale_add_section(scale_consumo);
+	lv_scale_section_set_range(section, 500, 1500);
+	lv_scale_section_set_style(section, LV_PART_MAIN, &scale_consumo_section2_main_style);
+	lv_scale_section_set_style(section, LV_PART_INDICATOR, &scale_consumo_section2_indicator_style);
+	lv_scale_section_set_style(section, LV_PART_ITEMS, &scale_consumo_section2_tick_style);
+
+	section = lv_scale_add_section(scale_consumo);
+	lv_scale_section_set_range(section, 1500, 2000);
+	lv_scale_section_set_style(section, LV_PART_MAIN, &scale_consumo_section3_main_style);
+	lv_scale_section_set_style(section, LV_PART_INDICATOR, &scale_consumo_section3_indicator_style);
+	lv_scale_section_set_style(section, LV_PART_ITEMS, &scale_consumo_section3_tick_style);
+
+	needle_consumo = lv_line_create(scale_consumo);
+
+	lv_obj_set_style_line_width(needle_consumo, 5, 0);
+	lv_obj_set_style_line_rounded(needle_consumo, true, 0);
+	lv_obj_set_style_line_color(needle_consumo, lv_palette_main(LV_PALETTE_RED), 0);
+		
+	static int32_t grid_col_dsc[] = {LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
+	static int32_t grid_row_dsc[] = {
+			LV_GRID_CONTENT,  /* Subtitulo */
+			5,                /* Separador */
+			LV_GRID_CONTENT,  /* Widget    */
+//			5,                /* Separador */
+//			LV_GRID_CONTENT,  /* Label     */
+//			5,                /* Separador */
+//			LV_GRID_CONTENT,  /* Switch */
+			LV_GRID_TEMPLATE_LAST
+	};
+	
+	lv_obj_set_grid_dsc_array(container, grid_col_dsc, grid_row_dsc);
+	
+	lv_obj_set_grid_cell(label_consumo_title, LV_GRID_ALIGN_CENTER, 0, 1, LV_GRID_ALIGN_CENTER, 0, 1);
+	lv_obj_set_grid_cell(scale_consumo, LV_GRID_ALIGN_CENTER, 0, 1, LV_GRID_ALIGN_CENTER, 2, 1);
+//	lv_obj_set_grid_cell(label_consumo, LV_GRID_ALIGN_START, 0, 1, LV_GRID_ALIGN_SPACE_EVENLY, 2, 1);
+	lv_scale_set_line_needle_value(scale_consumo, needle_consumo, 80, 750);
+}
+
+static void crear_panel_freq (lv_obj_t * container){
+	lv_obj_t * label_freq_input = lv_label_create(container);
+	lv_obj_add_style(label_freq_input, &style_subtitle, 0);
+	lv_label_set_text_fmt(label_freq_input, "Sintonizar una frecuencia [MHz]");
+	/* Create a frequency input */
+	lv_obj_t * frequency_input = lv_textarea_create(container);
+	lv_obj_set_width(frequency_input, LV_PCT(100));
+	lv_textarea_set_one_line(frequency_input, true);
+	lv_textarea_set_placeholder_text(frequency_input, "Introducir frecuencia [MHz]");
+//    lv_obj_add_event_cb(frequency_input, frequency_set_cb, LV_EVENT_VALUE_CHANGED, NULL);
+	lv_obj_add_event_cb(frequency_input, slider_event_cb, LV_EVENT_VALUE_CHANGED, NULL);
+	
+	
+	static int32_t grid_col_dsc[] = {LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
+	static int32_t grid_row_dsc[] = {
+			LV_GRID_CONTENT,  /* Subtitulo */
+			5,                /* Separador */
+			LV_GRID_CONTENT,  /* Freq      */
+			LV_GRID_TEMPLATE_LAST
+	};
+	
+	lv_obj_set_grid_dsc_array(container, grid_col_dsc, grid_row_dsc);
+	
+	lv_obj_set_grid_cell(label_freq_input, LV_GRID_ALIGN_CENTER, 0, 1, LV_GRID_ALIGN_STRETCH, 0, 1);
+	lv_obj_set_grid_cell(frequency_input, LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_STRETCH, 2, 1);
+}
+
+
+static void crear_panel_seek (lv_obj_t * container){
+	/* Create seek up and down buttons */
+	lv_obj_t * label_seek = lv_label_create(container);
+//		lv_obj_add_style(label_seek, &style_title, 0);
+	lv_label_set_text_fmt(label_seek, "Buscar emisora");
+	lv_obj_add_style(label_seek, &style_subtitle, 0);  
+	
+	lv_obj_t * seek_up_btn = lv_btn_create(container);
+	lv_obj_add_event_cb(seek_up_btn, seek_up_cb, LV_EVENT_CLICKED, NULL);
+	lv_obj_t * label_seek_up = lv_label_create(seek_up_btn);
+	lv_label_set_text_fmt(label_seek_up, "Up");
+	
+	lv_obj_t * seek_down_btn = lv_btn_create(container);
+	lv_obj_add_event_cb(seek_down_btn, seek_down_cb, LV_EVENT_CLICKED, NULL);
+	lv_obj_t * label_seek_down = lv_label_create(seek_down_btn);
+	lv_label_set_text_fmt(label_seek_down, "Down");
+	
+	static int32_t grid_col_dsc[] = {LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
+	static int32_t grid_row_dsc[] = {
+			LV_GRID_CONTENT,  /* Subtitulo */
+			5,                /* Separador */
+			LV_GRID_CONTENT,  /* Up        */
+			LV_GRID_CONTENT,  /* Down      */
+			LV_GRID_TEMPLATE_LAST
+	};
+	
+	lv_obj_set_grid_dsc_array(container, grid_col_dsc, grid_row_dsc);
+	
+	lv_obj_set_grid_cell(label_seek,    LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_STRETCH, 0, 1);
+	lv_obj_set_grid_cell(seek_up_btn,   LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_START, 2, 1);
+	lv_obj_set_grid_cell(seek_down_btn, LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_START, 3, 1);
+}
+static void crear_panel_salida (lv_obj_t * container){
+	lv_obj_t * label_salida = lv_label_create(container);
+	lv_label_set_text_fmt(label_salida, "Salida");
+	lv_obj_add_style(label_salida, &style_subtitle, 0);  
+	
+	lv_obj_t * headphones_btn = lv_btn_create(container);
+	lv_obj_add_event_cb(headphones_btn, headphones_cb, LV_EVENT_CLICKED, NULL);
+	lv_obj_t * label_headphones = lv_label_create(headphones_btn);
+	lv_label_set_text_fmt(label_headphones, "Cascos");
+	
+	lv_obj_t * speakers_btn = lv_btn_create(container);
+	lv_obj_add_event_cb(speakers_btn, speakers_cb, LV_EVENT_CLICKED, NULL);
+	lv_obj_t * label_altavoz = lv_label_create(speakers_btn);
+	lv_label_set_text_fmt(label_altavoz, "Altavoz");
+
+	static int32_t grid_col_dsc[] = {LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
+	static int32_t grid_row_dsc[] = {
+			LV_GRID_CONTENT,  /* Subtitulo */
+			5,                /* Separador */
+			LV_GRID_CONTENT,  /* Up        */
+			LV_GRID_CONTENT,  /* Down      */
+			LV_GRID_TEMPLATE_LAST
+	};
+	
+	lv_obj_set_grid_dsc_array(container, grid_col_dsc, grid_row_dsc);
+	
+	lv_obj_set_grid_cell(label_salida,   LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_START, 0, 1);
+	lv_obj_set_grid_cell(headphones_btn, LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_START, 2, 1);
+	lv_obj_set_grid_cell(speakers_btn,   LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_START, 3, 1);
+}
+static void crear_panel_volumen (lv_obj_t * container, lv_obj_t * vol_slider){
+/* No funciona. Quizas pasando un boton mute como parametro o haciendo mutes globales? */	
+	
+//	label_volumen = lv_label_create(container);
+//	lv_label_set_text_fmt(label_volumen, "Volumen");
+//	lv_obj_add_style(label_volumen, &style_subtitle, 0);  
+//	
+//	vol_slider = lv_slider_create(container);
+//	lv_obj_add_event_cb(vol_slider, volume_cb, LV_EVENT_VALUE_CHANGED, NULL);
+//	lv_slider_set_value(vol_slider, data.vol, LV_ANIM_ON);	
+////	lv_slider_set_range(volume_slider_filtros, 0, 100);
+//	
+//	lv_obj_t * mute_btn = lv_btn_create(container);
+//	lv_obj_add_event_cb(mute_btn, mute_cb, LV_EVENT_CLICKED, NULL);
+//	lv_obj_t * label_play_btn = lv_label_create(mute_btn);
+//	lv_label_set_text_fmt(label_play_btn, "%s  Mute", LV_SYMBOL_MUTE);
+//	
+//	static int32_t grid_vol_col_dsc[] = {LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
+//	static int32_t grid_vol_row_dsc[] = {
+//			LV_GRID_CONTENT,  /* Subtitulo */
+//			5,                /* Separador */
+//			LV_GRID_CONTENT,  /* Slider    */
+//			5,                /* Separador */
+//			LV_GRID_CONTENT,  /* Mute      */
+//			LV_GRID_TEMPLATE_LAST
+//	};
+//	
+//	lv_obj_set_grid_dsc_array(container, grid_vol_col_dsc, grid_vol_row_dsc);
+//	
+//	lv_obj_set_grid_cell(label_volumen, LV_GRID_ALIGN_CENTER,  0, 1, LV_GRID_ALIGN_STRETCH, 0, 1);
+//	lv_obj_set_grid_cell(vol_slider,    LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_STRETCH, 2, 1);
+//	lv_obj_set_grid_cell(mute_btn,      LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_STRETCH, 4, 1);
+}
+static void crear_panel_camino_audio(lv_obj_t * container){
+	/* Botones salida de audio */
+	lv_obj_t * label_salida = lv_label_create(container);
+	lv_label_set_text_fmt(label_salida, "Camino audio");
+  lv_obj_add_style(label_salida, &style_subtitle, 0);  
+	
+	lv_obj_t * headphones_btn = lv_btn_create(container);
+	lv_obj_add_event_cb(headphones_btn, headphones_cb, LV_EVENT_CLICKED, NULL);
+	lv_obj_t * label_headphones = lv_label_create(headphones_btn);
+	lv_label_set_text_fmt(label_headphones, "Cascos");
+		
+	lv_obj_t * speakers_btn = lv_btn_create(container);
+	lv_obj_add_event_cb(speakers_btn, speakers_cb, LV_EVENT_CLICKED, NULL);
+	lv_obj_t * label_altavoz = lv_label_create(speakers_btn);
+	lv_label_set_text_fmt(label_altavoz, "Altavoz");
+	
+	lv_obj_t * mp3_btn = lv_btn_create(container);
+	lv_obj_add_event_cb(mp3_btn, mp3_cb, LV_EVENT_CLICKED, NULL);
+	lv_obj_t * label_mp3 = lv_label_create(mp3_btn);
+	lv_label_set_text_fmt(label_mp3, "MP3");
+		
+	lv_obj_t * radio_btn = lv_btn_create(container);
+	lv_obj_add_event_cb(speakers_btn, radio_cb, LV_EVENT_CLICKED, NULL);
+	lv_obj_t * label_radio = lv_label_create(radio_btn);
+	lv_label_set_text_fmt(label_radio, "Radio");
+	
+	static int32_t grid_sal_col_dsc[] = {LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
+	static int32_t grid_sal_row_dsc[] = {
+			LV_GRID_CONTENT,  /* Subtitulo */
+			5,                /* Separador */
+			LV_GRID_CONTENT,  /* Boton Cascos */
+			LV_GRID_CONTENT,  /* Boton Altavoz */
+			5,                /* Separador */
+			LV_GRID_CONTENT,  /* Boton MP3 */
+			LV_GRID_CONTENT,  /* Boton radio */
+			LV_GRID_TEMPLATE_LAST
+	};
+	
+	lv_obj_set_grid_dsc_array(container, grid_sal_col_dsc, grid_sal_row_dsc);
+	
+	lv_obj_set_grid_cell(label_salida,   LV_GRID_ALIGN_CENTER, 0, 1, LV_GRID_ALIGN_STRETCH, 0, 1);
+	lv_obj_set_grid_cell(headphones_btn, LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_START, 2, 1);
+	lv_obj_set_grid_cell(speakers_btn,   LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_START, 3, 1);
+	lv_obj_set_grid_cell(mp3_btn,        LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_START, 5, 1);
+	lv_obj_set_grid_cell(radio_btn,      LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_START, 6, 1);
 }

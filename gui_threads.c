@@ -4,13 +4,14 @@
 #include "gui_threads.h"
 
 #include "Board_LED.h"
+#include "eqCoefficients.h"
 #define INIT 1
 
-osThreadId_t tid_Thread_tasks, tid_Thread_time, tid_Thread_leds;                        // thread id
+osThreadId_t tid_Thread_tasks, tid_Thread_time, tid_Thread_stuff;                        // thread id
  
 void Thread_tasks (void *argument);                   // thread function
 void Thread_time (void *argument);
-void Thread_Leds (void *args);
+void Thread_stuff (void *args);
 
 static osMutexId_t mut;
 
@@ -21,13 +22,13 @@ int Init_Thread (void) {
 	osThreadAttr_t att_task = {
 		.name = "LVGL Tasks",
 		.stack_size = 12400,
-		.priority = osPriorityNormal
+		.priority = osPriorityHigh
 	};
 	
 	osThreadAttr_t att_time = {
 		.name = "LVGL Times",
 		.stack_size = 12400,
-		.priority = osPriorityNormal
+		.priority = osPriorityHigh
 	};
 	
 	osMutexAttr_t att_mut = {
@@ -39,7 +40,7 @@ int Init_Thread (void) {
 	
   tid_Thread_tasks = osThreadNew(Thread_tasks, NULL, &att_task);
 	tid_Thread_time = osThreadNew(Thread_time, NULL, &att_time);
-	tid_Thread_leds = osThreadNew(Thread_Leds, NULL, NULL);
+	tid_Thread_stuff = osThreadNew(Thread_stuff, NULL, NULL);
 	
 	if (tid_Thread_tasks == NULL) {
     return(-1);
@@ -47,13 +48,17 @@ int Init_Thread (void) {
  
   return(0);
 }
-void Thread_Leds(void *args){
+void Thread_stuff (void *args){
 	LED_Initialize();
 	
 	int i = 0;
+	int data[2];
   while (1) {
+		data[0] = i%950; data[1] = coeffTable[i%950];
     LED_SetOut(++i);
-    osDelay(500);                            // suspend thread
+		lv_async_call(async_cb, data);
+		lv_async_call(consumo_async_cb, data);
+    osDelay(500);
   }
 }
  
@@ -62,9 +67,9 @@ void Thread_time(void *arg){
 	
 	while (1) {
 		osMutexAcquire(mut, osWaitForever);
-		lv_tick_inc(5);
+		lv_tick_inc(3);
     osMutexRelease(mut);
-		osDelay(5);
+		osDelay(3);
   }
 }
 

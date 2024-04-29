@@ -393,4 +393,6 @@
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\stdlib\builtin\..\..\misc\lv_ll.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\tick\lv_tick.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\layouts\lv_layout.h \
-  hal_stm_lvgl\touchpad\touchpad.h
+  hal_stm_lvgl\touchpad\touchpad.h \
+  C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdio.h \
+  C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\math.h
