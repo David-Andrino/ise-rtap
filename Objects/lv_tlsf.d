@@ -3,7 +3,7 @@
   RTE\LVGL\lv_conf_cmsis.h RTE\_Target_1\Pre_Include_Global.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\builtin\..\..\lv_conf_internal.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\builtin\..\..\lv_conf_kconfig.h \
-  lv_conf.h C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\limits.h \
+  C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\limits.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\builtin\lv_tlsf.h \
   C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stddef.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\builtin\..\..\osal\lv_os.h \

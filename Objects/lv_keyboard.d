@@ -5,7 +5,6 @@
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\widgets\keyboard\..\buttonmatrix\lv_buttonmatrix.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\widgets\keyboard\..\buttonmatrix\..\..\lv_conf_internal.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\widgets\keyboard\..\buttonmatrix\..\..\lv_conf_kconfig.h \
-  lv_conf.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\widgets\keyboard\..\buttonmatrix\..\..\core\lv_obj.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\lv_conf_internal.h \
   C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stddef.h \

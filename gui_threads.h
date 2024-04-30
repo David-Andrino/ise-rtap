@@ -4,5 +4,6 @@
 #include "gui.h"
 
 int Init_Thread (void);
+void get_cadena(char *buf, float freq);
 
 #endif

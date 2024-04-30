@@ -4,7 +4,6 @@
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\misc\cache\..\lv_assert.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\misc\cache\..\..\lv_conf_internal.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\misc\cache\..\..\lv_conf_kconfig.h \
-  lv_conf.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\misc\cache\..\lv_log.h \
   C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdint.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\misc\cache\..\lv_types.h \

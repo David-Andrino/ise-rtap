@@ -337,9 +337,9 @@
             <v6Rtti>0</v6Rtti>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define>STM32 STM32F7 STM32F769NIHx STM32F769I_DISCO DEBUG STM32F769xx LV_LVGL_H_INCLUDE_SIMPLE CONFIG_LV_FONT_MONTSERRAT_24=1  CONFIG_LV_FONT_MONTSERRAT_18=1 CONFIG_LV_FONT_MONTSERRAT_16=1</Define>
+              <Define>STM32 STM32F7 STM32F769NIHx STM32F769I_DISCO DEBUG STM32F769xx LV_LVGL_H_INCLUDE_SIMPLE CONFIG_LV_FONT_MONTSERRAT_36=1 CONFIG_LV_FONT_MONTSERRAT_24=1  CONFIG_LV_FONT_MONTSERRAT_18=1 CONFIG_LV_FONT_MONTSERRAT_16=1</Define>
               <Undefine></Undefine>
-              <IncludePath>.</IncludePath>
+              <IncludePath></IncludePath>
             </VariousControls>
           </Cads>
           <Aads>

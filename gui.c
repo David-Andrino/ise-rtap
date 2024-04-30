@@ -20,7 +20,7 @@ typedef enum {
 } disp_size_t;
 
 lv_obj_t * scale_consumo; 	// Tiene que ser global para modificarlo desde async_cb
-static lv_obj_t * needle_consumo;
+static lv_obj_t *needle_consumo, *needle_freq;
 lv_obj_t * label_consumo;
 
 /**********************
@@ -66,9 +66,10 @@ static void crear_panel_volumen     (lv_obj_t * container, lv_obj_t * vol_slider
 static void ta_event_cb(lv_event_t * e);
 static void slider_event_cb(lv_event_t * e);
 static void tabview_delete_event_cb(lv_event_t * e);
+static void freq_slider_observer_cb(lv_observer_t * observer, lv_subject_t * subject);
 
 static void drag_event_handler(lv_event_t * e);
-static void frequency_set_cb(lv_event_t * e) {}
+static void frequency_set_cb(lv_event_t * e);
 static void seek_up_cb(lv_event_t * e) {}
 static void seek_down_cb(lv_event_t * e) {}
 static void volume_cb(lv_event_t * e);
@@ -91,12 +92,17 @@ static lv_style_t style_subtitle;
 static lv_style_t style_icon;
 static lv_style_t style_bullet;
 
+static const lv_font_t * font_ultralarge;
 static const lv_font_t * font_large;
 static const lv_font_t * font_medium;
 static const lv_font_t * font_normal;
 
 static lv_obj_t * label_volumen;
 static lv_obj_t *volume_slider_radio, *volume_slider_mp3, *volume_slider_filtros;		// Necesario que sea global para poder copiar el valor. No puede haber solo un objeto compartido porque falla (Necesario uno por tab).
+
+static lv_obj_t * textarea_freq;
+static lv_obj_t * slider_freq;
+static lv_obj_t * label_cadena;
 
 static gui_data_t data = {
 	.vol = 50,
@@ -110,12 +116,18 @@ static gui_data_t data = {
 
 void lv_gui(){
 	disp_size = DISP_LARGE;
+	font_ultralarge = LV_FONT_DEFAULT;
 	font_large = LV_FONT_DEFAULT;
 	font_medium = LV_FONT_DEFAULT;
 	font_normal = LV_FONT_DEFAULT;
 	int32_t tab_h;
 	tab_h = 70;
 	
+#if LV_FONT_MONTSERRAT_36
+		font_ultralarge     = &lv_font_montserrat_36;
+#else
+        LV_LOG_WARN("LV_FONT_MONTSERRAT_36 is not enabled. Using LV_FONT_DEFAULT instead.");
+#endif
 #if LV_FONT_MONTSERRAT_24
 		font_large     = &lv_font_montserrat_24;
 #else
@@ -233,10 +245,10 @@ static void create_radio_content(lv_obj_t * tabview) {
 	lv_obj_set_width(panel_freq, LV_SIZE_CONTENT);
 	crear_panel_freq(panel_freq);
 	
-	lv_obj_t * panel_seek = lv_obj_create(tabview);
-	lv_obj_set_height(panel_seek, LV_SIZE_CONTENT);
-	lv_obj_set_width(panel_seek , LV_SIZE_CONTENT);
-	crear_panel_seek(panel_seek);
+//	lv_obj_t * panel_seek = lv_obj_create(tabview);
+//	lv_obj_set_height(panel_seek, LV_SIZE_CONTENT);
+//	lv_obj_set_width(panel_seek , LV_SIZE_CONTENT);
+//	crear_panel_seek(panel_seek);
 	
 	/* Volumen */
 	lv_obj_t * panel_vol = lv_obj_create(tabview);
@@ -278,20 +290,21 @@ static void create_radio_content(lv_obj_t * tabview) {
 	crear_panel_salida(panel_salida);
 	
 	/* Define the grid */
-	static int32_t grid_col_dsc[] = {LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
+	static int32_t grid_col_dsc[] = {LV_GRID_FR(2), LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
 	static int32_t grid_row_dsc[] = {
 		LV_GRID_CONTENT,          
-		LV_GRID_CONTENT,  				 
+		LV_GRID_CONTENT,
+		LV_GRID_CONTENT,
 		LV_GRID_TEMPLATE_LAST
 	};
 	
 	lv_obj_set_grid_dsc_array(tabview, grid_col_dsc, grid_row_dsc);
 	
-	lv_obj_set_grid_cell(panel_freq,   LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_STRETCH, 0, 1);
-	lv_obj_set_grid_cell(panel_seek,   LV_GRID_ALIGN_STRETCH, 1, 1, LV_GRID_ALIGN_STRETCH, 0, 1);
-	lv_obj_set_grid_cell(panel_vol,    LV_GRID_ALIGN_STRETCH, 2, 1, LV_GRID_ALIGN_STRETCH, 0, 1);
-	lv_obj_set_grid_cell(panel_salida, LV_GRID_ALIGN_STRETCH, 3, 1, LV_GRID_ALIGN_STRETCH, 0, 1);
-	lv_obj_set_grid_cell(panel_titulo, LV_GRID_ALIGN_STRETCH, 0, 4, LV_GRID_ALIGN_STRETCH, 1, 1);
+	lv_obj_set_grid_cell(panel_freq,   LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_STRETCH, 0, 2);
+//	lv_obj_set_grid_cell(panel_seek,   LV_GRID_ALIGN_STRETCH, 1, 1, LV_GRID_ALIGN_STRETCH, 0, 1);
+	lv_obj_set_grid_cell(panel_vol,    LV_GRID_ALIGN_STRETCH, 1, 1, LV_GRID_ALIGN_STRETCH, 0, 1);
+	lv_obj_set_grid_cell(panel_salida, LV_GRID_ALIGN_STRETCH, 1, 1, LV_GRID_ALIGN_STRETCH, 1, 1);
+	lv_obj_set_grid_cell(panel_titulo, LV_GRID_ALIGN_STRETCH, 0, 2, LV_GRID_ALIGN_STRETCH, 2, 1);
 }
 
 
@@ -410,14 +423,6 @@ static void create_filters_content(lv_obj_t * tabview){
 	lv_obj_set_height(panel_salida, LV_SIZE_CONTENT);
 	lv_obj_set_width(panel_salida, LV_SIZE_CONTENT);
 	
-	#if DRAGGABBLE
-	lv_obj_add_event_cb(panel_title, drag_event_handler, LV_EVENT_ALL, NULL);
-	lv_obj_add_event_cb(panel1, drag_event_handler, LV_EVENT_ALL, NULL);
-	lv_obj_add_event_cb(panel_config, drag_event_handler, LV_EVENT_ALL, NULL);
-	lv_obj_add_event_cb(panel3, drag_event_handler, LV_EVENT_ALL, NULL);
-	lv_obj_add_event_cb(panel_salida, drag_event_handler, LV_EVENT_ALL, NULL);
-	#endif
-	
 	/* Titulo */
 	crear_panel_titulo(panel_title);
 	
@@ -488,6 +493,14 @@ static void create_filters_content(lv_obj_t * tabview){
 	lv_obj_add_event_cb(mute_btn, mute_cb, LV_EVENT_CLICKED, NULL);
 	lv_obj_t * label_play_btn = lv_label_create(mute_btn);
 	lv_label_set_text_fmt(label_play_btn, "%s  Mute", LV_SYMBOL_MUTE);
+	
+	#if DRAGGABBLE
+	lv_obj_add_event_cb(panel_title, drag_event_handler, LV_EVENT_ALL, NULL);
+	lv_obj_add_event_cb(panel1, drag_event_handler, LV_EVENT_ALL, NULL);
+	lv_obj_add_event_cb(panel_config, drag_event_handler, LV_EVENT_ALL, NULL);
+	lv_obj_add_event_cb(panel_vol, drag_event_handler, LV_EVENT_ALL, NULL);
+	lv_obj_add_event_cb(panel_salida, drag_event_handler, LV_EVENT_ALL, NULL);
+	#endif
 	
 	static int32_t grid_vol_col_dsc[] = {LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
 	static int32_t grid_vol_row_dsc[] = {
@@ -987,35 +1000,91 @@ static void crear_panel_consumo (lv_obj_t * container){
 	
 	lv_obj_set_grid_cell(label_consumo_title, LV_GRID_ALIGN_CENTER, 0, 1, LV_GRID_ALIGN_CENTER, 0, 1);
 	lv_obj_set_grid_cell(scale_consumo, LV_GRID_ALIGN_CENTER, 0, 1, LV_GRID_ALIGN_CENTER, 2, 1);
-//	lv_obj_set_grid_cell(label_consumo, LV_GRID_ALIGN_START, 0, 1, LV_GRID_ALIGN_SPACE_EVENLY, 2, 1);
+	
 	lv_scale_set_line_needle_value(scale_consumo, needle_consumo, 80, 750);
 }
 
 static void crear_panel_freq (lv_obj_t * container){
-	lv_obj_t * label_freq_input = lv_label_create(container);
-	lv_obj_add_style(label_freq_input, &style_subtitle, 0);
-	lv_label_set_text_fmt(label_freq_input, "Sintonizar una frecuencia [MHz]");
-	/* Create a frequency input */
-	lv_obj_t * frequency_input = lv_textarea_create(container);
-	lv_obj_set_width(frequency_input, LV_PCT(100));
-	lv_textarea_set_one_line(frequency_input, true);
-	lv_textarea_set_placeholder_text(frequency_input, "Introducir frecuencia [MHz]");
-//    lv_obj_add_event_cb(frequency_input, frequency_set_cb, LV_EVENT_VALUE_CHANGED, NULL);
-	lv_obj_add_event_cb(frequency_input, slider_event_cb, LV_EVENT_VALUE_CHANGED, NULL);
+	lv_obj_t * kb = lv_keyboard_create(lv_screen_active());
+	lv_keyboard_set_mode(kb, LV_KEYBOARD_MODE_NUMBER);
+	lv_obj_add_flag(kb, LV_OBJ_FLAG_HIDDEN);
 	
+	lv_obj_t * label_freq_input = lv_label_create(container);
+	lv_label_set_text(label_freq_input, "Sintonizar una frecuencia [MHz]");
+	lv_obj_add_style(label_freq_input, &style_subtitle, 0);
+	
+	
+	/* Textarea */
+	textarea_freq = lv_textarea_create(container);
+	lv_obj_set_width(textarea_freq, LV_PCT(100));
+	lv_textarea_set_one_line(textarea_freq, true);
+	lv_textarea_set_placeholder_text(textarea_freq, "87.0");
+	lv_obj_add_event_cb(textarea_freq, ta_event_cb, LV_EVENT_ALL, kb);
+  lv_obj_add_event_cb(textarea_freq, frequency_set_cb, LV_EVENT_VALUE_CHANGED, NULL);
+//	lv_obj_add_event_cb(textarea_freq, slider_event_cb, LV_EVENT_VALUE_CHANGED, NULL);
+	
+	static lv_style_t style_ta;
+	lv_style_init(&style_ta);
+	
+	static lv_style_t style_cursor;
+	lv_style_init(&style_cursor);
+	
+	lv_style_set_bg_color(&style_cursor, lv_color_black());
+
+	lv_style_set_bg_opa(&style_ta, LV_OPA_TRANSP);  
+	lv_style_set_border_width(&style_ta, 0); 
+	
+	lv_style_set_text_font(&style_ta, font_ultralarge); 
+	lv_style_set_text_align(&style_ta, LV_TEXT_ALIGN_CENTER); 
+	lv_style_set_text_opa(&style_ta, LV_OPA_100);
+	
+//	lv_obj_remove_style_all(textarea_freq);
+	lv_obj_add_style(textarea_freq, &style_ta, LV_PART_MAIN);
+	lv_obj_add_style(textarea_freq, &style_cursor, LV_PART_CURSOR);
+	
+	/* Scale */
+	lv_obj_t * scale_freq = lv_scale_create(container);
+	
+	lv_scale_set_post_draw(scale_freq, true);
+	
+	lv_scale_set_range(scale_freq, 87, 108);
+	lv_scale_set_total_tick_count(scale_freq,43);
+	lv_scale_set_major_tick_every(scale_freq, 6);
+	lv_obj_set_style_length(scale_freq, 10, LV_PART_ITEMS);
+	lv_obj_set_style_length(scale_freq, 20, LV_PART_INDICATOR);
+	
+	/* Slider */
+	slider_freq = lv_slider_create(container);
+	
+	lv_slider_set_range(slider_freq, 87 * 10, 108 * 10); // Solo admite enteros: Se multiplica x 10 y asi tenemos el decimal con una division
+	
+	static lv_style_t *style_knob;
+	lv_style_init(style_knob);
+	lv_style_set_bg_opa(style_knob, LV_OPA_COVER);
+	lv_style_set_bg_color(style_knob, lv_palette_main(LV_PALETTE_RED));
+	lv_style_set_radius(style_knob, LV_RADIUS_CIRCLE);
+	lv_style_set_border_width(style_knob, 2);
+	lv_style_set_pad_all(style_knob, 2);
+
+	lv_obj_remove_style_all(slider_freq); 
+	lv_obj_add_style(slider_freq, style_knob, LV_PART_KNOB);	
+	
+	lv_obj_add_event_cb(slider_freq, frequency_set_cb, LV_EVENT_VALUE_CHANGED, NULL);
 	
 	static int32_t grid_col_dsc[] = {LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
 	static int32_t grid_row_dsc[] = {
 			LV_GRID_CONTENT,  /* Subtitulo */
-			5,                /* Separador */
 			LV_GRID_CONTENT,  /* Freq      */
+			LV_GRID_CONTENT,  /* Scale     */
 			LV_GRID_TEMPLATE_LAST
 	};
 	
 	lv_obj_set_grid_dsc_array(container, grid_col_dsc, grid_row_dsc);
 	
-	lv_obj_set_grid_cell(label_freq_input, LV_GRID_ALIGN_CENTER, 0, 1, LV_GRID_ALIGN_STRETCH, 0, 1);
-	lv_obj_set_grid_cell(frequency_input, LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_STRETCH, 2, 1);
+	lv_obj_set_grid_cell(label_freq_input, LV_GRID_ALIGN_CENTER,  0, 1, LV_GRID_ALIGN_STRETCH, 0, 1);
+	lv_obj_set_grid_cell(textarea_freq,    LV_GRID_ALIGN_CENTER,  0, 1, LV_GRID_ALIGN_STRETCH, 1, 1);
+	lv_obj_set_grid_cell(scale_freq,       LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_STRETCH, 2, 1);
+	lv_obj_set_grid_cell(slider_freq,      LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_START,   2, 1);
 }
 
 
@@ -1159,4 +1228,27 @@ static void crear_panel_camino_audio(lv_obj_t * container){
 	lv_obj_set_grid_cell(speakers_btn,   LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_START, 3, 1);
 	lv_obj_set_grid_cell(mp3_btn,        LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_START, 5, 1);
 	lv_obj_set_grid_cell(radio_btn,      LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_START, 6, 1);
+}
+
+static void freq_slider_observer_cb(lv_observer_t * observer, lv_subject_t * subject){
+	lv_obj_t *slider = lv_observer_get_target_obj(observer);
+	char buf[10] = "";
+	sprintf(buf, "%d", lv_slider_get_value(slider));
+	lv_textarea_set_text(textarea_freq, buf);
+	
+}
+
+static void frequency_set_cb(lv_event_t * e) {
+	lv_obj_t * obj = lv_event_get_target(e);
+	char buf[10] = "";
+	if (obj == slider_freq){
+		float freq = ((float)lv_slider_get_value(slider_freq))/10.0;
+		sprintf(buf, "%.1f", freq);
+		lv_textarea_set_text(textarea_freq, buf);
+	} else if(obj == textarea_freq){
+		sprintf(buf, "%s", lv_textarea_get_text(textarea_freq));
+		float freq = atof(buf);
+		int val = (freq*10.0); 
+		lv_slider_set_value(slider_freq, val, LV_ANIM_ON);
+	}
 }

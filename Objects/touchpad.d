@@ -1,12 +1,12 @@
 ./objects/touchpad.o: hal_stm_lvgl\touchpad\touchpad.c \
   RTE\LVGL\lv_conf_cmsis.h RTE\_Target_1\Pre_Include_Global.h \
-  hal_stm_lvgl\tft\tft.h C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdint.h \
+  hal_stm_lvgl\touchpad\..\tft\tft.h \
+  C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdint.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\lvgl.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\lv_init.h \
   C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdbool.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\lv_conf_internal.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\lv_conf_kconfig.h \
-  lv_conf.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\lv_mem.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\lv_conf_internal.h \
   C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stddef.h \

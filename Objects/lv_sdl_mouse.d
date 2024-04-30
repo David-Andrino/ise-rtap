@@ -7,7 +7,7 @@
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\drivers\sdl\..\..\display\..\misc\lv_types.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\drivers\sdl\..\..\display\..\misc\..\lv_conf_internal.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\drivers\sdl\..\..\display\..\misc\..\lv_conf_kconfig.h \
-  lv_conf.h C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdint.h \
+  C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdint.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\drivers\sdl\..\..\display\..\misc\lv_timer.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\drivers\sdl\..\..\display\..\misc\..\tick\lv_tick.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\drivers\sdl\..\..\display\..\misc\..\tick\..\lv_conf_internal.h \

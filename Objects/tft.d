@@ -1,5 +1,5 @@
 ./objects/tft.o: hal_stm_lvgl\tft\tft.c RTE\LVGL\lv_conf_cmsis.h \
-  RTE\_Target_1\Pre_Include_Global.h lv_conf.h \
+  RTE\_Target_1\Pre_Include_Global.h hal_stm_lvgl\tft\..\..\lv_conf.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\lvgl.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\lv_init.h \
   C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdbool.h \
