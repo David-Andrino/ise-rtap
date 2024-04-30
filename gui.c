@@ -9,7 +9,7 @@
 #define TITLE "Real Time Audio Processor"
 #define ABOUT "Ingenieria de Sistemas Electronicos 2024"
 #define DRAGGABBLE 0
-
+#define MAX_VOLUME 100
 /**********************
  *      TYPEDEFS
  **********************/
@@ -30,20 +30,18 @@ static lv_obj_t * label_coef;
 void async_cb(void * data){
     char str[32]; /* Buffer to hold the string */
 		int *n = ((int*) data);
-    /* Format the new string. Replace this with your actual calculation result */
+	
     sprintf(str, "Coeficiente %d: %d", n[0], n[1]);
 
-    /* Set the new text */
     lv_label_set_text(label_coef, str);
 }
 void consumo_async_cb(void * data){
 	char str[32]; /* Buffer to hold the string */
 	int *n = ((int*) data);
 	int consumo = abs(n[1] % 2000);
-	/* Format the new string. Replace this with your actual calculation result */
+	
 	sprintf(str, "Consumo actual %d mA", consumo);
 
-	/* Set the new text */
 	lv_label_set_text(label_consumo, str);
 	lv_scale_set_line_needle_value(scale_consumo, needle_consumo, 80, consumo);
 }
@@ -58,6 +56,7 @@ static void create_filters_content(lv_obj_t * tabview);
 static void crear_panel_titulo      (lv_obj_t * container);
 static void crear_panel_consumo     (lv_obj_t * container);
 static void crear_panel_freq        (lv_obj_t * container);
+static void crear_panel_mp3         (lv_obj_t * container);
 static void crear_panel_seek 				(lv_obj_t * container);
 static void crear_panel_salida 			(lv_obj_t * container);
 static void crear_panel_camino_audio(lv_obj_t * container);
@@ -72,6 +71,9 @@ static void drag_event_handler(lv_event_t * e);
 static void frequency_set_cb(lv_event_t * e);
 static void seek_up_cb(lv_event_t * e) {}
 static void seek_down_cb(lv_event_t * e) {}
+static void guardar_cadena_cb(lv_event_t * e);
+static void guardar_cadena_cb(lv_event_t * e);
+static void set_channel_from_list_cb(lv_event_t * e);
 static void volume_cb(lv_event_t * e);
 static void headphones_cb(lv_event_t * e) {}
 static void speakers_cb(lv_event_t * e) {}
@@ -97,12 +99,15 @@ static const lv_font_t * font_large;
 static const lv_font_t * font_medium;
 static const lv_font_t * font_normal;
 
-static lv_obj_t * label_volumen;
+//static lv_obj_t * label_volumen;
 static lv_obj_t *volume_slider_radio, *volume_slider_mp3, *volume_slider_filtros;		// Necesario que sea global para poder copiar el valor. No puede haber solo un objeto compartido porque falla (Necesario uno por tab).
 
 static lv_obj_t * textarea_freq;
 static lv_obj_t * slider_freq;
-static lv_obj_t * label_cadena;
+static lv_obj_t * label_cadena, *label_cadena_txt; 
+static lv_obj_t * list_cadenas;
+static float lista_freq_guardadas[15];
+static int index = 0;
 
 static gui_data_t data = {
 	.vol = 50,
@@ -209,11 +214,6 @@ static void home_create(lv_obj_t * tabview){
 	lv_obj_set_height(panel_salida, LV_SIZE_CONTENT);
 	lv_obj_set_width(panel_salida, LV_SIZE_CONTENT);
 	crear_panel_camino_audio(panel_salida);
-	
-//	/Create a keyboard /
-//	lv_obj_t * kb = lv_keyboard_create(lv_screen_active());
-//	lv_obj_add_flag(kb, LV_OBJ_FLAG_HIDDEN);
-//	lv_obj_add_event_cb(user_name, ta_event_cb, LV_EVENT_ALL, kb);
  
 	/*Create the third panel*/
 	lv_obj_t * panel_consumo = lv_obj_create(tabview);
@@ -243,17 +243,13 @@ static void create_radio_content(lv_obj_t * tabview) {
 	lv_obj_t * panel_freq = lv_obj_create(tabview);
 	lv_obj_set_height(panel_freq, LV_SIZE_CONTENT);
 	lv_obj_set_width(panel_freq, LV_SIZE_CONTENT);
-	crear_panel_freq(panel_freq);
-	
-//	lv_obj_t * panel_seek = lv_obj_create(tabview);
-//	lv_obj_set_height(panel_seek, LV_SIZE_CONTENT);
-//	lv_obj_set_width(panel_seek , LV_SIZE_CONTENT);
-//	crear_panel_seek(panel_seek);
+	crear_panel_freq(panel_freq);												// Aqui se crea todo el panel de la frecuencia
 	
 	/* Volumen */
 	lv_obj_t * panel_vol = lv_obj_create(tabview);
 	lv_obj_set_height(panel_vol, LV_SIZE_CONTENT);
 	lv_obj_set_width(panel_vol , LV_SIZE_CONTENT);
+	lv_obj_t * label_volumen;
 	label_volumen = lv_label_create(panel_vol);
 	lv_label_set_text_fmt(label_volumen, "Volumen");
 	lv_obj_add_style(label_volumen, &style_subtitle, 0);  
@@ -261,7 +257,7 @@ static void create_radio_content(lv_obj_t * tabview) {
 	volume_slider_radio = lv_slider_create(panel_vol);
 	lv_obj_add_event_cb(volume_slider_radio, volume_cb, LV_EVENT_VALUE_CHANGED, NULL);
 	lv_slider_set_value(volume_slider_radio, data.vol, LV_ANIM_ON);	
-	lv_slider_set_range(volume_slider_filtros, 0, 100);
+	lv_slider_set_range(volume_slider_filtros, 0, MAX_VOLUME);
 	
 	lv_obj_t * mute_btn = lv_btn_create(panel_vol);
 	lv_obj_add_event_cb(mute_btn, mute_cb, LV_EVENT_CLICKED, NULL);
@@ -287,7 +283,7 @@ static void create_radio_content(lv_obj_t * tabview) {
 	lv_obj_t * panel_salida = lv_obj_create(tabview);
 	lv_obj_set_height(panel_salida, LV_SIZE_CONTENT);
 	lv_obj_set_width(panel_salida , LV_SIZE_CONTENT);
-	crear_panel_salida(panel_salida);
+	crear_panel_salida(panel_salida);	
 	
 	/* Define the grid */
 	static int32_t grid_col_dsc[] = {LV_GRID_FR(2), LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
@@ -309,98 +305,163 @@ static void create_radio_content(lv_obj_t * tabview) {
 
 
 static void create_mp3_content(lv_obj_t * tabview){
-	lv_obj_t * tab_mp3 = lv_obj_create(tabview);
-	lv_obj_set_height(tab_mp3, LV_SIZE_CONTENT);
-	lv_obj_set_width(tab_mp3, 750);
+//	lv_obj_t * tab_mp3 = lv_obj_create(tabview);
+//	lv_obj_set_height(tab_mp3, LV_SIZE_CONTENT);
+//	lv_obj_set_width(tab_mp3, 750);
 
-	lv_obj_t * name = lv_label_create(tab_mp3);
-	lv_label_set_text(name, TITLE);
-	lv_obj_add_style(name, &style_title, 0);
+//	lv_obj_t * name = lv_label_create(tab_mp3);
+//	lv_label_set_text(name, TITLE);
+//	lv_obj_add_style(name, &style_title, 0);
+//	
+//	lv_obj_t * label_freq_input = lv_label_create(tab_mp3);
+//	lv_label_set_text_fmt(label_freq_input, "Canciones");
+//		
+//	lv_obj_t * canciones = lv_dropdown_create(tab_mp3);
+//	lv_dropdown_set_options_static(canciones, data.songs);
 	
-	lv_obj_t * label_freq_input = lv_label_create(tab_mp3);
-	lv_label_set_text_fmt(label_freq_input, "Canciones");
-		
-	lv_obj_t * canciones = lv_dropdown_create(tab_mp3);
-	lv_dropdown_set_options_static(canciones, data.songs);
-	
-		
+{		
 	/* Create seek up and down buttons */
-	lv_obj_t * label_seek = lv_label_create(tab_mp3);
-	lv_label_set_text_fmt(label_seek, "Control");
-	
-	lv_obj_t * play_btn = lv_btn_create(tab_mp3);
-	lv_obj_add_event_cb(play_btn, seek_up_cb, LV_EVENT_CLICKED, NULL);
-	lv_obj_t * label_play_btn = lv_label_create(play_btn);
-	lv_label_set_text_fmt(label_play_btn, "Play");
-		
-	lv_obj_t * repeat_btn = lv_btn_create(tab_mp3);
-	lv_obj_add_event_cb(repeat_btn, seek_down_cb, LV_EVENT_CLICKED, NULL);
-	lv_obj_t * label_repeat_btn = lv_label_create(repeat_btn);
-	lv_label_set_text_fmt(label_repeat_btn, "Bucle");
-	
-	lv_obj_t * prev_btn = lv_btn_create(tab_mp3);
-	lv_obj_add_event_cb(prev_btn, seek_up_cb, LV_EVENT_CLICKED, NULL);
-	lv_obj_t * label_seek_up = lv_label_create(prev_btn);
-	lv_label_set_text_fmt(label_seek_up, "Prev");
-		
-	lv_obj_t * next_btn = lv_btn_create(tab_mp3);
-	lv_obj_add_event_cb(next_btn, seek_down_cb, LV_EVENT_CLICKED, NULL);
-	lv_obj_t * label_next_btn = lv_label_create(next_btn);
-	lv_label_set_text_fmt(label_next_btn, "Next");
+//	lv_obj_t * label_seek = lv_label_create(tab_mp3);
+//	lv_label_set_text_fmt(label_seek, "Control");
+//	
+//	lv_obj_t * play_btn = lv_btn_create(tab_mp3);
+//	lv_obj_add_event_cb(play_btn, seek_up_cb, LV_EVENT_CLICKED, NULL);
+//	lv_obj_t * label_play_btn = lv_label_create(play_btn);
+//	lv_label_set_text_fmt(label_play_btn, "Play");
+//		
+//	lv_obj_t * repeat_btn = lv_btn_create(tab_mp3);
+//	lv_obj_add_event_cb(repeat_btn, seek_down_cb, LV_EVENT_CLICKED, NULL);
+//	lv_obj_t * label_repeat_btn = lv_label_create(repeat_btn);
+//	lv_label_set_text_fmt(label_repeat_btn, "Bucle");
+//	
+//	lv_obj_t * prev_btn = lv_btn_create(tab_mp3);
+//	lv_obj_add_event_cb(prev_btn, seek_up_cb, LV_EVENT_CLICKED, NULL);
+//	lv_obj_t * label_seek_up = lv_label_create(prev_btn);
+//	lv_label_set_text_fmt(label_seek_up, "Prev");
+//		
+//	lv_obj_t * next_btn = lv_btn_create(tab_mp3);
+//	lv_obj_add_event_cb(next_btn, seek_down_cb, LV_EVENT_CLICKED, NULL);
+//	lv_obj_t * label_next_btn = lv_label_create(next_btn);
+//	lv_label_set_text_fmt(label_next_btn, "Next");
 
-	/* Create a volume slider */
-	label_volumen = lv_label_create(tab_mp3);
+//	/* Create a volume slider */
+//	label_volumen = lv_label_create(tab_mp3);
+//	lv_label_set_text_fmt(label_volumen, "Volumen");
+//	volume_slider_mp3 = lv_slider_create(tab_mp3);
+//	lv_obj_add_event_cb(volume_slider_mp3, volume_cb, LV_EVENT_VALUE_CHANGED, NULL);
+//	lv_slider_set_value(volume_slider_mp3, data.vol, LV_ANIM_ON);	
+//	
+//	/* Create headphones and speakers buttons */
+//	lv_obj_t * label_salida = lv_label_create(tab_mp3);
+//	lv_label_set_text_fmt(label_salida, "Salida");
+//    
+//	lv_obj_t * headphones_btn = lv_btn_create(tab_mp3);
+//	lv_obj_add_event_cb(headphones_btn, headphones_cb, LV_EVENT_CLICKED, NULL);
+//	lv_obj_t * label_headphones = lv_label_create(headphones_btn);
+//	lv_label_set_text_fmt(label_headphones, "Cascos");
+//		
+//    lv_obj_t * speakers_btn = lv_btn_create(tab_mp3);
+//    lv_obj_add_event_cb(speakers_btn, speakers_cb, LV_EVENT_CLICKED, NULL);
+//		lv_obj_t * label_altavoz = lv_label_create(speakers_btn);
+//		lv_label_set_text_fmt(label_altavoz, "Altavoz");
+//		
+//		/* Define the grid */
+//    static int32_t grid_col_dsc[] = {LV_GRID_FR(2), 10, LV_GRID_FR(1), LV_GRID_FR(1), 10, LV_GRID_FR(2), 10, LV_GRID_FR(2), LV_GRID_TEMPLATE_LAST};
+//    static int32_t grid_row_dsc[] = {
+//			LV_GRID_CONTENT,           /* Title    */
+//			LV_GRID_CONTENT,  				 /* Subtitle */
+//			LV_GRID_CONTENT,                   
+//			LV_GRID_CONTENT,           /* Box      */
+//			LV_GRID_CONTENT,           /* Box      */
+//			LV_GRID_TEMPLATE_LAST
+//		};
+//		
+//    lv_obj_set_grid_dsc_array(tab_mp3, grid_col_dsc, grid_row_dsc);
+//		
+//		lv_obj_set_grid_cell(tab_mp3, LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_CENTER, 0, 1);
+//		
+//		lv_obj_set_grid_cell(name, LV_GRID_ALIGN_START, 0, 4, LV_GRID_ALIGN_START, 0, 1);
+//		lv_obj_set_grid_cell(label_freq_input, LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_START, 1, 1);
+//		lv_obj_set_grid_cell(canciones, LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_STRETCH, 2, 1);
+//		
+//		lv_obj_set_grid_cell(label_seek, LV_GRID_ALIGN_STRETCH, 2, 3, LV_GRID_ALIGN_STRETCH, 1, 1);
+//		lv_obj_set_grid_cell(play_btn, LV_GRID_ALIGN_STRETCH, 2, 1, LV_GRID_ALIGN_START, 2, 1);
+//		lv_obj_set_grid_cell(repeat_btn, LV_GRID_ALIGN_STRETCH, 3, 1, LV_GRID_ALIGN_START, 2, 1);
+//		lv_obj_set_grid_cell(prev_btn, LV_GRID_ALIGN_STRETCH, 2, 1, LV_GRID_ALIGN_START, 3, 1);
+//		lv_obj_set_grid_cell(next_btn, LV_GRID_ALIGN_STRETCH, 3, 1, LV_GRID_ALIGN_START, 3, 1);
+//		
+//		lv_obj_set_grid_cell(label_volumen, LV_GRID_ALIGN_STRETCH, 5, 1, LV_GRID_ALIGN_START, 1, 1);
+//		lv_obj_set_grid_cell(volume_slider_mp3, LV_GRID_ALIGN_STRETCH, 5, 1, LV_GRID_ALIGN_START, 2, 1);
+//		
+//		lv_obj_set_grid_cell(label_salida, LV_GRID_ALIGN_STRETCH, 7, 1, LV_GRID_ALIGN_START, 1, 1);
+//		lv_obj_set_grid_cell(headphones_btn, LV_GRID_ALIGN_STRETCH, 7, 1, LV_GRID_ALIGN_START, 2, 1);
+//		lv_obj_set_grid_cell(speakers_btn, LV_GRID_ALIGN_STRETCH, 7, 1, LV_GRID_ALIGN_START, 3, 1);
+}
+	lv_obj_t * panel_titulo = lv_obj_create(tabview);
+	crear_panel_titulo(panel_titulo);
+	
+	lv_obj_t * panel_mp3 = lv_obj_create(tabview);
+	lv_obj_set_height(panel_mp3, LV_SIZE_CONTENT);
+	lv_obj_set_width(panel_mp3, LV_SIZE_CONTENT);
+	crear_panel_mp3(panel_mp3);
+//	crear_panel_freq(panel_freq);
+
+	/* Volumen */
+	lv_obj_t * panel_vol = lv_obj_create(tabview);
+	lv_obj_set_height(panel_vol, LV_SIZE_CONTENT);
+	lv_obj_set_width(panel_vol , LV_SIZE_CONTENT);
+	lv_obj_t * label_volumen;
+	label_volumen = lv_label_create(panel_vol);
 	lv_label_set_text_fmt(label_volumen, "Volumen");
-	volume_slider_mp3 = lv_slider_create(tab_mp3);
+	lv_obj_add_style(label_volumen, &style_subtitle, 0);  
+	
+	volume_slider_mp3 = lv_slider_create(panel_vol);
 	lv_obj_add_event_cb(volume_slider_mp3, volume_cb, LV_EVENT_VALUE_CHANGED, NULL);
 	lv_slider_set_value(volume_slider_mp3, data.vol, LV_ANIM_ON);	
+	lv_slider_set_range(volume_slider_mp3, 0, MAX_VOLUME);
 	
-	/* Create headphones and speakers buttons */
-	lv_obj_t * label_salida = lv_label_create(tab_mp3);
-	lv_label_set_text_fmt(label_salida, "Salida");
-    
-	lv_obj_t * headphones_btn = lv_btn_create(tab_mp3);
-	lv_obj_add_event_cb(headphones_btn, headphones_cb, LV_EVENT_CLICKED, NULL);
-	lv_obj_t * label_headphones = lv_label_create(headphones_btn);
-	lv_label_set_text_fmt(label_headphones, "Cascos");
-		
-    lv_obj_t * speakers_btn = lv_btn_create(tab_mp3);
-    lv_obj_add_event_cb(speakers_btn, speakers_cb, LV_EVENT_CLICKED, NULL);
-		lv_obj_t * label_altavoz = lv_label_create(speakers_btn);
-		lv_label_set_text_fmt(label_altavoz, "Altavoz");
-		
-		/* Define the grid */
-    static int32_t grid_col_dsc[] = {LV_GRID_FR(2), 10, LV_GRID_FR(1), LV_GRID_FR(1), 10, LV_GRID_FR(2), 10, LV_GRID_FR(2), LV_GRID_TEMPLATE_LAST};
-    static int32_t grid_row_dsc[] = {
-			LV_GRID_CONTENT,           /* Title    */
-			LV_GRID_CONTENT,  				 /* Subtitle */
-			LV_GRID_CONTENT,                   
-			LV_GRID_CONTENT,           /* Box      */
-			LV_GRID_CONTENT,           /* Box      */
+	lv_obj_t * mute_btn = lv_btn_create(panel_vol);
+	lv_obj_add_event_cb(mute_btn, mute_cb, LV_EVENT_CLICKED, NULL);
+	lv_obj_t * label_play_btn = lv_label_create(mute_btn);
+	lv_label_set_text_fmt(label_play_btn, "%s  Mute", LV_SYMBOL_MUTE);
+	
+	static int32_t grid_vol_col_dsc[] = {LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
+	static int32_t grid_vol_row_dsc[] = {
+			LV_GRID_CONTENT,  /* Subtitulo */
+			5,                /* Separador */
+			LV_GRID_CONTENT,  /* Slider    */
+			5,                /* Separador */
+			LV_GRID_CONTENT,  /* Mute      */
 			LV_GRID_TEMPLATE_LAST
-		};
-		
-    lv_obj_set_grid_dsc_array(tab_mp3, grid_col_dsc, grid_row_dsc);
-		
-		lv_obj_set_grid_cell(tab_mp3, LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_CENTER, 0, 1);
-		
-		lv_obj_set_grid_cell(name, LV_GRID_ALIGN_START, 0, 4, LV_GRID_ALIGN_START, 0, 1);
-		lv_obj_set_grid_cell(label_freq_input, LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_START, 1, 1);
-		lv_obj_set_grid_cell(canciones, LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_STRETCH, 2, 1);
-		
-		lv_obj_set_grid_cell(label_seek, LV_GRID_ALIGN_STRETCH, 2, 3, LV_GRID_ALIGN_STRETCH, 1, 1);
-		lv_obj_set_grid_cell(play_btn, LV_GRID_ALIGN_STRETCH, 2, 1, LV_GRID_ALIGN_START, 2, 1);
-		lv_obj_set_grid_cell(repeat_btn, LV_GRID_ALIGN_STRETCH, 3, 1, LV_GRID_ALIGN_START, 2, 1);
-		lv_obj_set_grid_cell(prev_btn, LV_GRID_ALIGN_STRETCH, 2, 1, LV_GRID_ALIGN_START, 3, 1);
-		lv_obj_set_grid_cell(next_btn, LV_GRID_ALIGN_STRETCH, 3, 1, LV_GRID_ALIGN_START, 3, 1);
-		
-		lv_obj_set_grid_cell(label_volumen, LV_GRID_ALIGN_STRETCH, 5, 1, LV_GRID_ALIGN_START, 1, 1);
-		lv_obj_set_grid_cell(volume_slider_mp3, LV_GRID_ALIGN_STRETCH, 5, 1, LV_GRID_ALIGN_START, 2, 1);
-		
-		lv_obj_set_grid_cell(label_salida, LV_GRID_ALIGN_STRETCH, 7, 1, LV_GRID_ALIGN_START, 1, 1);
-		lv_obj_set_grid_cell(headphones_btn, LV_GRID_ALIGN_STRETCH, 7, 1, LV_GRID_ALIGN_START, 2, 1);
-		lv_obj_set_grid_cell(speakers_btn, LV_GRID_ALIGN_STRETCH, 7, 1, LV_GRID_ALIGN_START, 3, 1);
+	};
+	
+	lv_obj_set_grid_dsc_array(panel_vol, grid_vol_col_dsc, grid_vol_row_dsc);
+	
+	lv_obj_set_grid_cell(label_volumen,     LV_GRID_ALIGN_CENTER,  0, 1, LV_GRID_ALIGN_STRETCH, 0, 1);
+	lv_obj_set_grid_cell(volume_slider_mp3, LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_STRETCH, 2, 1);
+	lv_obj_set_grid_cell(mute_btn,          LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_STRETCH, 4, 1);
 
+	lv_obj_t * panel_salida = lv_obj_create(tabview);
+	lv_obj_set_height(panel_salida, LV_SIZE_CONTENT);
+	lv_obj_set_width(panel_salida , LV_SIZE_CONTENT);
+	crear_panel_salida(panel_salida);
+	
+	/* Define the grid */
+	static int32_t grid_col_dsc[] = {LV_GRID_FR(2), LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
+	static int32_t grid_row_dsc[] = {
+		LV_GRID_CONTENT,          
+		LV_GRID_CONTENT,
+		LV_GRID_CONTENT,
+		LV_GRID_TEMPLATE_LAST
+	};
+	
+	lv_obj_set_grid_dsc_array(tabview, grid_col_dsc, grid_row_dsc);
+	
+	lv_obj_set_grid_cell(panel_mp3,   LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_STRETCH, 0, 2);
+////	lv_obj_set_grid_cell(panel_seek,   LV_GRID_ALIGN_STRETCH, 1, 1, LV_GRID_ALIGN_STRETCH, 0, 1);
+	lv_obj_set_grid_cell(panel_vol,    LV_GRID_ALIGN_STRETCH, 1, 1, LV_GRID_ALIGN_STRETCH, 0, 1);
+	lv_obj_set_grid_cell(panel_salida, LV_GRID_ALIGN_STRETCH, 1, 1, LV_GRID_ALIGN_STRETCH, 1, 1);
+	lv_obj_set_grid_cell(panel_titulo, LV_GRID_ALIGN_STRETCH, 0, 2, LV_GRID_ALIGN_STRETCH, 2, 1);
 }
 
 
@@ -480,6 +541,7 @@ static void create_filters_content(lv_obj_t * tabview){
 	/* Volumen */
 	lv_obj_set_height(panel_vol, LV_SIZE_CONTENT);
 	lv_obj_set_width(panel_vol , LV_SIZE_CONTENT);
+	lv_obj_t * label_volumen;
 	label_volumen = lv_label_create(panel_vol);
 	lv_label_set_text_fmt(label_volumen, "Volumen");
 	lv_obj_add_style(label_volumen, &style_subtitle, 0);  
@@ -487,7 +549,7 @@ static void create_filters_content(lv_obj_t * tabview){
 	volume_slider_filtros = lv_slider_create(panel_vol);
 	lv_obj_add_event_cb(volume_slider_filtros, volume_cb, LV_EVENT_VALUE_CHANGED, NULL);
 	lv_slider_set_value(volume_slider_filtros, data.vol, LV_ANIM_ON);	
-//	lv_slider_set_range(volume_slider_filtros, 0, 100);
+	lv_slider_set_range(volume_slider_filtros, 0, MAX_VOLUME);
 	
 	lv_obj_t * mute_btn = lv_btn_create(panel_vol);
 	lv_obj_add_event_cb(mute_btn, mute_cb, LV_EVENT_CLICKED, NULL);
@@ -1052,6 +1114,7 @@ static void crear_panel_freq (lv_obj_t * container){
 	lv_scale_set_major_tick_every(scale_freq, 6);
 	lv_obj_set_style_length(scale_freq, 10, LV_PART_ITEMS);
 	lv_obj_set_style_length(scale_freq, 20, LV_PART_INDICATOR);
+	lv_obj_set_height(scale_freq, 35);
 	
 	/* Slider */
 	slider_freq = lv_slider_create(container);
@@ -1071,23 +1134,68 @@ static void crear_panel_freq (lv_obj_t * container){
 	
 	lv_obj_add_event_cb(slider_freq, frequency_set_cb, LV_EVENT_VALUE_CHANGED, NULL);
 	
-	static int32_t grid_col_dsc[] = {LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
+	/* Label "cadena" */
+	label_cadena_txt = lv_label_create(container);
+	lv_label_set_text(label_cadena_txt, "");
+	lv_obj_add_style(label_cadena_txt, &style_title, 0);
+	
+	/* Cadenas guardadas */
+	list_cadenas = lv_list_create(container);
+	
+	/* Seek up / down & save */
+	lv_obj_t * seek_up_btn = lv_btn_create(container);
+	lv_obj_add_event_cb(seek_up_btn, seek_up_cb, LV_EVENT_CLICKED, NULL);
+	lv_obj_t * label_seek_up = lv_label_create(seek_up_btn);
+	lv_label_set_text_fmt(label_seek_up, "%s Seek Up", LV_SYMBOL_UP);
+	
+	lv_obj_t * seek_down_btn = lv_btn_create(container);
+	lv_obj_add_event_cb(seek_down_btn, seek_down_cb, LV_EVENT_CLICKED, NULL);
+	lv_obj_t * label_seek_down = lv_label_create(seek_down_btn);
+	lv_label_set_text_fmt(label_seek_down, "%s Seek Down", LV_SYMBOL_DOWN);
+	
+	lv_obj_t * guardar_cadena_btn = lv_btn_create(container);
+	lv_obj_add_event_cb(guardar_cadena_btn, guardar_cadena_cb, LV_EVENT_CLICKED, NULL);
+	lv_obj_t * label_guardar_cadena = lv_label_create(guardar_cadena_btn);
+	lv_label_set_text_fmt(label_guardar_cadena, "%s Guardar", LV_SYMBOL_SAVE);
+	
+	static int32_t grid_col_dsc[] = {LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
 	static int32_t grid_row_dsc[] = {
 			LV_GRID_CONTENT,  /* Subtitulo */
 			LV_GRID_CONTENT,  /* Freq      */
 			LV_GRID_CONTENT,  /* Scale     */
+			LV_GRID_CONTENT,  /* Cadena    */
+			LV_GRID_CONTENT,  /* seek up   */
+			LV_GRID_CONTENT,  /* seek down */
+			LV_GRID_CONTENT,  /* guardar   */
 			LV_GRID_TEMPLATE_LAST
 	};
 	
 	lv_obj_set_grid_dsc_array(container, grid_col_dsc, grid_row_dsc);
 	
-	lv_obj_set_grid_cell(label_freq_input, LV_GRID_ALIGN_CENTER,  0, 1, LV_GRID_ALIGN_STRETCH, 0, 1);
-	lv_obj_set_grid_cell(textarea_freq,    LV_GRID_ALIGN_CENTER,  0, 1, LV_GRID_ALIGN_STRETCH, 1, 1);
-	lv_obj_set_grid_cell(scale_freq,       LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_STRETCH, 2, 1);
-	lv_obj_set_grid_cell(slider_freq,      LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_START,   2, 1);
+	lv_obj_set_grid_cell(label_freq_input,   LV_GRID_ALIGN_CENTER,  0, 2, LV_GRID_ALIGN_STRETCH, 0, 1);
+	lv_obj_set_grid_cell(textarea_freq,      LV_GRID_ALIGN_CENTER,  0, 2, LV_GRID_ALIGN_STRETCH, 1, 1);
+	lv_obj_set_grid_cell(scale_freq,         LV_GRID_ALIGN_STRETCH, 0, 2, LV_GRID_ALIGN_START,   2, 1);
+	lv_obj_set_grid_cell(slider_freq,        LV_GRID_ALIGN_STRETCH, 0, 2, LV_GRID_ALIGN_START,   2, 1);
+	lv_obj_set_grid_cell(label_cadena_txt,   LV_GRID_ALIGN_CENTER,  0, 2, LV_GRID_ALIGN_STRETCH, 3, 1);
+	lv_obj_set_grid_cell(seek_up_btn,        LV_GRID_ALIGN_STRETCH, 1, 1, LV_GRID_ALIGN_START,   4, 1);
+	lv_obj_set_grid_cell(seek_down_btn,      LV_GRID_ALIGN_STRETCH, 1, 1, LV_GRID_ALIGN_START,   5, 1);
+	lv_obj_set_grid_cell(guardar_cadena_btn, LV_GRID_ALIGN_STRETCH, 1, 1, LV_GRID_ALIGN_START,   6, 1);
+	lv_obj_set_grid_cell(list_cadenas,       LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_STRETCH, 4, 3);
 }
 
 
+
+static void crear_panel_mp3 (lv_obj_t * container){
+	LV_IMG_DECLARE(img_bonita_50px);
+	lv_obj_t * img1 = lv_img_create(container);
+	lv_img_set_src(img1, &img_bonita_50px);
+	lv_obj_align(img1, LV_ALIGN_CENTER, 0, -20);
+	lv_obj_set_size(img1, 200, 200);
+
+	lv_obj_t * img2 = lv_img_create(container);
+	lv_img_set_src(img2, LV_SYMBOL_OK "Accept");
+	lv_obj_align_to(img2, img1, LV_ALIGN_OUT_BOTTOM_MID, 0, 20);
+}
 static void crear_panel_seek (lv_obj_t * container){
 	/* Create seek up and down buttons */
 	lv_obj_t * label_seek = lv_label_create(container);
@@ -1251,4 +1359,47 @@ static void frequency_set_cb(lv_event_t * e) {
 		int val = (freq*10.0); 
 		lv_slider_set_value(slider_freq, val, LV_ANIM_ON);
 	}
+	float freq = ((float)lv_slider_get_value(slider_freq))/10.0;
+	
+	char buf2[50] = "", buf3[50]= "";
+	snprintf(buf2, 50, "");
+	get_cadena(buf2, freq);
+	if(strcmp(buf2, "") != 0){
+		lv_label_set_text(label_cadena_txt, buf2);
+	} else lv_label_set_text(label_cadena_txt, "");
+}
+
+static void guardar_cadena_cb(lv_event_t * e) {
+	char buf2[50] = "";
+	snprintf(buf2, 50, "");
+	
+	float freq = ((float)lv_slider_get_value(slider_freq))/10.0;
+	get_cadena(buf2, freq);
+	
+	lv_obj_t * btn;
+	
+	if(strcmp(buf2, "") == 0){
+		char tmp[10] = "";
+		sprintf(tmp, "%.1f", freq);
+		btn = lv_list_add_btn(list_cadenas, NULL, tmp);
+	} else {
+		btn = lv_list_add_btn(list_cadenas, NULL, lv_label_get_text(label_cadena_txt));
+	}
+	lv_obj_add_event_cb(btn, set_channel_from_list_cb, LV_EVENT_CLICKED, NULL);
+	lista_freq_guardadas[index] = freq;
+	index++;
+}
+
+static void set_channel_from_list_cb(lv_event_t * e){
+	lv_event_code_t code = lv_event_get_code(e);
+	lv_obj_t * obj = lv_event_get_target(e);
+	
+	uint32_t pos = lv_obj_get_index(obj);
+	float freq = lista_freq_guardadas[pos];
+	
+	char buf[10] = "";
+	sprintf(buf, "%.1f", freq);
+	lv_textarea_set_text(textarea_freq, buf);
+	int val = (freq*10.0); 
+	lv_slider_set_value(slider_freq, val, LV_ANIM_ON);
 }
