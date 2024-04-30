@@ -1,0 +1,7 @@
+t <form>
+t <text>
+t <id>rtcTime</id>
+c h <value>%02d-%02d-20%02d %02d:%02d:%02d</value>
+t </text>
+t </form>
+.
