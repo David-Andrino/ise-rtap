@@ -39,4 +39,5 @@
   C:\Users\ragus\AppData\Local\Arm\Packs\Keil\STM32F7xx_DFP\2.16.0\Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_hal_tim.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\Keil\STM32F7xx_DFP\2.16.0\Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_hal_tim_ex.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\Keil\STM32F7xx_DFP\2.16.0\Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_hal_dsi.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\Keil\STM32F7xx_DFP\2.16.0\Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_hal_jpeg.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\Keil\MDK-Middleware\7.13.0\Board\Board_LED.h

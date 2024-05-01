@@ -38,6 +38,8 @@
 #define RTE_DEVICE_HAL_GPIO
 /* Keil::Device:STM32Cube HAL:I2C:1.3.0 */
 #define RTE_DEVICE_HAL_I2C
+/* Keil::Device:STM32Cube HAL:JPEG:1.3.0 */
+#define RTE_DEVICE_HAL_JPEG
 /* Keil::Device:STM32Cube HAL:LTDC:1.3.0 */
 #define RTE_DEVICE_HAL_LTDC
 /* Keil::Device:STM32Cube HAL:PWR:1.3.0 */
@@ -56,6 +58,12 @@
 /* LVGL.LVGL9::LVGL:Essential:9.1.0 */
 /*! \brief Enable LVGL */
 #define RTE_GRAPHICS_LVGL
+/* LVGL.LVGL9::LVGL:Libraries and Others:File Explorer:9.1.0 */
+/*! \brief enable file explorer support */
+#define LV_USE_FILE_EXPLORER         1
+/* LVGL.LVGL9::LVGL:Libraries and Others:Libs sJPG:9.1.0 */
+/*! \brief enable JPG + split JPG decoder library. */
+#define LV_USE_TJPGD         1
 
 
 #endif /* RTE_COMPONENTS_H */

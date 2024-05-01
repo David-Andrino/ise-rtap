@@ -1,0 +1,4 @@
+img_bonita.sjpg,
+img_bonita.jpeg,
+img_bonita.jpg 
+TO fotos.c RTE NOPRINT ROOT(Fotos)

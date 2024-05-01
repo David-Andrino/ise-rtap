@@ -1,5 +1,5 @@
-./objects/buttons_769i_discovery.o: \
-  C:\Users\ragus\AppData\Local\Arm\Packs\Keil\STM32F7xx_DFP\2.16.0\MDK\Boards\ST\STM32F769I_Discovery\Common\Buttons_769I_Discovery.c \
+./objects/stm32f7xx_hal_jpeg.o: \
+  C:\Users\ragus\AppData\Local\Arm\Packs\Keil\STM32F7xx_DFP\2.16.0\Drivers\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_jpeg.c \
   RTE\LVGL\lv_conf_cmsis.h RTE\_Target_1\Pre_Include_Global.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\Keil\STM32F7xx_DFP\2.16.0\Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_hal.h \
   RTE\Device\STM32F769NIHx\stm32f7xx_hal_conf.h \
@@ -39,5 +39,4 @@
   C:\Users\ragus\AppData\Local\Arm\Packs\Keil\STM32F7xx_DFP\2.16.0\Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_hal_tim.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\Keil\STM32F7xx_DFP\2.16.0\Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_hal_tim_ex.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\Keil\STM32F7xx_DFP\2.16.0\Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_hal_dsi.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\Keil\STM32F7xx_DFP\2.16.0\Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_hal_jpeg.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\Keil\MDK-Middleware\7.13.0\Board\Board_Buttons.h
+  C:\Users\ragus\AppData\Local\Arm\Packs\Keil\STM32F7xx_DFP\2.16.0\Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_hal_jpeg.h

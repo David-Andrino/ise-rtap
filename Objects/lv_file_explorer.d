@@ -1,156 +1,101 @@
-./objects/stm32f7xx_it.o: stm32f7xx_it.c RTE\LVGL\lv_conf_cmsis.h \
-  RTE\_Target_1\Pre_Include_Global.h stm32f7xx_it.h main.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\Keil\STM32F7xx_DFP\2.16.0\Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_hal.h \
-  RTE\Device\STM32F769NIHx\stm32f7xx_hal_conf.h \
-  RTE\_Target_1\RTE_Components.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\Keil\STM32F7xx_DFP\2.16.0\Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_hal_rcc.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\Keil\STM32F7xx_DFP\2.16.0\Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_hal_def.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\Keil\STM32F7xx_DFP\2.16.0\Drivers\CMSIS\Device\ST\STM32F7xx\Include\stm32f7xx.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\Keil\STM32F7xx_DFP\2.16.0\Drivers\CMSIS\Device\ST\STM32F7xx\Include\stm32f769xx.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include\core_cm7.h \
-  C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdint.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include\cmsis_version.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include\cmsis_compiler.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include\cmsis_armclang.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include\mpu_armv7.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include\cachel1_armv7.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\Keil\STM32F7xx_DFP\2.16.0\Drivers\CMSIS\Device\ST\STM32F7xx\Include\system_stm32f7xx.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\Keil\STM32F7xx_DFP\2.16.0\Drivers\STM32F7xx_HAL_Driver\Inc\Legacy\stm32_hal_legacy.h \
-  C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stddef.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\Keil\STM32F7xx_DFP\2.16.0\Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_hal_rcc_ex.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\Keil\STM32F7xx_DFP\2.16.0\Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_hal_gpio.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\Keil\STM32F7xx_DFP\2.16.0\Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_hal_gpio_ex.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\Keil\STM32F7xx_DFP\2.16.0\Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_hal_dma.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\Keil\STM32F7xx_DFP\2.16.0\Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_hal_dma_ex.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\Keil\STM32F7xx_DFP\2.16.0\Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_hal_cortex.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\Keil\STM32F7xx_DFP\2.16.0\Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_hal_dma2d.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\Keil\STM32F7xx_DFP\2.16.0\Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_hal_flash.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\Keil\STM32F7xx_DFP\2.16.0\Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_hal_flash_ex.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\Keil\STM32F7xx_DFP\2.16.0\Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_hal_sdram.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\Keil\STM32F7xx_DFP\2.16.0\Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_ll_fmc.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\Keil\STM32F7xx_DFP\2.16.0\Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_hal_i2c.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\Keil\STM32F7xx_DFP\2.16.0\Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_hal_i2c_ex.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\Keil\STM32F7xx_DFP\2.16.0\Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_hal_ltdc.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\Keil\STM32F7xx_DFP\2.16.0\Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_hal_ltdc_ex.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\Keil\STM32F7xx_DFP\2.16.0\Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_hal_dsi.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\Keil\STM32F7xx_DFP\2.16.0\Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_hal_pwr.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\Keil\STM32F7xx_DFP\2.16.0\Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_hal_pwr_ex.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\Keil\STM32F7xx_DFP\2.16.0\Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_hal_tim.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\Keil\STM32F7xx_DFP\2.16.0\Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_hal_tim_ex.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\Keil\STM32F7xx_DFP\2.16.0\Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_hal_dsi.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\Keil\STM32F7xx_DFP\2.16.0\Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_hal_jpeg.h \
-  hal_stm_lvgl\tft\tft.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\lvgl.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\lv_init.h \
-  C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdbool.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\lv_conf_internal.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\lv_conf_kconfig.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\lv_mem.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\lv_conf_internal.h \
-  C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\string.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\lv_types.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\..\lv_conf_internal.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\lv_string.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\lv_sprintf.h \
-  C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\inttypes.h \
-  C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdarg.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\misc\lv_log.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\misc\lv_timer.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\..\tick\lv_tick.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\..\tick\..\lv_conf_internal.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\lv_ll.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\misc\lv_math.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\misc\lv_array.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\misc\lv_async.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\misc\lv_anim_timeline.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\lv_anim.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\lv_math.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\lv_timer.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\misc\lv_profiler_builtin.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\misc\lv_rb.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\lv_assert.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\lv_log.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\..\stdlib\lv_mem.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\tick\lv_tick.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\lv_obj.h \
+./objects/lv_file_explorer.o: \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\others\file_explorer\lv_file_explorer.c \
+  RTE\LVGL\lv_conf_cmsis.h RTE\_Target_1\Pre_Include_Global.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\others\file_explorer\lv_file_explorer.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\others\file_explorer\..\..\lv_conf_internal.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\others\file_explorer\..\..\lv_conf_kconfig.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\others\file_explorer\..\..\core\lv_obj.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\lv_conf_internal.h \
+  C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stddef.h \
+  C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdbool.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\lv_types.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\..\lv_conf_internal.h \
+  C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdint.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\lv_style.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\..\font\lv_font.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\..\font\..\lv_conf_internal.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\..\font\lv_symbol_def.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\..\font\..\draw\lv_draw_buf.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\..\font\..\draw\..\misc\lv_area.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\..\font\..\draw\..\misc\lv_color.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\lv_palette.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\lv_color.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\lv_color_op.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\..\font\..\draw\..\stdlib\lv_string.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\..\font\..\draw\lv_image_dsc.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\..\font\..\draw\..\lv_conf_internal.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\..\font\..\misc\lv_area.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\..\font\..\misc\lv_types.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\..\font\..\misc\cache\lv_cache.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\..\font\..\misc\cache\lv_cache_entry.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\..\font\..\misc\cache\..\..\osal\lv_os.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\..\font\..\misc\cache\..\..\osal\..\lv_conf_internal.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\..\font\..\misc\cache\..\..\osal\..\misc\lv_types.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\..\font\..\misc\cache\..\..\osal\lv_os_none.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\..\font\..\misc\cache\..\lv_types.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\..\font\..\misc\cache\lv_cache_private.h \
-  C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdlib.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\..\font\..\misc\cache\_lv_cache_lru_rb.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\..\font\..\misc\cache\lv_image_cache.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\lv_area.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\lv_text.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\..\stdlib\lv_sprintf.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\lv_bidi.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\..\layouts\lv_layout.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\..\layouts\..\lv_conf_internal.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\..\layouts\..\misc\lv_types.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\..\layouts\flex\lv_flex.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\..\layouts\flex\..\..\lv_conf_internal.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\..\layouts\flex\..\..\misc\lv_area.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\..\layouts\grid\lv_grid.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\..\layouts\grid\..\..\lv_conf_internal.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\..\layouts\grid\..\..\misc\lv_area.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\lv_style_gen.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\lv_area.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\lv_color.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\..\font\lv_font.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\..\font\..\lv_conf_internal.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\..\font\lv_symbol_def.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\..\font\..\draw\lv_draw_buf.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\..\font\..\draw\..\misc\lv_area.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\..\font\..\draw\..\misc\lv_color.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\lv_assert.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\lv_obj_tree.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\lv_log.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\..\stdlib\lv_mem.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\..\stdlib\..\lv_conf_internal.h \
+  C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\string.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\..\stdlib\..\misc\lv_types.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\lv_math.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\lv_palette.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\lv_color.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\lv_color_op.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\..\font\..\draw\..\stdlib\lv_string.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\..\font\..\draw\lv_image_dsc.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\..\font\..\draw\..\lv_conf_internal.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\..\font\..\misc\lv_area.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\..\font\..\misc\lv_types.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\..\font\..\misc\cache\lv_cache.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\..\font\..\misc\cache\lv_cache_entry.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\..\font\..\misc\cache\..\..\osal\lv_os.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\..\font\..\misc\cache\..\..\osal\..\lv_conf_internal.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\..\font\..\misc\cache\..\..\osal\..\misc\lv_types.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\..\font\..\misc\cache\..\..\osal\lv_os_none.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\..\font\..\misc\cache\..\lv_types.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\..\font\..\misc\cache\lv_cache_private.h \
+  C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdlib.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\..\font\..\misc\cache\_lv_cache_lru_rb.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\..\font\..\misc\cache\lv_image_cache.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\lv_area.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\lv_anim.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\lv_timer.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\..\tick\lv_tick.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\..\tick\..\lv_conf_internal.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\lv_ll.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\lv_text.h \
+  C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdarg.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\..\stdlib\lv_sprintf.h \
+  C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\inttypes.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\lv_bidi.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\..\layouts\lv_layout.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\..\layouts\..\lv_conf_internal.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\..\layouts\..\misc\lv_types.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\..\layouts\flex\lv_flex.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\..\layouts\flex\..\..\lv_conf_internal.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\..\layouts\flex\..\..\misc\lv_area.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\..\layouts\grid\lv_grid.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\..\layouts\grid\..\..\lv_conf_internal.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\..\layouts\grid\..\..\misc\lv_area.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\lv_style_gen.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\lv_obj_tree.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\display\lv_display.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\display\..\misc\lv_types.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\display\..\misc\lv_timer.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\display\..\misc\lv_event.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\lv_array.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\lv_array.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\display\..\misc\lv_color.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\display\..\draw\lv_draw.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\..\font\..\draw\..\misc\lv_types.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\..\font\..\draw\..\misc\lv_style.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\..\font\..\draw\..\misc\lv_text.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\..\font\..\draw\..\misc\lv_profiler.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\..\font\..\draw\lv_image_decoder.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\..\font\..\draw\..\misc\lv_fs.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\..\font\..\draw\..\misc\cache\lv_cache.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\..\font\..\draw\..\osal\lv_os.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\..\font\..\draw\lv_draw_rect.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\..\font\..\draw\lv_draw.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\..\font\..\draw\sw\lv_draw_sw_gradient.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\..\font\..\draw\sw\..\..\misc\lv_color.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\..\font\..\draw\sw\..\..\misc\lv_style.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\..\font\..\draw\lv_draw_label.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\..\font\..\draw\..\misc\lv_bidi.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\..\font\..\draw\lv_draw_image.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\..\font\..\draw\lv_draw_arc.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\..\font\..\draw\lv_draw_line.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\..\font\..\draw\lv_draw_triangle.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\..\font\..\draw\lv_draw_mask.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\..\font\..\draw\..\misc\lv_types.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\..\font\..\draw\..\misc\lv_style.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\..\font\..\draw\..\misc\lv_text.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\..\font\..\draw\..\misc\lv_profiler.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\..\font\..\draw\lv_image_decoder.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\..\font\..\draw\..\misc\lv_fs.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\..\font\..\draw\..\misc\cache\lv_cache.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\..\font\..\draw\..\osal\lv_os.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\..\font\..\draw\lv_draw_rect.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\..\font\..\draw\lv_draw.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\..\font\..\draw\sw\lv_draw_sw_gradient.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\..\font\..\draw\sw\..\..\misc\lv_color.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\..\font\..\draw\sw\..\..\misc\lv_style.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\..\font\..\draw\lv_draw_label.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\..\font\..\draw\..\misc\lv_bidi.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\..\font\..\draw\lv_draw_image.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\..\font\..\draw\lv_draw_arc.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\..\font\..\draw\lv_draw_line.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\..\font\..\draw\lv_draw_triangle.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\..\font\..\draw\lv_draw_mask.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\lv_obj_pos.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\lv_obj_scroll.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\lv_obj_style.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\lv_bidi.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\lv_obj_style_gen.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\core\lv_obj_style.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\lv_obj_draw.h \
@@ -161,11 +106,26 @@
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\lv_event.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\indev\lv_indev.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\indev\..\core\lv_group.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\lv_ll.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\indev\..\misc\lv_area.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\indev\..\misc\lv_timer.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\indev\..\misc\lv_event.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\lv_group.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\others\file_explorer\..\..\lvgl.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\others\file_explorer\..\..\..\lvgl.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\lv_init.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\lv_mem.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\lv_string.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\lv_sprintf.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\misc\lv_log.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\misc\lv_timer.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\misc\lv_math.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\misc\lv_array.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\misc\lv_async.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\misc\lv_anim_timeline.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\misc\lv_profiler_builtin.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\misc\lv_rb.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\tick\lv_tick.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\lv_obj.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\indev\lv_indev.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\lv_refr.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\display\lv_display.h \
@@ -283,9 +243,6 @@
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\others\ime\lv_ime_pinyin.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\others\ime\..\..\lv_conf_internal.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\others\ime\..\..\core\lv_obj.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\others\file_explorer\lv_file_explorer.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\others\file_explorer\..\..\lv_conf_internal.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\others\file_explorer\..\..\core\lv_obj.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\libs\barcode\lv_barcode.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\libs\barcode\..\..\lv_conf_internal.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\libs\barcode\..\..\misc\lv_types.h \
@@ -325,7 +282,7 @@
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\draw\lv_draw.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\draw\lv_draw_buf.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\draw\lv_draw_vector.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\..\font\..\draw\..\misc\lv_array.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\..\font\..\draw\..\misc\lv_array.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\themes\lv_theme.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\themes\..\core\lv_obj.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\themes\default\lv_theme_default.h \
@@ -368,24 +325,21 @@
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\drivers\windows\..\..\indev\lv_indev.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\drivers\windows\lv_windows_display.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\lv_api_map_v8.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\misc\lv_types.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\others\file_explorer\..\..\misc\lv_types.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\lv_api_map_v9_0.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\lv_global.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\draw\sw\lv_draw_sw.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\..\font\..\draw\sw\..\lv_draw.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\..\font\..\draw\sw\..\..\misc\lv_area.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\..\font\..\draw\sw\..\..\display\lv_display.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\..\font\..\draw\sw\..\..\osal\lv_os.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\..\font\..\draw\sw\..\..\draw\lv_draw_vector.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\..\font\..\draw\sw\blend\lv_draw_sw_blend.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\..\font\..\draw\sw\blend\..\lv_draw_sw_mask.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\..\font\..\draw\sw\..\..\misc\lv_math.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\..\font\..\draw\sw\blend\..\..\..\misc\lv_color.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\..\font\..\draw\sw\blend\..\..\..\misc\lv_area.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\stdlib\..\misc\..\font\..\draw\sw\blend\..\..\..\misc\lv_style.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\lv_color_op.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\lv_log.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\lv_timer.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\..\font\..\draw\sw\..\lv_draw.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\..\font\..\draw\sw\..\..\misc\lv_area.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\..\font\..\draw\sw\..\..\display\lv_display.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\..\font\..\draw\sw\..\..\osal\lv_os.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\..\font\..\draw\sw\..\..\draw\lv_draw_vector.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\..\font\..\draw\sw\blend\lv_draw_sw_blend.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\..\font\..\draw\sw\blend\..\lv_draw_sw_mask.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\..\font\..\draw\sw\..\..\misc\lv_math.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\..\font\..\draw\sw\blend\..\..\..\misc\lv_color.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\..\font\..\draw\sw\blend\..\..\..\misc\lv_area.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\misc\..\font\..\draw\sw\blend\..\..\..\misc\lv_style.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\others\sysmon\lv_sysmon.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\stdlib\builtin\lv_tlsf.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\stdlib\builtin\..\..\lv_conf_internal.h \
@@ -393,12 +347,4 @@
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\stdlib\builtin\..\..\misc\lv_ll.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\tick\lv_tick.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\layouts\lv_layout.h \
-  hal_stm_lvgl\touchpad\touchpad.h gui_threads.h gui.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\Keil\STM32F7xx_DFP\2.16.0\Drivers\BSP\STM32F769I-Discovery\stm32f769i_discovery.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\Keil\STM32F7xx_DFP\2.16.0\Drivers\BSP\STM32F769I-Discovery\stm32f769i_discovery_lcd.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\Keil\STM32F7xx_DFP\2.16.0\Drivers\BSP\STM32F769I-Discovery\..\Components\otm8009a\otm8009a.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\Keil\STM32F7xx_DFP\2.16.0\Drivers\BSP\STM32F769I-Discovery\..\Components\adv7533\adv7533.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\Keil\STM32F7xx_DFP\2.16.0\Drivers\BSP\STM32F769I-Discovery\..\Components\adv7533\..\Common\audio.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\Keil\STM32F7xx_DFP\2.16.0\Drivers\BSP\STM32F769I-Discovery\stm32f769i_discovery_sdram.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\Keil\STM32F7xx_DFP\2.16.0\Drivers\BSP\STM32F769I-Discovery\stm32f769i_discovery.h \
-  C:\Users\ragus\AppData\Local\Arm\Packs\Keil\STM32F7xx_DFP\2.16.0\Drivers\BSP\STM32F769I-Discovery\..\..\..\Utilities\Fonts\fonts.h
+  C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\others\file_explorer\..\..\core\lv_global.h
