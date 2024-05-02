@@ -9,7 +9,7 @@
 #define TITLE "Real Time Audio Processor"
 #define ABOUT "Ingenieria de Sistemas Electronicos 2024"
 #define DRAGGABBLE 0
-#define MAX_VOLUME 100
+#define MAX_VOLUME 10
 /**********************
  *      TYPEDEFS
  **********************/
@@ -115,7 +115,7 @@ static float lista_freq_guardadas[15];
 static int index = 0;
 
 static gui_data_t data = {
-	.vol = 50,
+	.vol = 10,
 	.songs = "Song 1\nSong 2\nSong 3\nSong 4\nSong 5",
 	.fcentral[0] = "20Hz",
 	.fcentral[1] = "110Hz",
@@ -223,6 +223,7 @@ static void home_create(lv_obj_t * tabview){
 	/*Create the third panel*/
 	lv_obj_t * panel_consumo = lv_obj_create(tabview);
   crear_panel_consumo(panel_consumo);
+	lv_obj_set_height(panel_consumo, lv_pct(100));
 		
 //	lv_obj_t * label_bajo_consumo = lv_label_create(panel_consumo);
 //	lv_label_set_text(label_bajo_consumo, "Bajo consumo");
@@ -262,7 +263,7 @@ static void create_radio_content(lv_obj_t * tabview) {
 	volume_slider_radio = lv_slider_create(panel_vol);
 	lv_obj_add_event_cb(volume_slider_radio, volume_cb, LV_EVENT_VALUE_CHANGED, NULL);
 	lv_slider_set_value(volume_slider_radio, data.vol, LV_ANIM_ON);	
-	lv_slider_set_range(volume_slider_filtros, 0, MAX_VOLUME);
+	lv_slider_set_range(volume_slider_radio, 0, MAX_VOLUME);
 	
 	lv_obj_t * mute_btn = lv_btn_create(panel_vol);
 	lv_obj_add_event_cb(mute_btn, mute_cb, LV_EVENT_CLICKED, NULL);
@@ -378,7 +379,7 @@ static void create_filters_content(lv_obj_t * tabview){
 	lv_obj_t * panel_title = lv_obj_create(tabview);	  // En este panel va el titulo y los nombres
 	
 	lv_obj_t * panel1 = lv_obj_create(tabview);			    // En este panel van los filtros del ecualizador
-	lv_obj_set_height(panel1, LV_SIZE_CONTENT);
+	lv_obj_set_height(panel1, lv_pct(100));
 	lv_obj_set_width(panel1, LV_SIZE_CONTENT);
 	
 	lv_obj_t * panel_config = lv_obj_create(tabview);		// En este panel va lo de guardar config
@@ -407,7 +408,8 @@ static void create_filters_content(lv_obj_t * tabview){
 	/* Banda 1 */
 	lv_obj_t * slider_b1 = lv_slider_create(panel1);
 	lv_obj_set_size(slider_b1, 20, 150);
-	lv_slider_set_value(slider_b1, 50, LV_ANIM_OFF);
+	lv_slider_set_range(slider_b1, -2, 2);
+	lv_slider_set_value(slider_b1, 0, LV_ANIM_ON);
 	
 	lv_obj_t * slider_b1_label = lv_label_create(panel1);
 	lv_label_set_text(slider_b1_label, data.fcentral[0]);
@@ -415,7 +417,8 @@ static void create_filters_content(lv_obj_t * tabview){
 	/* Banda 2 */
 	lv_obj_t * slider_b2 = lv_slider_create(panel1);
 	lv_obj_set_size(slider_b2, 20, 150);
-	lv_slider_set_value(slider_b2, 50, LV_ANIM_OFF);
+	lv_slider_set_value(slider_b2, 0, LV_ANIM_OFF);
+	lv_slider_set_range(slider_b2, -9, 9);
 	
 	lv_obj_t * slider_b2_label = lv_label_create(panel1);
 	lv_label_set_text(slider_b2_label, data.fcentral[1]);
@@ -423,7 +426,8 @@ static void create_filters_content(lv_obj_t * tabview){
 	/* Banda 3 */
 	lv_obj_t * slider_b3 = lv_slider_create(panel1);
 	lv_obj_set_size(slider_b3, 20, 150);
-	lv_slider_set_value(slider_b3, 50, LV_ANIM_OFF);
+	lv_slider_set_value(slider_b3, 0, LV_ANIM_OFF);
+	lv_slider_set_range(slider_b3, -9, 9);
 	
 	lv_obj_t * slider_b3_label = lv_label_create(panel1);
 	lv_label_set_text(slider_b3_label, data.fcentral[2]);
@@ -431,7 +435,8 @@ static void create_filters_content(lv_obj_t * tabview){
 	/* Banda 4 */
 	lv_obj_t * slider_b4 = lv_slider_create(panel1);
 	lv_obj_set_size(slider_b4, 20, 150);
-	lv_slider_set_value(slider_b4, 50, LV_ANIM_OFF);
+	lv_slider_set_value(slider_b4, 0, LV_ANIM_OFF);
+	lv_slider_set_range(slider_b4, -9, 9);
 	
 	lv_obj_t * slider_b4_label = lv_label_create(panel1);
 	lv_label_set_text(slider_b4_label, data.fcentral[3]);
@@ -439,7 +444,8 @@ static void create_filters_content(lv_obj_t * tabview){
 	/* Banda 5 */
 	lv_obj_t * slider_b5 = lv_slider_create(panel1);
 	lv_obj_set_size(slider_b5, 20, 150);
-	lv_slider_set_value(slider_b5, 50, LV_ANIM_OFF);
+	lv_slider_set_value(slider_b5, 0, LV_ANIM_OFF);
+	lv_slider_set_range(slider_b5, -9, 9);
 	
 	lv_obj_t * slider_b5_label = lv_label_create(panel1);
 	lv_label_set_text(slider_b5_label, data.fcentral[4]);
@@ -1405,7 +1411,7 @@ static void guardar_cadena_cb(lv_event_t * e) {
 	}
 	lv_obj_add_event_cb(btn, set_channel_from_list_cb, LV_EVENT_CLICKED, NULL);
 	lista_freq_guardadas[index] = freq;
-	index++;
+	index = ((index + 1)%15);
 }
 static void set_channel_from_list_cb(lv_event_t * e){
 	lv_event_code_t code = lv_event_get_code(e);
