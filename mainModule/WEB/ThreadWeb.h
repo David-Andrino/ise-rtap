@@ -2,8 +2,10 @@
 #define THREADWEB_H
 
 #include "../main.h"
+#include <cmsis_os2.h>
 
 extern int Init_Web (void);
+extern osMessageQueueId_t webQueue;
 
 typedef enum {
 	RADIO = 0,

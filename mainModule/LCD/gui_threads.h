@@ -2,6 +2,9 @@
 #define GUI_THREADS_H
 
 #include <stdint.h>
+#include <cmsis_os2.h>
+
+extern osMessageQueueId_t lcdQueue;
 
 /**
  * @brief Enumeración de mensajes de salida al LCD
