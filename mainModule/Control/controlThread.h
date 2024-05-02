@@ -1,6 +1,5 @@
 #ifndef CONTROL_THREAD_H
 #define CONTROL_THREAD_H
-#pragma anon_unions
 
 #include <stdint.h>
 #include <cmsis_os2.h>
@@ -17,6 +16,7 @@ typedef enum {
     MSG_LCD,                 /**< Mensaje de entrada del LCD     */
     MSG_WEB,                 /**< Mensaje de entrada de la web   */
     MSG_RTC,                 /**< Mensaje de entrada del RTC     */
+    MSG_CONS,                /**< Mensaje de entrada del consumo */
 } msg_ctrl_type_t;
 
 // ===================================== LCD ======================================
@@ -103,6 +103,7 @@ typedef struct {
         lcd_msg_t lcd_msg;
         rtc_msg_t rtc_msg;
         web_msg_t web_msg;
+        uint16_t  cons_msg;
 	};
 } msg_ctrl_t;    
 
