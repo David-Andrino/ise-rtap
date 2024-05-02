@@ -22,11 +22,11 @@ Dialog DLL:      TCM.DLL V1.48.0.0
  
 <h2>Project:</h2>
 C:\Users\X421\Desktop\ISE\ise-rtap\PaginaWeb\HTTP_Server.uvprojx
-Project File Date:  04/30/2024
+Project File Date:  05/02/2024
 
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 7 (build 960)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
-Rebuild target 'Debug'
+Build target 'Debug'
 
 FCARM uses the following Files via command file '.\Auto_FcArm_Cmd.inp':
 styles.css,
@@ -49,56 +49,10 @@ custom translating @.\Auto_FcArm_Cmd.inp...
 Custom: C:\Keil_v5\ARM\Bin\FCARM.exe @.\Auto_FcArm_Cmd.inp
 FCARM FILE CONVERTER V2.58
 Completed 15 File(s), Ratio 84%
-Note: source file 'RTE\Device\STM32F429ZITx\system_stm32f4xx.c' - object file renamed from '.\Debug\system_stm32f4xx.o' to '.\Debug\system_stm32f4xx_1.o'.
-assembling irq_armv7m.s...
-compiling HTTP_Server_CGI.c...
-HTTP_Server_CGI.c(140): warning:  #550-D: variable "passw"  was set but never used
-    char var[40],passw[12];
-HTTP_Server_CGI.c(26): warning:  #177-D: variable "ip_string"  was declared but never referenced
-  static char    ip_string[40];
-HTTP_Server_CGI.c: 2 warnings, 0 errors
 compiling Web.c...
-compiling rtx_evr.c...
-compiling rtx_lib.c...
-compiling Buttons_NUCLEO_F429ZI.c...
-compiling main.c...
-compiling HTTP_Server.c...
-compiling rtx_delay.c...
-compiling rtx_kernel.c...
-compiling rtx_evflags.c...
-compiling rtx_memory.c...
-compiling rtx_system.c...
-compiling rtx_timer.c...
-compiling rtx_mempool.c...
-compiling rtx_semaphore.c...
-compiling rtx_mutex.c...
-compiling PHY_LAN8742A.c...
-compiling rtx_msgqueue.c...
-compiling RTX_Config.c...
-compiling rtx_thread.c...
-compiling os_systick.c...
-compiling stm32f4xx_hal_cortex.c...
-compiling EventRecorder.c...
-compiling stm32f4xx_hal_adc.c...
-compiling stm32f4xx_hal.c...
-compiling stm32f4xx_hal_adc_ex.c...
-compiling EMAC_STM32F4xx.c...
-compiling stm32f4xx_hal_pwr.c...
-compiling stm32f4xx_hal_gpio.c...
-compiling stm32f4xx_hal_dma.c...
-compiling stm32f4xx_hal_pwr_ex.c...
-assembling startup_stm32f429xx.s...
-compiling stm32f4xx_hal_dma_ex.c...
-compiling stm32f4xx_hal_rcc_ex.c...
-compiling stm32f4xx_hal_rcc.c...
-compiling Net_Config.c...
-compiling Net_Debug.c...
-compiling stm32f4xx_hal_sram.c...
-compiling stm32f4xx_ll_fmc.c...
-compiling system_stm32f4xx.c...
 linking...
-Program Size: Code=73624 RO-data=55944 RW-data=34700 ZI-data=28624  
-".\Debug\HTTP_Server.axf" - 0 Error(s), 2 Warning(s).
+Program Size: Code=75620 RO-data=56012 RW-data=34700 ZI-data=76588  
+".\Debug\HTTP_Server.axf" - 0 Error(s), 0 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -128,7 +82,6 @@ Package Vendor: Keil
                 http://www.keil.com/pack/Keil.MDK-Middleware.7.13.0.pack
                 Keil.MDK-Middleware.7.13.0
                 Middleware for Keil MDK-Professional and MDK-Plus
-   * Component: Buttons Version: 1.0.0
    * Component: CORE Variant: IPv4/IPv6 Debug Version: 7.15.0
    * Component: ETH Version: 7.15.0
    * Component: Web Server Compact Variant: HTTP Version: 7.15.0
@@ -136,32 +89,26 @@ Package Vendor: Keil
    * Component: UDP Version: 7.15.0
 
 Package Vendor: Keil
-                https://www.keil.com/pack/Keil.STM32F4xx_DFP.2.17.1.pack
-                Keil.STM32F4xx_DFP.2.17.1
-                STMicroelectronics STM32F4 Series Device Support, Drivers and Examples
+                https://www.keil.com/pack/Keil.STM32F7xx_DFP.2.16.0.pack
+                Keil.STM32F7xx_DFP.2.16.0
+                STMicroelectronics STM32F7 Series Device Support, Drivers and Examples
    * Component: STM32Cube Framework Version: 1.0.0
-   * Component: Ethernet MAC Version: 2.10
-   * Component: Classic Version: 1.8.1
-   * Component: ADC Version: 1.8.1
-   * Component: Common Version: 1.8.1
-   * Component: Cortex Version: 1.8.1
-   * Component: DMA Version: 1.8.1
-   * Component: GPIO Version: 1.8.1
-   * Component: PWR Version: 1.8.1
-   * Component: RCC Version: 1.8.1
-   * Component: SRAM Version: 1.8.1
-   * Component: Startup Version: 2.6.3
-
-Package Vendor: Keil
-                https://www.keil.com/pack/Keil.STM32NUCLEO_BSP.1.8.1.pack
-                Keil.STM32NUCLEO_BSP.1.8.1
-                STMicroelectronics Nucleo Boards Support and Examples
-   * Component: Buttons Version: 1.0.0
+   * Component: Ethernet MAC Version: 1.12.0
+   * Component: Classic Version: 1.3.0
+   * Component: ADC Version: 1.3.0
+   * Component: Common Version: 1.3.0
+   * Component: Cortex Version: 1.3.0
+   * Component: DMA Version: 1.3.0
+   * Component: GPIO Version: 1.3.0
+   * Component: PWR Version: 1.3.0
+   * Component: RCC Version: 1.3.0
+   * Component: SRAM Version: 1.3.0
+   * Component: Startup Version: 1.2.5
 
 <h2>Collection of Component include folders:</h2>
   .\RTE\CMSIS
   .\RTE\Compiler
-  .\RTE\Device\STM32F429ZITx
+  .\RTE\Device\STM32F769NIHx
   .\RTE\Network
   .\RTE\_Debug
   C:\Users\X421\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include
@@ -169,15 +116,11 @@ Package Vendor: Keil
   C:\Users\X421\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\RTOS2\Include
   C:\Users\X421\AppData\Local\Arm\Packs\ARM\CMSIS\5.8.0\CMSIS\RTOS2\RTX\Include
   C:\Users\X421\AppData\Local\Arm\Packs\Keil\ARM_Compiler\1.7.2\Include
-  C:\Users\X421\AppData\Local\Arm\Packs\Keil\MDK-Middleware\7.13.0\Board
   C:\Users\X421\AppData\Local\Arm\Packs\Keil\MDK-Middleware\7.13.0\Network\Include
-  C:\Users\X421\AppData\Local\Arm\Packs\Keil\STM32F4xx_DFP\2.17.1\Drivers\CMSIS\Device\ST\STM32F4xx\Include
-  C:\Users\X421\AppData\Local\Arm\Packs\Keil\STM32F4xx_DFP\2.17.1\Drivers\STM32F4xx_HAL_Driver\Inc
+  C:\Users\X421\AppData\Local\Arm\Packs\Keil\STM32F7xx_DFP\2.16.0\Drivers\CMSIS\Device\ST\STM32F7xx\Include
+  C:\Users\X421\AppData\Local\Arm\Packs\Keil\STM32F7xx_DFP\2.16.0\Drivers\STM32F7xx_HAL_Driver\Inc
 
 <h2>Collection of Component Files used:</h2>
-
-   * Component: ::Board Support:Buttons:1.0.0 (API)
-      Include file:  Board\Board_Buttons.h
 
    * Component: ::CMSIS Driver:Ethernet MAC:2.2.0 (API)
       Include file:  CMSIS\Driver\Include\Driver_ETH_MAC.h
@@ -193,38 +136,38 @@ Package Vendor: Keil
    * Component: ARM::CMSIS:CORE:5.5.0
 
    * Component: ARM::CMSIS:RTOS2:Keil RTX5:Source:5.5.3
-      Source file:   CMSIS\RTOS2\RTX\Template\Semaphore.c
-      Source file:   CMSIS\RTOS2\RTX\Source\rtx_mutex.c
-      Source file:   CMSIS\RTOS2\RTX\Source\rtx_thread.c
-      Source file:   CMSIS\RTOS2\RTX\Template\main.c
-      Source file:   CMSIS\RTOS2\RTX\Template\Thread.c
       Include file:  CMSIS\RTOS2\RTX\Include\rtx_os.h
-      Source file:   CMSIS\RTOS2\RTX\Template\Timer.c
-      Source file:   CMSIS\RTOS2\RTX\Template\Events.c
-      Source file:   CMSIS\RTOS2\RTX\Template\MsgQueue.c
-      Source file:   CMSIS\RTOS2\RTX\Source\rtx_kernel.c
-      Source file:   CMSIS\RTOS2\RTX\Template\MemPool.c
-      Source file:   CMSIS\RTOS2\RTX\Template\Mutex.c
-      Source file:   CMSIS\RTOS2\RTX\Source\rtx_delay.c
-      Source file:   CMSIS\RTOS2\RTX\Source\rtx_timer.c
-      Source file:   CMSIS\RTOS2\RTX\Config\RTX_Config.c
       Source file:   CMSIS\RTOS2\RTX\Template\svc_user.c
       Include file:  CMSIS\RTOS2\RTX\Config\RTX_Config.h
-      Source file:   CMSIS\RTOS2\RTX\Source\rtx_evflags.c
-      Source file:   CMSIS\RTOS2\RTX\Source\rtx_system.c
-      Source file:   CMSIS\RTOS2\RTX\Source\ARM\irq_armv7m.s
-      Source file:   CMSIS\RTOS2\RTX\Source\rtx_msgqueue.c
-      Source file:   CMSIS\RTOS2\RTX\Source\rtx_lib.c
-      Source file:   CMSIS\RTOS2\RTX\Source\rtx_mempool.c
-      Source file:   CMSIS\RTOS2\RTX\Source\rtx_semaphore.c
+      Source file:   CMSIS\RTOS2\RTX\Template\Mutex.c
+      Source file:   CMSIS\RTOS2\RTX\Template\Semaphore.c
+      Source file:   CMSIS\RTOS2\RTX\Config\RTX_Config.c
+      Source file:   CMSIS\RTOS2\RTX\Template\MsgQueue.c
+      Source file:   CMSIS\RTOS2\RTX\Template\Events.c
+      Source file:   CMSIS\RTOS2\RTX\Template\main.c
+      Source file:   CMSIS\RTOS2\RTX\Template\Thread.c
+      Source file:   CMSIS\RTOS2\RTX\Template\MemPool.c
+      Source file:   CMSIS\RTOS2\RTX\Template\Timer.c
+      Source file:   CMSIS\RTOS2\RTX\Source\rtx_thread.c
       Source file:   CMSIS\RTOS2\RTX\Source\rtx_memory.c
+      Source file:   CMSIS\RTOS2\RTX\Source\rtx_evflags.c
+      Source file:   CMSIS\RTOS2\RTX\Source\rtx_msgqueue.c
+      Source file:   CMSIS\RTOS2\RTX\Source\ARM\irq_armv7m.s
+      Source file:   CMSIS\RTOS2\RTX\Source\rtx_kernel.c
       Source file:   CMSIS\RTOS2\RTX\Source\rtx_evr.c
+      Source file:   CMSIS\RTOS2\RTX\Source\rtx_lib.c
+      Source file:   CMSIS\RTOS2\RTX\Source\rtx_semaphore.c
+      Source file:   CMSIS\RTOS2\RTX\Source\rtx_mutex.c
+      Source file:   CMSIS\RTOS2\RTX\Source\rtx_mempool.c
+      Source file:   CMSIS\RTOS2\RTX\Source\rtx_timer.c
+      Source file:   CMSIS\RTOS2\RTX\Source\rtx_delay.c
+      Source file:   CMSIS\RTOS2\RTX\Source\rtx_system.c
       Source file:   CMSIS\RTOS2\Source\os_systick.c
 
    * Component: Keil.ARM Compiler::Compiler:Event Recorder:DAP:1.5.1
-      Source file:   Source\EventRecorder.c
-      Include file:  Include\EventRecorder.h
       Include file:  Config\EventRecorderConf.h
+      Include file:  Include\EventRecorder.h
+      Source file:   Source\EventRecorder.c
 
    * Component: Keil.MDK-Pro::Network:CORE:IPv4/IPv6 Debug:7.15.0
       Include file:  Network\Include\rl_net.h
@@ -237,77 +180,74 @@ Package Vendor: Keil
 
    * Component: Keil.MDK-Pro::Network:Service:Web Server Compact:HTTP:7.15.0
       Include file:  Network\Config\Net_Config_HTTP_Server.h
-      Source file:   Network\Template\HTTP_Server_Multiuser.c
-      Source file:   Network\Template\HTTP_Server_Access.c
-      Source file:   Network\Template\HTTP_Server_Error.c
       Source file:   Network\Template\HTTP_Server_CGI.c
+      Source file:   Network\Template\HTTP_Server_Access.c
+      Source file:   Network\Template\HTTP_Server_Multiuser.c
+      Source file:   Network\Template\HTTP_Server_Error.c
 
    * Component: Keil.MDK-Pro::Network:Socket:TCP:7.15.0
+      Source file:   Network\Template\TCP_Socket_Client.c
       Include file:  Network\Config\Net_Config_TCP.h
       Source file:   Network\Template\TCP_Socket_Server.c
-      Source file:   Network\Template\TCP_Socket_Client.c
 
    * Component: Keil.MDK-Pro::Network:Socket:UDP:7.15.0
       Include file:  Network\Config\Net_Config_UDP.h
       Source file:   Network\Template\UDP_Socket.c
 
-   * Component: Keil.NUCLEO-F429ZI::Board Support:Buttons:1.0.0
-      Source file:   Boards\ST\NUCLEO-F429ZI\Common\Buttons_NUCLEO_F429ZI.c
-
-   * Component: Keil::CMSIS Driver:Ethernet MAC:2.10
-      Source file:   CMSIS\Driver\EMAC_STM32F4xx.c
+   * Component: Keil::CMSIS Driver:Ethernet MAC:1.12.0
+      Source file:   CMSIS\Driver\EMAC_STM32F7xx.c
 
    * Component: Keil::CMSIS Driver:Ethernet PHY:LAN8742A:1.3.0
       Source file:   ETH\PHY_LAN8742A.c
 
-   * Component: Keil::Device:STM32Cube Framework:Classic:1.8.1
+   * Component: Keil::Device:STM32Cube Framework:Classic:1.3.0
+      Include file:  MDK\Templates\Inc\stm32f7xx_it.h
+      Source file:   MDK\Templates\Src\stm32f7xx_it.c
       Include file:  MDK\Templates\Inc\main.h
       Source file:   MDK\Templates\Src\main.c
+      Include file:  MDK\Templates\Inc\stm32f7xx_hal_conf.h
       Include file:  CMSIS\Driver\Config\RTE_Device.h
-      Include file:  MDK\Templates\Inc\stm32f4xx_hal_conf.h
-      Source file:   MDK\Templates_LL\Src\main.c
-      Include file:  MDK\Templates\Inc\stm32f4xx_it.h
-      Source file:   MDK\Templates\Src\stm32f4xx_it.c
-      Source file:   MDK\Templates\Src\stm32f4xx_hal_msp.c
       Include file:  MDK\Templates_LL\Inc\main.h
+      Source file:   MDK\Templates_LL\Src\main.c
+      Source file:   MDK\Templates\Src\stm32f7xx_hal_msp.c
 
-   * Component: Keil::Device:STM32Cube HAL:ADC:1.8.1
-      Source file:   Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_adc.c
-      Source file:   Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_adc_ex.c
+   * Component: Keil::Device:STM32Cube HAL:ADC:1.3.0
+      Source file:   Drivers\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_adc.c
+      Source file:   Drivers\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_adc_ex.c
 
-   * Component: Keil::Device:STM32Cube HAL:Common:1.8.1
-      Source file:   Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal.c
-      Include file:  Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h
+   * Component: Keil::Device:STM32Cube HAL:Common:1.3.0
+      Source file:   Drivers\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal.c
+      Include file:  Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_hal.h
 
-   * Component: Keil::Device:STM32Cube HAL:Cortex:1.8.1
-      Source file:   Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_cortex.c
+   * Component: Keil::Device:STM32Cube HAL:Cortex:1.3.0
+      Source file:   Drivers\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_cortex.c
 
-   * Component: Keil::Device:STM32Cube HAL:DMA:1.8.1
-      Source file:   Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_dma.c
-      Source file:   Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_dma_ex.c
+   * Component: Keil::Device:STM32Cube HAL:DMA:1.3.0
+      Source file:   Drivers\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_dma.c
+      Source file:   Drivers\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_dma_ex.c
 
-   * Component: Keil::Device:STM32Cube HAL:GPIO:1.8.1
-      Source file:   Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_gpio.c
+   * Component: Keil::Device:STM32Cube HAL:GPIO:1.3.0
+      Source file:   Drivers\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_gpio.c
 
-   * Component: Keil::Device:STM32Cube HAL:PWR:1.8.1
-      Source file:   Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_pwr.c
-      Source file:   Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_pwr_ex.c
+   * Component: Keil::Device:STM32Cube HAL:PWR:1.3.0
+      Source file:   Drivers\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_pwr.c
+      Source file:   Drivers\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_pwr_ex.c
 
-   * Component: Keil::Device:STM32Cube HAL:RCC:1.8.1
-      Source file:   Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_rcc_ex.c
-      Source file:   Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_rcc.c
+   * Component: Keil::Device:STM32Cube HAL:RCC:1.3.0
+      Source file:   Drivers\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_rcc_ex.c
+      Source file:   Drivers\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_rcc.c
 
-   * Component: Keil::Device:STM32Cube HAL:SRAM:1.8.1
-      Source file:   Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_sram.c
-      Source file:   Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_ll_fmc.c
+   * Component: Keil::Device:STM32Cube HAL:SRAM:1.3.0
+      Source file:   Drivers\STM32F7xx_HAL_Driver\Src\stm32f7xx_ll_fmc.c
+      Source file:   Drivers\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_sram.c
 
-   * Component: Keil::Device:Startup:2.6.3
-      Source file:   Drivers\CMSIS\Device\ST\STM32F4xx\Source\Templates\arm\startup_stm32f429xx.s
-      Source file:   MDK\Device\Source\ARM\STM32F4xx_OTP.s
-      Source file:   MDK\Device\Source\ARM\STM32F42xxx_43xxx_OPT.s
-      Include file:  Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h
-      Source file:   Drivers\CMSIS\Device\ST\STM32F4xx\Source\Templates\system_stm32f4xx.c
-Build Time Elapsed:  00:01:52
+   * Component: Keil::Device:Startup:1.2.5
+      Source file:   MDK\Device\Source\ARM\STM32F76x_77x_OPT.s
+      Source file:   MDK\Device\Source\ARM\STM32F76x_77x_OTP.s
+      Include file:  Drivers\CMSIS\Device\ST\STM32F7xx\Include\stm32f7xx.h
+      Source file:   Drivers\CMSIS\Device\ST\STM32F7xx\Source\Templates\arm\startup_stm32f769xx.s
+      Source file:   Drivers\CMSIS\Device\ST\STM32F7xx\Source\Templates\system_stm32f7xx.c
+Build Time Elapsed:  00:00:01
 </pre>
 </body>
 </html>

@@ -12,7 +12,6 @@
 #include "cmsis_os2.h"                  // ::CMSIS:RTOS2
 #include "rl_net.h"                     // Keil.MDK-Pro::Network:CORE
 #include <stdlib.h>
-#include "Board_Buttons.h"
 
 #if      defined (__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050)
 #pragma  clang diagnostic push
@@ -138,10 +137,6 @@ void netCGI_ProcessQuery (const char *qstr) {
 //            - 5 = the same as 4, but with more XML data to follow.
 void netCGI_ProcessData (uint8_t code, const char *data, uint32_t len) {
   char var[40],passw[12];
-	if (Buttons_GetState() == 1){
-		opciones.dia += 1;
-		opciones.ano -= 1;
-	}
 
   if (code != 0) {
     // Ignore all other codes

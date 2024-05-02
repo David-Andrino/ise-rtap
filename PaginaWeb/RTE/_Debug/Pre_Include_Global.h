@@ -10,7 +10,7 @@
 #ifndef PRE_INCLUDE_GLOBAL_H
 #define PRE_INCLUDE_GLOBAL_H
 
-/* Keil::Device:STM32Cube HAL:Common:1.8.1 */
+/* Keil::Device:STM32Cube HAL:Common:1.3.0 */
 #define USE_HAL_DRIVER
 
 
