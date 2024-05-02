@@ -25,11 +25,10 @@ static int8_t bandGains[5] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
 static uint8_t volume = 10; // Almacenado en tanto por 10
 
 static int dsp_tim_init(void);
-static void dsp_configure_filters(int8_t* bands, uint8_t vol);
 
 int dsp_init(void) {
-    int8_t bands[] = { 1, 3, 0, 0, -2 };
-    dsp_configure_filters(bands, 4);
+    int8_t bands[] = { 0, 0, 0, 0, 0 };
+    dsp_configure_filters(bands, 10);
     return dsp_tim_init();
 }
 
@@ -117,9 +116,12 @@ void processSamples(uint16_t* in, uint16_t* out) {
     
     arm_shift_q31(midBuffer, DSP_SHIFT_MARGIN, midBuffer, DSP_BUFSIZE);
     
+    // arm_clip_q31(midBuffer, midBuffer, -134217728, 134217728, DSP_BUFSIZE); // Equivalentes a medidas de -2048, 2048
+    
     arm_q31_to_q15(midBuffer, (q15_t*)out, DSP_BUFSIZE); 
     
     
     // Recuperar offset
     arm_offset_q15((q15_t*)out, 2048, (q15_t*)out, DSP_BUFSIZE);
+    arm_clip_q15((q15_t*)out, (q15_t*)out, 0, 4095, DSP_BUFSIZE);
 }

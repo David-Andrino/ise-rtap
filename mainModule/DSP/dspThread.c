@@ -17,8 +17,11 @@ static void DSP_Thread(void* arg);
 static void halfBufferCb(void);
 static void fullBufferCb(void);
 
+osMessageQueueId_t dspQueue;
+
 // BORRAR: TEST
 static TIM_HandleTypeDef htmptim = {0};
+static dspMsg_t testMsg = { .vol = 10 };
 
 static int tmp_tim_init(void) {
     __HAL_RCC_GPIOD_CLK_ENABLE();
@@ -54,11 +57,26 @@ static int tmp_tim_init(void) {
 
     return 0;
 }
+void EXTI15_10_IRQHandler(void) {
+    HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_13);
+}
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
+    if (GPIO_Pin == GPIO_PIN_13) {
+        testMsg.vol = (testMsg.vol == 0) ? 10 : testMsg.vol - 1;
+        osMessageQueuePut(dspQueue, &testMsg, NULL, 0);
+    }
+}
+
 // FIN TEST
 
 int DSP_Init(void) {
     dsp_tid = osThreadNew((osThreadFunc_t)DSP_Thread, NULL, NULL);
     if (dsp_tid == NULL) {
+        return -1;
+    }
+    
+    dspQueue = osMessageQueueNew(DSP_MSG_CNT, sizeof(dspMsg_t), NULL);
+    if (dspQueue == NULL) {
         return -1;
     }
 
@@ -84,6 +102,14 @@ int DSP_Init(void) {
 
     // BORRAR: TEST
     tmp_tim_init();
+    __HAL_RCC_GPIOC_CLK_ENABLE();
+    GPIO_InitTypeDef pc13 = {
+        .Pin = GPIO_PIN_13,
+        .Mode = GPIO_MODE_IT_FALLING,
+        .Pull = GPIO_NOPULL
+    };
+    HAL_GPIO_Init(GPIOC, &pc13);
+    HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
     // FIN TEST
 
     return 0;
@@ -96,16 +122,22 @@ void fullBufferCb(void) { osThreadFlagsSet(dsp_tid, FULL_FLAG); }
 static void DSP_Thread(void* arg) {
     uint16_t* in;
     uint16_t* out;
-
+    dspMsg_t msg;
+    
     while (1) {
         int flag = osThreadFlagsWait(HALF_FLAG | FULL_FLAG, osFlagsWaitAny, osWaitForever);
         if (flag == HALF_FLAG) {
-            in = inBuffer;
+            in  = inBuffer;
             out = outBuffer;
         } else {
             in = &inBuffer[DSP_BUFSIZE];
             out = &outBuffer[DSP_BUFSIZE];
         }
         processSamples(in, out);
+        
+        if (osMessageQueueGetCount(dspQueue) > 0) {
+            while (osMessageQueueGet(dspQueue, &msg, NULL, 0) != osErrorResource);
+            dsp_configure_filters(msg.bandGains, msg.vol);
+        }
     }
 }
