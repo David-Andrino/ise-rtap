@@ -25,11 +25,31 @@ t                 <td colspan="4" style="position: relative;">
 t                     <form action="mp3.cgi" method="post">
 t                     <select name="canciones" id="listacaniones" style="width: 90%; height: 50px;">
 t                         <option value="default">Selecciona una canción</option>
-c m 1                     <option value="cancion1">%s</option>
-c m 2                     <option value="cancion2">%s</option>
-c m 3                     <option value="cancion3">%s</option>
-c m 4                     <option value="cancion4">%s</option>
-c m 5                     <option value="cancion5">%s</option>
+c m a                     <option value="cancion01">%s</option>
+c m b                     <option value="cancion02">%s</option>
+c m c                     <option value="cancion03">%s</option>
+c m d                     <option value="cancion04">%s</option>
+c m e                     <option value="cancion05">%s</option>
+c m f                     <option value="cancion06">%s</option>
+c m g                     <option value="cancion07">%s</option>
+c m h                     <option value="cancion08">%s</option>
+c m i                     <option value="cancion09">%s</option>
+c m j                     <option value="cancion10">%s</option>
+c m k                     <option value="cancion11">%s</option>
+c m l                     <option value="cancion12">%s</option>
+c m m                     <option value="cancion13">%s</option>
+c m n                     <option value="cancion14">%s</option>
+c m o                     <option value="cancion15">%s</option>
+c m p                     <option value="cancion16">%s</option>
+c m q                     <option value="cancion17">%s</option>
+c m r                     <option value="cancion18">%s</option>
+c m s                     <option value="cancion19">%s</option>
+c m t                     <option value="cancion20">%s</option>
+c m u                     <option value="cancion21">%s</option>
+c m v                     <option value="cancion22">%s</option>
+c m w                     <option value="cancion23">%s</option>
+c m x                     <option value="cancion24">%s</option>
+c m y                     <option value="cancion25">%s</option>
 t                     </select>
 t                       <input type="image" src="imgs/sendx32.png" class="botoncircular"
 t                         style="position: absolute; right: 0; top: 50%; transform: translateY(-50%);

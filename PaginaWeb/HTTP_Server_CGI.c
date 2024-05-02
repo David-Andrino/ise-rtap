@@ -11,7 +11,9 @@
 #include <string.h>
 #include "cmsis_os2.h"                  // ::CMSIS:RTOS2
 #include "rl_net.h"                     // Keil.MDK-Pro::Network:CORE
+#include "controlThread.h"
 #include <stdlib.h>
+#include "ThreadWeb.h"
 
 #if      defined (__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050)
 #pragma  clang diagnostic push
@@ -23,6 +25,9 @@
 //// Local variables.
 static uint8_t ip_addr[NET_ADDR_IP6_LEN];
 static char    ip_string[40];
+static msg_ctrl_t msgToMain = {
+	.type = MSG_WEB
+};
 
 // My structure of CGI status variable.
 typedef struct {
@@ -31,53 +36,20 @@ typedef struct {
 } MY_BUF;
 #define MYBUF(p)        ((MY_BUF *)p)
 
-typedef enum {
-	RADIO			= 0,
-	MP3			 	= 1
-} input_t;
 
-typedef enum {
-	ALTAVOZ 			= 0,
-	AURICULARES 	= 1
-} output_t;
-
-typedef enum {
-	SEEKUP   			= 0,
-	SEEKDOWN			= 1
-} seek_t;
-
-typedef struct {
-	input_t entrada;
-	output_t salida;
-	uint8_t bajo_consumo;
-	uint8_t vol, prev_vol;
-	uint8_t mute;
-	float consumo;
-	uint32_t freq_actual;
-	uint8_t cancion_sel;
-	int8_t eq1, eq2, eq3, eq4, eq5;
-	uint8_t horas, min, seg;
-	uint8_t dia, mes, ano;
-	seek_t seek;
-} options;
-
-char canciones [5][10] = {
+char canciones [25][30] = {
 	"Cancion 1",
 	"Cancion 2",
 	"Cancion 3",
 	"Cancion 4",
 	"Cancion 5"
 };
+uint8_t song_cnt = 5;
 
+options opciones = {0};
 
-options opciones = {
-	.dia = 29,
-	.mes = 04,
-	.ano = 24,
-	.horas = 18,
-	.min = 51,
-	.seg = 33
-};
+static void sendToQueue(web_msg_type_t type, uint16_t payload);
+static void searchSong(char* name);
 
 // Process query string received by GET request.
 void netCGI_ProcessQuery (const char *qstr) {
@@ -155,56 +127,86 @@ void netCGI_ProcessData (uint8_t code, const char *data, uint32_t len) {
 			if (strncmp(var, "entrada=",8) == 0){
 				if (strncmp(var, "entrada=radio",13) == 0){
 					opciones.entrada = RADIO;
+					sendToQueue(WEB_INPUT_SEL, 0);
 				} 
 				else if (strncmp(var, "entrada=mp3",11) == 0){
 					opciones.entrada = MP3;
+					sendToQueue(WEB_INPUT_SEL, 1);
 				}
 			}
 			else if (strncmp(var, "salida=",7) == 0){
 				if (strncmp(var, "salida=altavoz",14) == 0){
 					opciones.salida = ALTAVOZ;
+					sendToQueue(WEB_OUTPUT_SEL, 1);
 				} 
 				else if (strncmp(var, "salida=cascos",13) == 0){
 					opciones.salida = AURICULARES;
+					sendToQueue(WEB_OUTPUT_SEL, 0);
 				}
 			}
 			else if (strncmp(var, "consumo=",8) == 0){
 				opciones.bajo_consumo = 1;
+				sendToQueue(WEB_LOW_POWER,0);
 			}
 			else if (strncmp(var, "frec_sint=",10) == 0){
-				sscanf(var, "frec_sint=%d", &opciones.freq_actual);
+				float tmp;
+				sscanf(var, "frec_sint=%f", &tmp);
+				opciones.freq_actual = (int)(tmp*10);
+				sendToQueue(WEB_RADIO_FREQ, opciones.freq_actual);
 			}
 			else if (strncmp(var, "seekup=",7) == 0){
-				opciones.seek = SEEKUP;
+				sendToQueue(WEB_SEEK, 1);
 			}
 			else if (strncmp(var, "seekdown=",9) == 0){
-				opciones.seek = SEEKDOWN;
+				sendToQueue(WEB_SEEK, 0);
 			}
 			else if (strncmp(var, "mute=",5) == 0){
 				opciones.mute =! opciones.mute;
 				opciones.vol = (opciones.mute == 1 ? 0 : opciones.prev_vol);
+				sendToQueue(WEB_VOL, opciones.vol);
 			}
 			else if (strncmp(var, "formatted_vol=",14) == 0){
 				sscanf(var, "formatted_vol=%hhd", &opciones.vol);
 				opciones.prev_vol = opciones.vol;
+				sendToQueue(WEB_VOL, opciones.vol);
 			}
 			else if (strncmp(var, "save_conf.x=",12) == 0){
-				//Guardar configuración
+				sendToQueue(WEB_SAVE_SD, 0);
 			}
 			else if (strncmp(var, "eq1=",4) == 0){
 				sscanf(var, "eq1=%hhd", &opciones.eq1);
+				sendToQueue(WEB_BANDS, 0x0000 | opciones.eq1);
 			}
 			else if (strncmp(var, "eq2=",4) == 0){
 				sscanf(var, "eq2=%hhd", &opciones.eq2);
+				sendToQueue(WEB_BANDS, 0x0100 | opciones.eq2);
 			}
 			else if (strncmp(var, "eq3=",4) == 0){
 				sscanf(var, "eq3=%hhd", &opciones.eq3);	
+				sendToQueue(WEB_BANDS, 0x0200 | opciones.eq3);				
 			}
 			else if (strncmp(var, "eq4=",4) == 0){
 				sscanf(var, "eq4=%hhd", &opciones.eq4);
+				sendToQueue(WEB_BANDS, 0x0300 | opciones.eq4);
 			}
 			else if (strncmp(var, "eq5=",4) == 0){
 				sscanf(var, "eq5=%hhd", &opciones.eq5);
+				sendToQueue(WEB_BANDS, 0x0400 | opciones.eq5);
+			}
+			else if (strncmp(var, "canciones=",10) == 0){
+				searchSong(&var[10]);
+			}
+			else if (strncmp(var, "prev_song.x=",12) == 0){
+				sendToQueue(WEB_PREV_SONG, 0);
+			}
+			else if (strncmp(var,"play_song.x=", 12) == 0){
+				sendToQueue(WEB_PLAY_PAUSE, 0);
+			}
+			else if (strncmp(var, "next_song.x=",11) == 0){
+				sendToQueue(WEB_NEXT_SONG, 0);
+			}
+			else if (strncmp(var, "loop_song.x=",11) == 0){
+				sendToQueue(WEB_LOOP, 0);
 			}
 		}
   } while (data);
@@ -250,26 +252,6 @@ uint32_t netCGI_Script (const char *env, char *buf, uint32_t buflen, uint32_t *p
 		case 'm':
 			// Cases for mp3
 			switch (env[2]){
-				case '1':
-				// Case for 1º Song	
-					len = sprintf (buf, &env[4], canciones[0]);
-				break;
-				case '2':
-				// Case for 2º Song	
-					len = sprintf (buf, &env[4], canciones[1]);
-				break;
-				case '3':
-				// Case for 3º Song	
-					len = sprintf (buf, &env[4], canciones[2]);
-				break;
-				case '4':
-				// Case for 4º Song	
-					len = sprintf (buf, &env[4], canciones[3]);
-				break;
-				case '5':
-				// Case for 5º Song	
-					len = sprintf (buf, &env[4], canciones[4]);
-				break;
 				case '6':
 				// Case for volumen	
 					len = sprintf (buf, &env[4], opciones.vol);
@@ -282,6 +264,14 @@ uint32_t netCGI_Script (const char *env, char *buf, uint32_t buflen, uint32_t *p
 				// Case for Auriculares Output
 					len = sprintf (buf, &env[4], opciones.salida == AURICULARES ? "checked" :"");
 				break;
+				default:
+				// Case for songs	
+					if (env[2] - 'a' < song_cnt) {
+						len = sprintf (buf, &env[4], canciones[env[2] - 'a']);
+					} else {
+						len = 0;
+					}
+					break;
 			}
 		break;
 			
@@ -353,6 +343,21 @@ uint32_t netCGI_Script (const char *env, char *buf, uint32_t buflen, uint32_t *p
 	}
 
 	return (len);
+}
+
+void sendToQueue(web_msg_type_t type, uint16_t payload){
+	msgToMain.web_msg.type = type;
+	msgToMain.web_msg.payload = payload;
+	//osMessageQueuePut(ctrl_in_queue, &msgToMain, NULL, 0);
+}
+
+void searchSong(char* name){
+	for (int i = 0; i < 25; i++){
+		if (strcmp(name, canciones[i]) == 0){
+			sendToQueue(WEB_SONG, i);
+			return;
+		}
+	}
 }
 
 #if      defined (__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050)

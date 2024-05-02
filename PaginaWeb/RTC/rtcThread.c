@@ -76,6 +76,7 @@ __NO_RETURN int RTC_thread_main(void* args) {
         if (flag & RTC_SEC_FLAG) {
             osMutexAcquire(rtc_mutex, osWaitForever);
             RTC_readTime(&currentTime);
+						// Poner hora en la cola
             osMutexRelease(rtc_mutex);
         }
         if (flag & RTC_NTP_FLAG) {
@@ -96,7 +97,6 @@ void alarmACallback() {
 		/*------------ CAMBIAR ESTO --------------------*/
 }
 
-}
 void timerOnceCallback(void* arg) {
     timerPeriodicCallback(NULL);
     osTimerStart(rtc_timer_periodic, 180000); // 3 min
