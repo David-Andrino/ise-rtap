@@ -5,7 +5,7 @@
 #include <stdint.h>
 #include <cmsis_os2.h>
 
-extern osMessageQueueId_t ctrl_in_queue, ctrl_out_queue;
+extern osMessageQueueId_t ctrl_in_queue;
 int Init_Control(void);
 
 // ==================================== MSG TYPES ======================================
