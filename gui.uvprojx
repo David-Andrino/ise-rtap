@@ -448,11 +448,6 @@
               <FileType>5</FileType>
               <FilePath>.\lv_conf.h</FilePath>
             </File>
-            <File>
-              <FileName>img_hand.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\img_hand.c</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
@@ -464,9 +459,6 @@
               <FilePath>.\eqCoefficients.h</FilePath>
             </File>
           </Files>
-        </Group>
-        <Group>
-          <GroupName>Fotos</GroupName>
         </Group>
         <Group>
           <GroupName>::Board Support</GroupName>
@@ -488,8 +480,44 @@
   </Targets>
 
   <RTE>
+    <packages>
+      <filter>
+        <targetInfos/>
+      </filter>
+      <package name="CMSIS" schemaVersion="1.3" url="http://www.keil.com/pack/" vendor="ARM" version="5.8.0">
+        <targetInfos>
+          <targetInfo name="Target 1" versionMatchMode="fixed"/>
+        </targetInfos>
+      </package>
+      <package name="ARM_Compiler" schemaVersion="1.7.7" url="https://www.keil.com/pack/" vendor="Keil" version="1.7.2">
+        <targetInfos>
+          <targetInfo name="Target 1" versionMatchMode="fixed"/>
+        </targetInfos>
+      </package>
+      <package name="MDK-Middleware" schemaVersion="1.4" url="http://www.keil.com/pack/" vendor="Keil" version="7.13.0">
+        <targetInfos>
+          <targetInfo name="Target 1" versionMatchMode="fixed"/>
+        </targetInfos>
+      </package>
+      <package name="STM32F7xx_DFP" schemaVersion="1.7.28" url="https://www.keil.com/pack/" vendor="Keil" version="2.16.0">
+        <targetInfos>
+          <targetInfo name="Target 1" versionMatchMode="fixed"/>
+        </targetInfos>
+      </package>
+      <package name="lvgl" schemaVersion="1.7.31" url="https://raw.githubusercontent.com/lvgl/lvgl/master/env_support/cmsis-pack/" vendor="LVGL" version="9.1.0">
+        <targetInfos>
+          <targetInfo name="Target 1" versionMatchMode="fixed"/>
+        </targetInfos>
+      </package>
+    </packages>
     <apis>
       <api Capiversion="1.0.0" Cclass="Board Support" Cgroup="Buttons" exclusive="0">
+        <package name="MDK-Middleware" schemaVersion="1.4" url="http://www.keil.com/pack/" vendor="Keil" version="7.13.0"/>
+        <targetInfos>
+          <targetInfo name="Target 1"/>
+        </targetInfos>
+      </api>
+      <api Capiversion="1.0.0" Cclass="Board Support" Cgroup="Graphic LCD" exclusive="0">
         <package name="MDK-Middleware" schemaVersion="1.4" url="http://www.keil.com/pack/" vendor="Keil" version="7.13.0"/>
         <targetInfos>
           <targetInfo name="Target 1"/>
@@ -568,6 +596,12 @@
         </targetInfos>
       </component>
       <component Cbundle="STM32F769I-Discovery" Cclass="Board Support" Cgroup="Drivers" Csub="Touch Screen" Cvendor="Keil" Cversion="1.1.0" condition="STM32F769I-Discovery BSP TS">
+        <package name="STM32F7xx_DFP" schemaVersion="1.7.28" url="https://www.keil.com/pack/" vendor="Keil" version="2.16.0"/>
+        <targetInfos>
+          <targetInfo name="Target 1"/>
+        </targetInfos>
+      </component>
+      <component Capiversion="1.0.0" Cbundle="STM32F769I-Discovery" Cclass="Board Support" Cgroup="Graphic LCD" Cvendor="Keil" Cversion="1.1.0" condition="STM32F769I-Discovery GLCD">
         <package name="STM32F7xx_DFP" schemaVersion="1.7.28" url="https://www.keil.com/pack/" vendor="Keil" version="2.16.0"/>
         <targetInfos>
           <targetInfo name="Target 1"/>

@@ -398,4 +398,6 @@
   C:\Users\ragus\AppData\Local\Arm\Packs\LVGL\lvgl\9.1.0\src\core\..\layouts\lv_layout.h \
   hal_stm_lvgl\touchpad\touchpad.h gui.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\Keil\MDK-Middleware\7.13.0\Board\Board_LED.h \
-  C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdio.h eqCoefficients.h
+  C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdio.h eqCoefficients.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\Keil\MDK-Middleware\7.13.0\Board\Board_GLCD.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\Keil\MDK-Middleware\7.13.0\Board\Board_Buttons.h
