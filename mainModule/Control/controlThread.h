@@ -17,6 +17,7 @@ typedef enum {
     MSG_WEB,                 /**< Mensaje de entrada de la web   */
     MSG_RTC,                 /**< Mensaje de entrada del RTC     */
     MSG_CONS,                /**< Mensaje de entrada del consumo */
+    MSG_RADIO,               /**< Mensaje de entrada de la radio */
 } msg_ctrl_type_t;
 
 // ===================================== LCD ======================================
@@ -92,6 +93,7 @@ typedef struct {
     uint8_t hour, minute, second, day, month, year;
 } rtc_msg_t;
 
+
 // ====================================== MSG ========================================
 /**
  * @brief Estructura para los mensajes de entrada
@@ -104,6 +106,7 @@ typedef struct {
         rtc_msg_t rtc_msg;
         web_msg_t web_msg;
         uint16_t  cons_msg;
+        uint32_t  radio_msg;
 	};
 } msg_ctrl_t;    
 

@@ -25,6 +25,7 @@ static void ctrl_LCD(lcd_msg_t* msg);
 static void ctrl_RTC(rtc_msg_t* msg);
 static void ctrl_NFC(nfc_msg_t* msg);
 static void ctrl_WEB(web_msg_t* msg);
+static void ctrl_radio(radio_msg* msg);
 static void ctrl_lowPower(void);
 static void ctrl_saveConfig(void);
 
@@ -57,6 +58,9 @@ static void Control_Thread(void* arg) {
                 break;
             case MSG_RTC:
                 ctrl_RTC(&msg.rtc_msg);
+                break;
+            case MSG_RADIO:
+                ctrl_radio(&msg.radio_msg);
                 break;
             default: case MSG_WEB:
                 ctrl_WEB(&msg.web_msg);
@@ -166,6 +170,7 @@ static void ctrl_LCD(lcd_msg_t* msg) {
 }
 
 static void ctrl_RTC(rtc_msg_t* msg) {
+    // Update WEB date and time
     webMsg.type    = WEB_OUT_DATE;
     webMsg.payload = (msg->day << 16) | (msg->month << 8) | msg->year;
     osMessageQueuePut(webQueue, &webMsg, NULL, 0);
@@ -288,6 +293,17 @@ static void ctrl_WEB(web_msg_t* msg) {
             osMessageQueuePut(MP3Queue, &mp3msg, NULL, 0);
             break;
     }
+}
+
+static void ctrl_radio(radio_msg* msg) {
+    // Actualizar frecuencia del LCD y WEB
+    lcdMsg.type = LCD_OUT_RADIO_FREQ;
+    lcdMsg.payload = (*msg) / 100;
+    osMessageQueuePut(lcdQueue, &lcdMsg, NULL, 0);
+
+    webMsg.type = WEB_OUT_RADIO_FREQ;
+    webMsg.payload = lcdMsg.payload;
+    osMessageQueuePut(webQueue, &webMsg, NULL, 0);
 }
 
 void GPIO_init(void) {
