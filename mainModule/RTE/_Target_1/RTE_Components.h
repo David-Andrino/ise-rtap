@@ -28,16 +28,24 @@
           #define RTE_Compiler_IO_STDOUT_ITM      /* Compiler I/O: STDOUT ITM */
 /* Keil::Device:STM32Cube Framework:Classic:1.3.0 */
 #define RTE_DEVICE_FRAMEWORK_CLASSIC
+/* Keil::Device:STM32Cube HAL:ADC:1.3.0 */
+#define RTE_DEVICE_HAL_ADC
 /* Keil::Device:STM32Cube HAL:Common:1.3.0 */
 #define RTE_DEVICE_HAL_COMMON
 /* Keil::Device:STM32Cube HAL:Cortex:1.3.0 */
 #define RTE_DEVICE_HAL_CORTEX
+/* Keil::Device:STM32Cube HAL:DAC:1.3.0 */
+#define RTE_DEVICE_HAL_DAC
+/* Keil::Device:STM32Cube HAL:DMA:1.3.0 */
+#define RTE_DEVICE_HAL_DMA
 /* Keil::Device:STM32Cube HAL:GPIO:1.3.0 */
 #define RTE_DEVICE_HAL_GPIO
 /* Keil::Device:STM32Cube HAL:PWR:1.3.0 */
 #define RTE_DEVICE_HAL_PWR
 /* Keil::Device:STM32Cube HAL:RCC:1.3.0 */
 #define RTE_DEVICE_HAL_RCC
+/* Keil::Device:STM32Cube HAL:TIM:1.3.0 */
+#define RTE_DEVICE_HAL_TIM
 /* Keil::Device:Startup:1.2.5 */
 #define RTE_DEVICE_STARTUP_STM32F7XX    /* Device Startup for STM32F7 */
 
