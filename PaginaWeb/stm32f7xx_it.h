@@ -1,8 +1,8 @@
 /**
   ******************************************************************************
-  * @file    Templates/main.h 
+  * @file    Templates/stm32f7xx_it.h 
   * @author  MCD Application Team
-  * @brief   Header for main.c module
+  * @brief   This file contains the headers of the interrupt handlers.
   ******************************************************************************
   * @attention
   *
@@ -15,22 +15,35 @@
   *
   ******************************************************************************
   */
-  
+
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __MAIN_H
-#define __MAIN_H
+#ifndef __STM32F7xx_IT_H
+#define __STM32F7xx_IT_H
+
+#ifdef __cplusplus
+ extern "C" {
+#endif 
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32f7xx_hal.h"
-#include <cmsis_os2.h>
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
-extern uint64_t app_main_stk[];
-extern const osThreadAttr_t app_main_attr;
-
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
-extern void app_main (void *arg);
 
-#endif /* __MAIN_H */
+void NMI_Handler(void);
+void HardFault_Handler(void);
+void MemManage_Handler(void);
+void BusFault_Handler(void);
+void UsageFault_Handler(void);
+void SVC_Handler(void);
+void DebugMon_Handler(void);
+void PendSV_Handler(void);
+void SysTick_Handler(void);
+void DSI_IRQHandler(void);
+	
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* __STM32F7xx_IT_H */
 

@@ -44,7 +44,7 @@
 
 // <e>IPv4 Core Debug
 // <i>Enable printing IPv4 debug messages
-#define DBG_CORE4_EN            1
+#define DBG_CORE4_EN            0
 
 //   <o>IP4 Core  <0=>Off <1=>Errors only <2=>Full debug
 //   <i>Configure IPv4 Core/localhost debugging
@@ -64,7 +64,7 @@
 
 //   <o>DHCP Client  <0=>Off <1=>Errors only <2=>Full debug
 //   <i>Configure Dynamic Host Configuration Client debugging
-#define DBG_DHCP                2
+#define DBG_DHCP                1
 
 //   <o>ARP Address Resolution  <0=>Off <1=>Errors only <2=>Full debug
 //   <i>Configure Ethernet Address Resolution debugging
@@ -73,7 +73,7 @@
 
 // <e>IPv6 Core Debug
 // <i>Enable printing IPv6 debug messages
-#define DBG_CORE6_EN            1
+#define DBG_CORE6_EN            0
 
 //   <o>IP6 Core  <0=>Off <1=>Errors only <2=>Full debug
 //   <i>Configure IPv6 Core/localhost debugging
@@ -85,7 +85,7 @@
 
 //   <o>DHCP6 Client  <0=>Off <1=>Errors only <2=>Full debug
 //   <i>Configure Dynamic Host Configuration ver.6 Client debugging
-#define DBG_DHCP6               2
+#define DBG_DHCP6               1
 
 //   <o>NDP Neighbor Discovery  <0=>Off <1=>Errors only <2=>Full debug
 //   <i>Configure Neighbor Discovery in IPv6 debugging
@@ -94,7 +94,7 @@
 
 // <e>Socket Debug
 // <i>Enable printing socket debug messages
-#define DBG_SOCKET_EN           1
+#define DBG_SOCKET_EN           0
 
 //   <o>UDP Socket  <0=>Off <1=>Errors only <2=>Full debug
 //   <i>Configure native UDP Socket debugging
@@ -111,11 +111,11 @@
 
 // <e>Service Debug
 // <i>Enable printing service debug messages
-#define DBG_SERVICE_EN          1
+#define DBG_SERVICE_EN          0
 
 //   <o>HTTP Server  <0=>Off <1=>Errors only <2=>Full debug
 //   <i>Configure Web Server debugging
-#define DBG_HTTP_SERVER         2
+#define DBG_HTTP_SERVER         1
 
 //   <o>FTP Server  <0=>Off <1=>Errors only <2=>Full debug
 //   <i>Configure FTP Server debugging

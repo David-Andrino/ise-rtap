@@ -9,6 +9,7 @@
 #include <stdio.h>
 
 #include "main.h"
+#include <cmsis_os2.h>
 
 #include "rl_net.h"                     // Keil.MDK-Pro::Network:CORE
 

@@ -1,10 +1,10 @@
 /*------------------------------------------------------------------------------
  * MDK Middleware - Component ::Network:Service
- * Copyright (c) 2004-2019 Arm Limited (or its affiliates). All rights reserved.
+ * Copyright (c) 2004-2021 Arm Limited (or its affiliates). All rights reserved.
  *------------------------------------------------------------------------------
  * Name:    Net_Config_HTTP_Server.h
  * Purpose: Network Configuration for HTTP Server
- * Rev.:    V7.1.0
+ * Rev.:    V7.2.0
  *----------------------------------------------------------------------------*/
 
 //-------- <<< Use Configuration Wizard in Context Menu >>> --------------------
@@ -73,5 +73,11 @@
 //   </e>
 
 // </h>
+
+// Number of nonce cache entries
+#define HTTP_SERVER_NONCE_TAB_SIZE   8
+
+// Nonce cache timeout in seconds
+#define HTTP_SERVER_NONCE_CACHE_TOUT 60
 
 //------------- <<< end of configuration section >>> ---------------------------

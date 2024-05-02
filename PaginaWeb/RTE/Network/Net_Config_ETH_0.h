@@ -146,7 +146,7 @@
 //     </e>
 
 //     Disable ICMP Echo response
-#define ETH0_ICMP_NO_ECHO       0 
+#define ETH0_ICMP_NO_ECHO       0
 //   </e>
 
 //   <e>IPv6
@@ -235,14 +235,14 @@
 //     </e>
 
 //     Disable ICMP6 Echo response
-#define ETH0_ICMP6_NO_ECHO      0 
+#define ETH0_ICMP6_NO_ECHO      0
 //   </e>
 
 //   <h>OS Resource Settings
 //   <i>These settings are used to optimize usage of OS resources.
 //     <o>Interface Thread Stack Size <512-65535:4>
 //     <i>Default: 512 bytes
-#define ETH0_THREAD_STACK_SIZE  1024
+#define ETH0_THREAD_STACK_SIZE  512
 
 //        Interface Thread Priority
 #define ETH0_THREAD_PRIORITY    osPriorityAboveNormal

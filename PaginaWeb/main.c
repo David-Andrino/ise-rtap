@@ -22,6 +22,8 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "RTC/rtc.h"
+#include "RTC/rtcThread.h"
 
 #ifdef _RTE_
 #include "RTE_Components.h"             // Component selection
@@ -122,8 +124,10 @@ int main(void)
   osKernelInitialize ();
 
   /* Create thread functions that start executing*/
-  osThreadNew(app_main, NULL, &app_main_attr);
-
+	
+  osThreadNew(app_main, NULL, NULL); 
+	RTC_thread_init();
+	
   /* Start thread execution */
   osKernelStart();
 #endif
@@ -160,8 +164,9 @@ static void SystemClock_Config(void)
   RCC_OscInitTypeDef RCC_OscInitStruct;
 
   /* Enable HSE Oscillator and activate PLL with HSE as source */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE | RCC_OSCILLATORTYPE_LSE;
   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
+	RCC_OscInitStruct.LSEState = RCC_LSE_ON;
   RCC_OscInitStruct.HSIState = RCC_HSI_OFF;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
@@ -179,6 +184,16 @@ static void SystemClock_Config(void)
   {
     Error_Handler();
   }
+	
+	RCC_PeriphCLKInitTypeDef periph ={
+		.PeriphClockSelection = RCC_PERIPHCLK_RTC,
+		.RTCClockSelection = RCC_RTCCLKSOURCE_LSE
+	};
+	
+	if (HAL_RCCEx_PeriphCLKConfig(&periph) != HAL_OK){
+		Error_Handler();
+	}
+
   
   /* Select PLL as system clock source and configure the HCLK, PCLK1 and PCLK2 
      clocks dividers */
