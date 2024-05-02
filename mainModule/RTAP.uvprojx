@@ -396,6 +396,21 @@
           </Files>
         </Group>
         <Group>
+          <GroupName>Control</GroupName>
+          <Files>
+            <File>
+              <FileName>controlThread.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Control\controlThread.c</FilePath>
+            </File>
+            <File>
+              <FileName>controlThread.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Control\controlThread.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
           <GroupName>::CMSIS</GroupName>
         </Group>
         <Group>
