@@ -4,33 +4,40 @@
 #include "../Radio/radio.h"
 #include "../WEB/ThreadWeb.h"
 #include "../DSP/dspThread.h"
+#include "../LCD/gui_threads.h"
 #include "controlConfig.h"
 #include <cmsis_os2.h>
 
 #define QUEUE_SIZE 64
 
 osMessageQueueId_t ctrl_in_queue;
+ADC_HandleTypeDef hconsadc;
 
+static osTimerId_t   cons_tim;
 static osThreadId_t  ctrl_tid;
 static radioMsg_t    radioMsg;
 static mp3Msg_t      mp3msg;
 static dspMsg_t      dspMsg = { .vol = 10, .bandGains = { 0 } };
 static lcd_out_msg_t lcdMsg;
-static web_state_t   webMsg;
+static web_out_msg_t   webMsg;
 static uint8_t mp3Playing = 0;
+static uint32_t exec1; // Para el timer, ignorar
 
 static void Control_Thread(void* arg);
-static void GPIO_init(void);
+static void ctrl_pins_init(void);
+static void ctrl_cons_init(void);
 static void ctrl_LCD(lcd_msg_t* msg);
 static void ctrl_RTC(rtc_msg_t* msg);
 static void ctrl_NFC(nfc_msg_t* msg);
 static void ctrl_WEB(web_msg_t* msg);
-static void ctrl_radio(radio_msg* msg);
+static void ctrl_radio(uint32_t* msg);
 static void ctrl_lowPower(void);
 static void ctrl_saveConfig(void);
+static void ctrl_sampleCons(void*);
 
 int Init_Control(void) {
-    GPIO_init();
+    ctrl_pins_init();
+    ctrl_cons_init();
     
     ctrl_tid = osThreadNew(Control_Thread, NULL, NULL);
     if (ctrl_tid == NULL) {
@@ -42,10 +49,17 @@ int Init_Control(void) {
         return -1;
     }
     
+    cons_tim = osTimerNew(ctrl_sampleCons, osTimerPeriodic, &exec1, NULL);
+    if (cons_tim == NULL) {
+        return -1;
+    }
+    
     return 0;
 }
 
 static void Control_Thread(void* arg) {
+    osTimerStart(&cons_tim, 1000); 
+    
     msg_ctrl_t msg;
     while (1) {
         osMessageQueueGet(ctrl_in_queue, &msg, NULL, osWaitForever);
@@ -77,7 +91,7 @@ static void ctrl_LCD(lcd_msg_t* msg) {
             } else {                 // Seleccionar MP3
                 HAL_GPIO_WritePin(INPUT_SELECT_GPIO_PORT, INPUT_SELECT_GPIO_PIN, SELECT_INPUT_MP3);
             }
-
+            
             webMsg.type = WEB_OUT_INPUT_SEL;
             webMsg.payload = msg->payload;
             osMessageQueuePut(webQueue, &webMsg, NULL, 0);
@@ -90,7 +104,7 @@ static void ctrl_LCD(lcd_msg_t* msg) {
                 HAL_GPIO_WritePin(OUTPUT_SELECT_GPIO_PORT, OUTPUT_SELECT_GPIO_PIN, SELECT_OUTPUT_SPK);
             }
 
-            webMsg.type = web_OUT_OUTPUT_SEL;
+            webMsg.type = WEB_OUT_OUTPUT_SEL;
             webMsg.payload = msg->payload;
             osMessageQueuePut(webQueue, &webMsg, NULL, 0);
             break;
@@ -129,7 +143,7 @@ static void ctrl_LCD(lcd_msg_t* msg) {
             break;
 
         case LCD_SONG:
-            mp3msg = msg->content;
+            mp3msg = msg->payload;
             osMessageQueuePut(MP3Queue, &mp3msg, NULL, 0);
             break;
 
@@ -180,6 +194,7 @@ static void ctrl_RTC(rtc_msg_t* msg) {
     osMessageQueuePut(webQueue, &webMsg, NULL, 0);
 }
 
+// TODO: Actualizar la pantalla y el LCD solo en la radio
 static void ctrl_NFC(nfc_msg_t* msg) {
     if (msg->type == 0) { // Cancion
         mp3msg = msg->content;
@@ -254,7 +269,7 @@ static void ctrl_WEB(web_msg_t* msg) {
             break;
 
         case WEB_SONG:
-            mp3msg = msg->content;
+            mp3msg = msg->payload;
             osMessageQueuePut(MP3Queue, &mp3msg, NULL, 0);
             break;
 
@@ -295,7 +310,7 @@ static void ctrl_WEB(web_msg_t* msg) {
     }
 }
 
-static void ctrl_radio(radio_msg* msg) {
+static void ctrl_radio(uint32_t* msg) {
     // Actualizar frecuencia del LCD y WEB
     lcdMsg.type = LCD_OUT_RADIO_FREQ;
     lcdMsg.payload = (*msg) / 100;
@@ -306,7 +321,15 @@ static void ctrl_radio(radio_msg* msg) {
     osMessageQueuePut(webQueue, &webMsg, NULL, 0);
 }
 
-void GPIO_init(void) {
+static void ctrl_pins_init(void) {
+    __ENA_GPIO();
+    GPIO_InitTypeDef enaGPIO = {
+        .Pin = ENA_GPIO_PIN,
+        .Pull = GPIO_NOPULL, 
+        .Mode = GPIO_MODE_OUTPUT_PP,
+    };
+    HAL_GPIO_Init(ENA_GPIO_PORT, &enaGPIO);    
+    
     __INPUT_SELECT_GPIO();
     GPIO_InitTypeDef radioGPIO = {
         .Pin = INPUT_SELECT_GPIO_PIN,
@@ -323,6 +346,22 @@ void GPIO_init(void) {
     };
     HAL_GPIO_Init(OUTPUT_SELECT_GPIO_PORT, &mp3GPIO);
     
+    HAL_GPIO_WritePin(ENA_GPIO_PORT, ENA_GPIO_PIN, ENA_GPIO_ON);
+    HAL_GPIO_WritePin(INPUT_SELECT_GPIO_PORT, INPUT_SELECT_GPIO_PIN, SELECT_INPUT_RADIO);
+    HAL_GPIO_WritePin(OUTPUT_SELECT_GPIO_PORT, OUTPUT_SELECT_GPIO_PIN, SELECT_OUTPUT_EAR);
+}
+
+// TODO: Low power mode
+static void ctrl_lowPower(void) {
+    while (1) {}
+}
+
+// TODO: Save to SD
+static void ctrl_saveConfig() {
+    while (1) {}
+}
+
+static void ctrl_cons_init(void) {
     __CONS_ENABLE_GPIO();
     GPIO_InitTypeDef consGPIO = {
         .Pin = CONS_GPIO_PIN,
@@ -330,14 +369,35 @@ void GPIO_init(void) {
         .Mode = GPIO_MODE_ANALOG,
     };
     HAL_GPIO_Init(CONS_GPIO_PORT, &consGPIO);
+    
+    __ENA_CONS_ADC();
+    hconsadc.Instance = CONS_ADC;
+    hconsadc.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV8;
+    hconsadc.Init.Resolution = ADC_RESOLUTION_12B;
+    hconsadc.Init.ScanConvMode = ENABLE;
+    hconsadc.Init.ContinuousConvMode = DISABLE;
+    hconsadc.Init.DiscontinuousConvMode = DISABLE;
+    hconsadc.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
+    hconsadc.Init.ExternalTrigConv = ADC_SOFTWARE_START;
+    hconsadc.Init.DataAlign = ADC_DATAALIGN_RIGHT;
+    hconsadc.Init.NbrOfConversion = 1;
+    hconsadc.Init.DMAContinuousRequests = DISABLE;
+    hconsadc.Init.EOCSelection = ADC_EOC_SEQ_CONV;
+    HAL_ADC_Init(&hconsadc);
+
+    ADC_ChannelConfTypeDef sConfig = {
+        .Channel = CONS_ADC_CHANNEL,
+        .Rank = 1,
+        .SamplingTime = ADC_SAMPLETIME_480CYCLES
+    };
+    HAL_ADC_ConfigChannel(&hconsadc, &sConfig);
+    HAL_ADC_Start(&hconsadc);
 }
 
-// TODO: Low power mode
-void ctrl_lowPower(void) {
-    while (1) {}
-}
-
-// TODO: Save to SD
-void ctrl_saveConfig() {
-    while (1) {}
+static void ctrl_sampleCons(void* arg) {
+    HAL_ADC_Stop(&hconsadc);
+    msg_ctrl_t msg = { .type = MSG_CONS };
+    msg.cons_msg   = HAL_ADC_GetValue(&hconsadc);
+    osMessageQueuePut(ctrl_in_queue, &msg, NULL, 0);
+    HAL_ADC_Start(&hconsadc);
 }

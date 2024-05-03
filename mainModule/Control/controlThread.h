@@ -3,9 +3,10 @@
 
 #include <stdint.h>
 #include <cmsis_os2.h>
+#include "../main.h"
 
 extern osMessageQueueId_t ctrl_in_queue;
-int Init_Control(void);
+int    Init_Control(void);
 
 // ==================================== MSG TYPES ======================================
 /**
