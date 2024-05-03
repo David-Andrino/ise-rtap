@@ -9,13 +9,13 @@ extern osMessageQueueId_t webQueue;
 extern osMutexId_t web_mutex;
 
 typedef enum {
-	RADIO			= 0,
-	MP3			 	= 1
+	WEB_RADIO			= 0,
+	WEB_MP3			 	= 1
 } input_t;
 
 typedef enum {
-	ALTAVOZ 		= 0,
-	AURICULARES 	= 1
+	WEB_ALTAVOZ 		= 0,
+	WEB_AURICULARES 	= 1
 } output_t;
 
 typedef struct {

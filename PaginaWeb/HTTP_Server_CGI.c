@@ -129,21 +129,21 @@ void netCGI_ProcessData (uint8_t code, const char *data, uint32_t len) {
         
 			if (strncmp(var, "entrada=",8) == 0){
 				if (strncmp(var, "entrada=radio",13) == 0){
-					web_state.entrada = RADIO;
+					web_state.entrada = WEB_RADIO;
 					sendToQueue(WEB_INPUT_SEL, 0);
 				} 
 				else if (strncmp(var, "entrada=mp3",11) == 0){
-					web_state.entrada = MP3;
+					web_state.entrada = WEB_MP3;
 					sendToQueue(WEB_INPUT_SEL, 1);
 				}
 			}
 			else if (strncmp(var, "salida=",7) == 0){
 				if (strncmp(var, "salida=altavoz",14) == 0){
-					web_state.salida = ALTAVOZ;
+					web_state.salida = WEB_ALTAVOZ;
 					sendToQueue(WEB_OUTPUT_SEL, 1);
 				} 
 				else if (strncmp(var, "salida=cascos",13) == 0){
-					web_state.salida = AURICULARES;
+					web_state.salida = WEB_AURICULARES;
 					sendToQueue(WEB_OUTPUT_SEL, 0);
 				}
 			}
@@ -236,19 +236,19 @@ uint32_t netCGI_Script (const char *env, char *buf, uint32_t buflen, uint32_t *p
 			switch (env[2]){
 				case '1':
 				// Case for Radio Input
-					len = sprintf (buf, &env[4], web_state.entrada == RADIO ? "checked" :"");
+					len = sprintf (buf, &env[4], web_state.entrada == WEB_RADIO ? "checked" :"");
 				break;
 				case '2':
 				// Case for MP3 Input	
-					len = sprintf (buf, &env[4], web_state.entrada == MP3 ? "checked" :"");
+					len = sprintf (buf, &env[4], web_state.entrada == WEB_MP3 ? "checked" :"");
 				break;
 				case '3':
 				// Case for Altavoz Output
-					len = sprintf (buf, &env[4], web_state.salida == ALTAVOZ ? "checked" :"");
+					len = sprintf (buf, &env[4], web_state.salida == WEB_ALTAVOZ ? "checked" :"");
 				break;
 				case '4':
 				// Case for Auriculares Output
-					len = sprintf (buf, &env[4], web_state.salida == AURICULARES ? "checked" :"");
+					len = sprintf (buf, &env[4], web_state.salida == WEB_AURICULARES ? "checked" :"");
 				break;
                 case '5':
                 // Case for power 
@@ -266,11 +266,11 @@ uint32_t netCGI_Script (const char *env, char *buf, uint32_t buflen, uint32_t *p
 				break;
 				case '7':
 				// Case for Altavoz Output
-					len = sprintf (buf, &env[4], web_state.salida == ALTAVOZ ? "checked" :"");
+					len = sprintf (buf, &env[4], web_state.salida == WEB_ALTAVOZ ? "checked" :"");
 				break;
 				case '8':
 				// Case for Auriculares Output
-					len = sprintf (buf, &env[4], web_state.salida == AURICULARES ? "checked" :"");
+					len = sprintf (buf, &env[4], web_state.salida == WEB_AURICULARES ? "checked" :"");
 				break;
 				default:
 				// Case for songs	
@@ -296,11 +296,11 @@ uint32_t netCGI_Script (const char *env, char *buf, uint32_t buflen, uint32_t *p
 				break;
 				case '3':
 				// Case for Altavoz Output
-					len = sprintf (buf, &env[4], web_state.salida == ALTAVOZ ? "checked" :"");
+					len = sprintf (buf, &env[4], web_state.salida == WEB_ALTAVOZ ? "checked" :"");
 				break;
 				case '4':
 				// Case for Auriculares Output
-					len = sprintf (buf, &env[4], web_state.salida == AURICULARES ? "checked" :"");
+					len = sprintf (buf, &env[4], web_state.salida == WEB_AURICULARES ? "checked" :"");
 				break;
 			}
 		break;
@@ -334,11 +334,11 @@ uint32_t netCGI_Script (const char *env, char *buf, uint32_t buflen, uint32_t *p
 				break;
 				case '7':
 				// Case for Altavoz Output
-					len = sprintf (buf, &env[4], web_state.salida == ALTAVOZ ? "checked" :"");
+					len = sprintf (buf, &env[4], web_state.salida == WEB_ALTAVOZ ? "checked" :"");
 				break;
 				case '8':
 				// Case for Auriculares Output
-					len = sprintf (buf, &env[4], web_state.salida == AURICULARES ? "checked" :"");
+					len = sprintf (buf, &env[4], web_state.salida == WEB_AURICULARES ? "checked" :"");
 				break;
 			}
 		break;
