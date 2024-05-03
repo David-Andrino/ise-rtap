@@ -11,9 +11,10 @@ void consumo_async_cb(void * data);
 typedef struct{
 	uint8_t vol;					  		// Volumen general del sistema
 	/* Radio */
-	uint32_t freq_khz;      		// La frecuencia de la radio sintonizada
+	uint32_t freq;      		    // La frecuencia de la radio sintonizada, en centenas de kHz
 	/* MP3 */
-	char songs[200];						// Todas las canciones, separadas por '\n'
+	uint8_t num_canciones;
+	char songs[5][30];					// Todas las canciones
 	/* Filtros */
 	char fcentral[5][10];				// La frecuencia central de cada banda, tal y como será representada (pasar 3.5kHz en vez de 3500Hz)
 } gui_data_t;

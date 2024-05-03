@@ -38,6 +38,8 @@
   C:\Users\ragus\AppData\Local\Arm\Packs\Keil\STM32F7xx_DFP\2.16.0\Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_hal_dsi.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\Keil\STM32F7xx_DFP\2.16.0\Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_hal_pwr.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\Keil\STM32F7xx_DFP\2.16.0\Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_hal_pwr_ex.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\Keil\STM32F7xx_DFP\2.16.0\Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_hal_rtc.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\Keil\STM32F7xx_DFP\2.16.0\Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_hal_rtc_ex.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\Keil\STM32F7xx_DFP\2.16.0\Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_hal_tim.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\Keil\STM32F7xx_DFP\2.16.0\Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_hal_tim_ex.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\Keil\STM32F7xx_DFP\2.16.0\Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_hal_dsi.h \
@@ -400,4 +402,11 @@
   C:\Users\ragus\AppData\Local\Arm\Packs\Keil\MDK-Middleware\7.13.0\Board\Board_LED.h \
   C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdio.h eqCoefficients.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\Keil\MDK-Middleware\7.13.0\Board\Board_GLCD.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\Keil\STM32F7xx_DFP\2.16.0\Drivers\BSP\STM32F769I-Discovery\stm32f769i_discovery_lcd.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\Keil\STM32F7xx_DFP\2.16.0\Drivers\BSP\STM32F769I-Discovery\..\Components\otm8009a\otm8009a.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\Keil\STM32F7xx_DFP\2.16.0\Drivers\BSP\STM32F769I-Discovery\..\Components\adv7533\adv7533.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\Keil\STM32F7xx_DFP\2.16.0\Drivers\BSP\STM32F769I-Discovery\..\Components\adv7533\..\Common\audio.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\Keil\STM32F7xx_DFP\2.16.0\Drivers\BSP\STM32F769I-Discovery\stm32f769i_discovery_sdram.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\Keil\STM32F7xx_DFP\2.16.0\Drivers\BSP\STM32F769I-Discovery\stm32f769i_discovery.h \
+  C:\Users\ragus\AppData\Local\Arm\Packs\Keil\STM32F7xx_DFP\2.16.0\Drivers\BSP\STM32F769I-Discovery\..\..\..\Utilities\Fonts\fonts.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\Keil\MDK-Middleware\7.13.0\Board\Board_Buttons.h

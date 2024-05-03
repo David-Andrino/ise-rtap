@@ -7,6 +7,7 @@
 #include "eqCoefficients.h"
 
 #include "Board_GLCD.h"
+#include "stm32f769i_discovery_lcd.h"
 #include "Board_Buttons.h"
 
 #define INIT 1
@@ -21,6 +22,8 @@ static osMutexId_t mut;
 
 extern lv_display_t * disp;
 
+RTC_HandleTypeDef hrtc;
+
 //char padres[130000] = {0};  // Ocupa y no hace nada
 
 void EXTI0_IRQHandler(void){
@@ -30,147 +33,82 @@ void EXTI0_IRQHandler(void){
 void EXTI15_10_IRQHandler(void){
   
 }
-void disable_all(){
-NVIC_DisableIRQ(WWDG_IRQn);
-NVIC_DisableIRQ(PVD_IRQn);
-NVIC_DisableIRQ(TAMP_STAMP_IRQn);
-NVIC_DisableIRQ(RTC_WKUP_IRQn);
-NVIC_DisableIRQ(FLASH_IRQn);
-NVIC_DisableIRQ(RCC_IRQn);
-NVIC_DisableIRQ(EXTI0_IRQn);
-NVIC_DisableIRQ(EXTI1_IRQn);
-NVIC_DisableIRQ(EXTI2_IRQn);
-NVIC_DisableIRQ(EXTI3_IRQn);
-NVIC_DisableIRQ(EXTI4_IRQn);
-NVIC_DisableIRQ(DMA1_Stream0_IRQn);
-NVIC_DisableIRQ(DMA1_Stream1_IRQn);
-NVIC_DisableIRQ(DMA1_Stream2_IRQn);
-NVIC_DisableIRQ(DMA1_Stream3_IRQn);
-NVIC_DisableIRQ(DMA1_Stream4_IRQn);
-NVIC_DisableIRQ(DMA1_Stream5_IRQn);
-NVIC_DisableIRQ(DMA1_Stream6_IRQn);
-NVIC_DisableIRQ(ADC_IRQn);
-NVIC_DisableIRQ(CAN1_TX_IRQn);
-NVIC_DisableIRQ(CAN1_RX0_IRQn);
-NVIC_DisableIRQ(CAN1_RX1_IRQn);
-NVIC_DisableIRQ(CAN1_SCE_IRQn);
-NVIC_DisableIRQ(EXTI9_5_IRQn);
-NVIC_DisableIRQ(TIM1_BRK_TIM9_IRQn);
-NVIC_DisableIRQ(TIM1_UP_TIM10_IRQn);
-NVIC_DisableIRQ(TIM1_TRG_COM_TIM11_IRQn);
-NVIC_DisableIRQ(TIM1_CC_IRQn);
-NVIC_DisableIRQ(TIM2_IRQn);
-NVIC_DisableIRQ(TIM3_IRQn);
-NVIC_DisableIRQ(TIM4_IRQn);
-NVIC_DisableIRQ(I2C1_EV_IRQn);
-NVIC_DisableIRQ(I2C1_ER_IRQn);
-NVIC_DisableIRQ(I2C2_EV_IRQn);
-NVIC_DisableIRQ(I2C2_ER_IRQn);
-NVIC_DisableIRQ(SPI1_IRQn);
-NVIC_DisableIRQ(SPI2_IRQn);
-NVIC_DisableIRQ(USART1_IRQn);
-NVIC_DisableIRQ(USART2_IRQn);
-NVIC_DisableIRQ(USART3_IRQn);
-NVIC_DisableIRQ(EXTI15_10_IRQn);
-NVIC_DisableIRQ(RTC_Alarm_IRQn);
-NVIC_DisableIRQ(OTG_FS_WKUP_IRQn);
-NVIC_DisableIRQ(TIM8_BRK_TIM12_IRQn);
-NVIC_DisableIRQ(TIM8_UP_TIM13_IRQn);
-NVIC_DisableIRQ(TIM8_TRG_COM_TIM14_IRQn);
-NVIC_DisableIRQ(TIM8_CC_IRQn);
-NVIC_DisableIRQ(DMA1_Stream7_IRQn);
-NVIC_DisableIRQ(FMC_IRQn);
-NVIC_DisableIRQ(SDMMC1_IRQn);
-NVIC_DisableIRQ(TIM5_IRQn);
-NVIC_DisableIRQ(SPI3_IRQn);
-NVIC_DisableIRQ(UART4_IRQn);
-NVIC_DisableIRQ(UART5_IRQn);
-NVIC_DisableIRQ(TIM6_DAC_IRQn);
-NVIC_DisableIRQ(TIM7_IRQn);
-NVIC_DisableIRQ(DMA2_Stream0_IRQn);
-NVIC_DisableIRQ(DMA2_Stream1_IRQn);
-NVIC_DisableIRQ(DMA2_Stream2_IRQn);
-NVIC_DisableIRQ(DMA2_Stream3_IRQn);
-NVIC_DisableIRQ(DMA2_Stream4_IRQn);
-NVIC_DisableIRQ(ETH_IRQn);
-NVIC_DisableIRQ(ETH_WKUP_IRQn);
-NVIC_DisableIRQ(CAN2_TX_IRQn);
-NVIC_DisableIRQ(CAN2_RX0_IRQn);
-NVIC_DisableIRQ(CAN2_RX1_IRQn);
-NVIC_DisableIRQ(CAN2_SCE_IRQn);
-NVIC_DisableIRQ(OTG_FS_IRQn);
-NVIC_DisableIRQ(DMA2_Stream5_IRQn);
-NVIC_DisableIRQ(DMA2_Stream6_IRQn);
-NVIC_DisableIRQ(DMA2_Stream7_IRQn);
-NVIC_DisableIRQ(USART6_IRQn);
-NVIC_DisableIRQ(I2C3_EV_IRQn);
-NVIC_DisableIRQ(I2C3_ER_IRQn);
-NVIC_DisableIRQ(OTG_HS_EP1_OUT_IRQn);
-NVIC_DisableIRQ(OTG_HS_EP1_IN_IRQn);
-NVIC_DisableIRQ(OTG_HS_WKUP_IRQn);
-NVIC_DisableIRQ(OTG_HS_IRQn);
-NVIC_DisableIRQ(DCMI_IRQn);
-NVIC_DisableIRQ(RNG_IRQn);
-NVIC_DisableIRQ(FPU_IRQn);
-NVIC_DisableIRQ(UART7_IRQn);
-NVIC_DisableIRQ(UART8_IRQn);
-NVIC_DisableIRQ(SPI4_IRQn);
-NVIC_DisableIRQ(SPI5_IRQn);
-NVIC_DisableIRQ(SPI6_IRQn);
-NVIC_DisableIRQ(SAI1_IRQn);
-NVIC_DisableIRQ(LTDC_IRQn);
-NVIC_DisableIRQ(LTDC_ER_IRQn);
-NVIC_DisableIRQ(DMA2D_IRQn);
-NVIC_DisableIRQ(SAI2_IRQn);
-NVIC_DisableIRQ(QUADSPI_IRQn);
-NVIC_DisableIRQ(LPTIM1_IRQn);
-NVIC_DisableIRQ(CEC_IRQn);
-NVIC_DisableIRQ(I2C4_EV_IRQn);
-NVIC_DisableIRQ(I2C4_ER_IRQn);
-NVIC_DisableIRQ(SPDIF_RX_IRQn);
-NVIC_DisableIRQ(DSI_IRQn);
-NVIC_DisableIRQ(DFSDM1_FLT0_IRQn);
-NVIC_DisableIRQ(DFSDM1_FLT1_IRQn);
-NVIC_DisableIRQ(DFSDM1_FLT2_IRQn);
-NVIC_DisableIRQ(DFSDM1_FLT3_IRQn);
-NVIC_DisableIRQ(SDMMC2_IRQn);
-NVIC_DisableIRQ(CAN3_TX_IRQn);
-NVIC_DisableIRQ(CAN3_RX0_IRQn);
-NVIC_DisableIRQ(CAN3_RX1_IRQn);
-NVIC_DisableIRQ(CAN3_SCE_IRQn);
-NVIC_DisableIRQ(JPEG_IRQn);
-NVIC_DisableIRQ(MDIOS_IRQn);
-}
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_PIN){
-	if(GPIO_PIN == GPIO_PIN_0){
-//		NVIC_EnableIRQ(ETH_IRQn);
-	}
+	
+}
+
+void rtc_init(void){
+	RTC_InitTypeDef   RtcInit = {
+		.HourFormat     = RTC_HOURFORMAT_24,
+		.AsynchPrediv   = 127,													// Prescaler 1									
+		.SynchPrediv    = 255,													// Prescaler 2
+		.OutPut         = RTC_OUTPUT_DISABLE,
+		.OutPutPolarity = RTC_OUTPUT_POLARITY_HIGH,  	// ?
+		.OutPutType 		= RTC_OUTPUT_TYPE_OPENDRAIN  	// ?
+	};
+
+	__HAL_RCC_RTC_ENABLE();
+	__HAL_RCC_PWR_CLK_ENABLE();	
+	
+	hrtc.Instance = RTC;
+	hrtc.Init = RtcInit;
+	HAL_RTC_Init(&hrtc);
+}
+
+void EnterStandbyMode(void){
+	rtc_init();
+	
+	BSP_LCD_DisplayOff();
+	BSP_LCD_Reset();
+	BSP_LCD_MspDeInit();
+	
+	if (__HAL_PWR_GET_FLAG(PWR_FLAG_SB) != RESET){
+	  __HAL_PWR_CLEAR_FLAG(PWR_FLAG_SB);          // clear the flag
+		__HAL_PWR_CLEAR_WAKEUP_FLAG(PWR_CR2_CWUPF1);
+  }
+  __HAL_PWR_CLEAR_FLAG(PWR_FLAG_WU);
+  __HAL_RTC_WAKEUPTIMER_CLEAR_FLAG(&hrtc, RTC_FLAG_WUTF);
+	
+	__HAL_RCC_PWR_CLK_ENABLE();
+	
+	HAL_PWR_DisableWakeUpPin(PWR_WAKEUP_PIN1);
+	__HAL_PWR_CLEAR_FLAG(PWR_CSR1_WUIF);
+	__HAL_PWR_CLEAR_FLAG(PWR_FLAG_VOSRDY);
+	
+	HAL_PWR_EnableWakeUpPin(PWR_WAKEUP_PIN1);
+	
+	HAL_RTCEx_DeactivateInternalTimeStamp(&hrtc);
+	HAL_RTCEx_DeactivateWakeUpTimer(&hrtc);
+	HAL_RTC_DeactivateAlarm(&hrtc, RTC_ALARM_A);
+	__HAL_RTC_ALARMA_DISABLE(&hrtc);
+	
+	HAL_PWR_EnterSTANDBYMode();
 }
 
 int Init_Thread (void) {
  
 	osThreadAttr_t att_task = {
 		.name = "LVGL Tasks",
-		.stack_size = 12400,
+		.stack_size = 5400,
 		.priority = osPriorityHigh
 	};
 	
 	osThreadAttr_t att_time = {
 		.name = "LVGL Times",
-		.stack_size = 12400,
+//		.stack_size = 12400,
 		.priority = osPriorityHigh
 	};
 	
 	osMutexAttr_t att_mut = {
 		.name = "LVGL Mutex",
-		.cb_size = 150000
+//		.cb_size = 150000
 	};
 	
 	mut = osMutexNew(&att_mut);
 	
-  tid_Thread_tasks = osThreadNew(Thread_tasks, NULL, &att_task);
-	tid_Thread_time = osThreadNew(Thread_time, NULL, &att_time);
-	tid_Thread_stuff = osThreadNew(Thread_stuff, NULL, NULL);
+  tid_Thread_tasks = osThreadNew (Thread_tasks, NULL, &att_task);
+	tid_Thread_time  = osThreadNew (Thread_time,  NULL, &att_time);
+	tid_Thread_stuff = osThreadNew (Thread_stuff, NULL, NULL);
 	
 	if (tid_Thread_tasks == NULL) {
     return(-1);
@@ -181,46 +119,15 @@ int Init_Thread (void) {
 void Thread_stuff (void *args){
 	LED_Initialize();
 	
-	__HAL_RCC_GPIOA_CLK_ENABLE();
-
-	HAL_NVIC_EnableIRQ(EXTI0_IRQn);
-	HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
-	HAL_NVIC_EnableIRQ(EXTI9_5_IRQn);
-	GPIO_InitTypeDef GPIO_InitStruct2 = {
-				.Mode = GPIO_MODE_IT_RISING,
-				.Pull = GPIO_NOPULL,
-	//				.Speed = GPIO_SPEED_FREQ_LOW,
-				.Pin = GPIO_PIN_0
-			};
-	HAL_GPIO_Init(GPIOA, &GPIO_InitStruct2);
-	
-	
 	int i = 0, j = 0;
 	int data[2];
+	
   while (1) {
-		i++;
-		if(i == 10) {
-			LED_SetOut(3);
-			disable_all();
-//			HAL_SuspendTick();
-			__HAL_RCC_PWR_CLK_ENABLE();
-			
-			HAL_PWR_DisableWakeUpPin(PWR_WAKEUP_PIN1);
-			__HAL_PWR_CLEAR_FLAG(PWR_FLAG_WU);
-			HAL_PWR_EnableWakeUpPin(PWR_WAKEUP_PIN1);
-			
-			HAL_PWR_EnterSTANDBYMode();
-				
-//			for (int i = 0; i < 50; i ++)
-//				__WFI();
-//			
-//			HAL_ResumeTick();
-		} else {
-			LED_SetOut(i);
-			data[0] = i%950; data[1] = coeffTable[i%950];
-			lv_async_call(async_cb, data);
-			lv_async_call(consumo_async_cb, data);
-		}
+		LED_SetOut(++i);
+		data[0] = i%950; data[1] = coeffTable[i%950];
+		lv_async_call(async_cb, data);
+		lv_async_call(consumo_async_cb, data);
+		
 		osDelay(500);
   }
 }
@@ -237,11 +144,6 @@ void Thread_time(void *arg){
 }
 
 void Thread_tasks (void *argument) {
-//	lv_tick_set_cb(OS_Tick_GetCount);
-//	lv_tick_set_cb(osKernelGetTickCount);
-	
-//	lv_demo_widgets();
-	
 	lv_init();
 	
 	tft_init();

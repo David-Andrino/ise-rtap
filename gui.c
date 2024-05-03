@@ -84,7 +84,9 @@ static void mute_cb(lv_event_t * e);
 static void save_cb(lv_event_t * e){}
 static void mp3_cb(lv_event_t * e){}
 static void radio_cb(lv_event_t * e){}
-static void low_power_cb(lv_event_t * e){}
+static void low_power_cb(lv_event_t * e){
+	EnterStandbyMode();
+}
 
 /**********************
  *  STATIC VARIABLES
@@ -123,7 +125,7 @@ static gui_data_t data = {
 	.fcentral[1] = "110Hz",
 	.fcentral[2] = "630Hz",
 	.fcentral[3] = "3.5kHz",
-	.fcentral[4] = "15kHz"
+	.fcentral[4] = "15kHz",
 };
 
 void lv_gui(){

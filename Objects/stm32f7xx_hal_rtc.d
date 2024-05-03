@@ -1,5 +1,5 @@
-./objects/stm32f7xx_hal_gpio.o: \
-  C:\Users\ragus\AppData\Local\Arm\Packs\Keil\STM32F7xx_DFP\2.16.0\Drivers\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_gpio.c \
+./objects/stm32f7xx_hal_rtc.o: \
+  C:\Users\ragus\AppData\Local\Arm\Packs\Keil\STM32F7xx_DFP\2.16.0\Drivers\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_rtc.c \
   RTE\LVGL\lv_conf_cmsis.h RTE\_Target_1\Pre_Include_Global.h \
   C:\Users\ragus\AppData\Local\Arm\Packs\Keil\STM32F7xx_DFP\2.16.0\Drivers\STM32F7xx_HAL_Driver\Inc\stm32f7xx_hal.h \
   RTE\Device\STM32F769NIHx\stm32f7xx_hal_conf.h \
