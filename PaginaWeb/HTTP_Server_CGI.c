@@ -14,6 +14,7 @@
 #include "controlThread.h"
 #include <stdlib.h>
 #include "ThreadWeb.h"
+#include "ThreadTestWeb.h"
 
 #if      defined (__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050)
 #pragma  clang diagnostic push
@@ -46,7 +47,7 @@ char canciones [25][30] = {
 };
 uint8_t song_cnt = 5;
 
-options opciones = {0};
+web_state_t web_state = {0};
 
 static void sendToQueue(web_msg_type_t type, uint16_t payload);
 static void searchSong(char* name);
@@ -115,44 +116,46 @@ void netCGI_ProcessData (uint8_t code, const char *data, uint32_t len) {
     return;
   }
 	
-	  if (len == 0) {
+  if (len == 0) {
     return;
   }
   passw[0] = 1;
   do {
+    osMutexAcquire(web_mutex, osWaitForever);
     // Parse all parameters
     data = netCGI_GetEnvVar (data, var, sizeof (var));
     if (var[0] != 0) {
       // First character is non-null, string exists
+        
 			if (strncmp(var, "entrada=",8) == 0){
 				if (strncmp(var, "entrada=radio",13) == 0){
-					opciones.entrada = RADIO;
+					web_state.entrada = RADIO;
 					sendToQueue(WEB_INPUT_SEL, 0);
 				} 
 				else if (strncmp(var, "entrada=mp3",11) == 0){
-					opciones.entrada = MP3;
+					web_state.entrada = MP3;
 					sendToQueue(WEB_INPUT_SEL, 1);
 				}
 			}
 			else if (strncmp(var, "salida=",7) == 0){
 				if (strncmp(var, "salida=altavoz",14) == 0){
-					opciones.salida = ALTAVOZ;
+					web_state.salida = ALTAVOZ;
 					sendToQueue(WEB_OUTPUT_SEL, 1);
 				} 
 				else if (strncmp(var, "salida=cascos",13) == 0){
-					opciones.salida = AURICULARES;
+					web_state.salida = AURICULARES;
 					sendToQueue(WEB_OUTPUT_SEL, 0);
 				}
 			}
 			else if (strncmp(var, "consumo=",8) == 0){
-				opciones.bajo_consumo = 1;
+				web_state.bajo_consumo = 1;
 				sendToQueue(WEB_LOW_POWER,0);
 			}
 			else if (strncmp(var, "frec_sint=",10) == 0){
 				float tmp;
 				sscanf(var, "frec_sint=%f", &tmp);
-				opciones.freq_actual = (int)(tmp*10);
-				sendToQueue(WEB_RADIO_FREQ, opciones.freq_actual);
+				web_state.freq_actual = (int)(tmp*10);
+				sendToQueue(WEB_RADIO_FREQ, web_state.freq_actual);
 			}
 			else if (strncmp(var, "seekup=",7) == 0){
 				sendToQueue(WEB_SEEK, 1);
@@ -161,37 +164,37 @@ void netCGI_ProcessData (uint8_t code, const char *data, uint32_t len) {
 				sendToQueue(WEB_SEEK, 0);
 			}
 			else if (strncmp(var, "mute=",5) == 0){
-				opciones.mute =! opciones.mute;
-				opciones.vol = (opciones.mute == 1 ? 0 : opciones.prev_vol);
-				sendToQueue(WEB_VOL, opciones.vol);
+				web_state.mute =! web_state.mute;
+				web_state.vol = (web_state.mute == 1 ? 0 : web_state.prev_vol);
+				sendToQueue(WEB_VOL, web_state.vol);
 			}
 			else if (strncmp(var, "formatted_vol=",14) == 0){
-				sscanf(var, "formatted_vol=%hhd", &opciones.vol);
-				opciones.prev_vol = opciones.vol;
-				sendToQueue(WEB_VOL, opciones.vol);
+				sscanf(var, "formatted_vol=%hhd", &web_state.vol);
+				web_state.prev_vol = web_state.vol;
+				sendToQueue(WEB_VOL, web_state.vol);
 			}
 			else if (strncmp(var, "save_conf.x=",12) == 0){
 				sendToQueue(WEB_SAVE_SD, 0);
 			}
 			else if (strncmp(var, "eq1=",4) == 0){
-				sscanf(var, "eq1=%hhd", &opciones.eq1);
-				sendToQueue(WEB_BANDS, 0x0000 | opciones.eq1);
+				sscanf(var, "eq1=%hhd", &web_state.eq1);
+				sendToQueue(WEB_BANDS, 0x0000 | web_state.eq1);
 			}
 			else if (strncmp(var, "eq2=",4) == 0){
-				sscanf(var, "eq2=%hhd", &opciones.eq2);
-				sendToQueue(WEB_BANDS, 0x0100 | opciones.eq2);
+				sscanf(var, "eq2=%hhd", &web_state.eq2);
+				sendToQueue(WEB_BANDS, 0x0100 | web_state.eq2);
 			}
 			else if (strncmp(var, "eq3=",4) == 0){
-				sscanf(var, "eq3=%hhd", &opciones.eq3);	
-				sendToQueue(WEB_BANDS, 0x0200 | opciones.eq3);				
+				sscanf(var, "eq3=%hhd", &web_state.eq3);	
+				sendToQueue(WEB_BANDS, 0x0200 | web_state.eq3);				
 			}
 			else if (strncmp(var, "eq4=",4) == 0){
-				sscanf(var, "eq4=%hhd", &opciones.eq4);
-				sendToQueue(WEB_BANDS, 0x0300 | opciones.eq4);
+				sscanf(var, "eq4=%hhd", &web_state.eq4);
+				sendToQueue(WEB_BANDS, 0x0300 | web_state.eq4);
 			}
 			else if (strncmp(var, "eq5=",4) == 0){
-				sscanf(var, "eq5=%hhd", &opciones.eq5);
-				sendToQueue(WEB_BANDS, 0x0400 | opciones.eq5);
+				sscanf(var, "eq5=%hhd", &web_state.eq5);
+				sendToQueue(WEB_BANDS, 0x0400 | web_state.eq5);
 			}
 			else if (strncmp(var, "canciones=",10) == 0){
 				searchSong(&var[10]);
@@ -209,6 +212,7 @@ void netCGI_ProcessData (uint8_t code, const char *data, uint32_t len) {
 				sendToQueue(WEB_LOOP, 0);
 			}
 		}
+    osMutexRelease(web_mutex);
   } while (data);
 
 
@@ -232,20 +236,24 @@ uint32_t netCGI_Script (const char *env, char *buf, uint32_t buflen, uint32_t *p
 			switch (env[2]){
 				case '1':
 				// Case for Radio Input
-					len = sprintf (buf, &env[4], opciones.entrada == RADIO ? "checked" :"");
+					len = sprintf (buf, &env[4], web_state.entrada == RADIO ? "checked" :"");
 				break;
 				case '2':
 				// Case for MP3 Input	
-					len = sprintf (buf, &env[4], opciones.entrada == MP3 ? "checked" :"");
+					len = sprintf (buf, &env[4], web_state.entrada == MP3 ? "checked" :"");
 				break;
 				case '3':
 				// Case for Altavoz Output
-					len = sprintf (buf, &env[4], opciones.salida == ALTAVOZ ? "checked" :"");
+					len = sprintf (buf, &env[4], web_state.salida == ALTAVOZ ? "checked" :"");
 				break;
 				case '4':
 				// Case for Auriculares Output
-					len = sprintf (buf, &env[4], opciones.salida == AURICULARES ? "checked" :"");
+					len = sprintf (buf, &env[4], web_state.salida == AURICULARES ? "checked" :"");
 				break;
+                case '5':
+                // Case for power 
+                    len = sprintf (buf, &env[4], web_state.consumo);
+                break;
 			}
 		break;
 			
@@ -254,15 +262,15 @@ uint32_t netCGI_Script (const char *env, char *buf, uint32_t buflen, uint32_t *p
 			switch (env[2]){
 				case '6':
 				// Case for volumen	
-					len = sprintf (buf, &env[4], opciones.vol);
+					len = sprintf (buf, &env[4], web_state.vol);
 				break;
 				case '7':
 				// Case for Altavoz Output
-					len = sprintf (buf, &env[4], opciones.salida == ALTAVOZ ? "checked" :"");
+					len = sprintf (buf, &env[4], web_state.salida == ALTAVOZ ? "checked" :"");
 				break;
 				case '8':
 				// Case for Auriculares Output
-					len = sprintf (buf, &env[4], opciones.salida == AURICULARES ? "checked" :"");
+					len = sprintf (buf, &env[4], web_state.salida == AURICULARES ? "checked" :"");
 				break;
 				default:
 				// Case for songs	
@@ -280,19 +288,19 @@ uint32_t netCGI_Script (const char *env, char *buf, uint32_t buflen, uint32_t *p
 			switch (env[2]){
 				case '1':
 				// Case for frecuency
-					len = sprintf (buf, &env[4], opciones.freq_actual);
+					len = sprintf (buf, &env[4], web_state.freq_actual);
 				break;
 				case '2':
 				// Case for volumen
-					len = sprintf (buf, &env[4], opciones.vol);
+					len = sprintf (buf, &env[4], web_state.vol);
 				break;
 				case '3':
 				// Case for Altavoz Output
-					len = sprintf (buf, &env[4], opciones.salida == ALTAVOZ ? "checked" :"");
+					len = sprintf (buf, &env[4], web_state.salida == ALTAVOZ ? "checked" :"");
 				break;
 				case '4':
 				// Case for Auriculares Output
-					len = sprintf (buf, &env[4], opciones.salida == AURICULARES ? "checked" :"");
+					len = sprintf (buf, &env[4], web_state.salida == AURICULARES ? "checked" :"");
 				break;
 			}
 		break;
@@ -302,43 +310,46 @@ uint32_t netCGI_Script (const char *env, char *buf, uint32_t buflen, uint32_t *p
 			switch (env[2]){
 				case '1':
 				// Case for eq1
-					len = sprintf (buf, &env[4], opciones.eq1);
+					len = sprintf (buf, &env[4], web_state.eq1);
 				break;
 				case '2':
 				// Case for eq2
-					len = sprintf (buf, &env[4], opciones.eq2);
+					len = sprintf (buf, &env[4], web_state.eq2);
 				break;
 				case '3':
 				// Case for eq3
-					len = sprintf (buf, &env[4], opciones.eq3);
+					len = sprintf (buf, &env[4], web_state.eq3);
 				break;
 				case '4':
 				// Case for eq4
-					len = sprintf (buf, &env[4], opciones.eq4);
+					len = sprintf (buf, &env[4], web_state.eq4);
 				break;
 				case '5':
 				// Case for eq5	
-					len = sprintf (buf, &env[4], opciones.eq5);
+					len = sprintf (buf, &env[4], web_state.eq5);
 				break;
 				case '6':
 				// Case for volumen	
-					len = sprintf (buf, &env[4], opciones.vol);
+					len = sprintf (buf, &env[4], web_state.vol);
 				break;
 				case '7':
 				// Case for Altavoz Output
-					len = sprintf (buf, &env[4], opciones.salida == ALTAVOZ ? "checked" :"");
+					len = sprintf (buf, &env[4], web_state.salida == ALTAVOZ ? "checked" :"");
 				break;
 				case '8':
 				// Case for Auriculares Output
-					len = sprintf (buf, &env[4], opciones.salida == AURICULARES ? "checked" :"");
+					len = sprintf (buf, &env[4], web_state.salida == AURICULARES ? "checked" :"");
 				break;
 			}
 		break;
 			
 		case 'h':
-			len = sprintf (buf, &env[1], opciones.dia , opciones.mes, opciones.ano, opciones.horas, opciones.min, opciones.seg);
+			len = sprintf (buf, &env[2], web_state.dia , web_state.mes, web_state.ano, web_state.horas, web_state.min, web_state.seg);
 		break;
-
+        
+        case 'z':
+            len = sprintf (buf, &env[2], web_state.consumo);
+        break;
 		
 	}
 
@@ -348,7 +359,7 @@ uint32_t netCGI_Script (const char *env, char *buf, uint32_t buflen, uint32_t *p
 void sendToQueue(web_msg_type_t type, uint16_t payload){
 	msgToMain.web_msg.type = type;
 	msgToMain.web_msg.payload = payload;
-	//osMessageQueuePut(ctrl_in_queue, &msgToMain, NULL, 0);
+	osMessageQueuePut(ctrl_in_queue, &msgToMain, NULL, 0);
 }
 
 void searchSong(char* name){

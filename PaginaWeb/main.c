@@ -24,6 +24,8 @@
 #include "main.h"
 #include "RTC/rtc.h"
 #include "RTC/rtcThread.h"
+#include "ThreadWeb.h"
+#include "ThreadTestWeb.h"
 
 #ifdef _RTE_
 #include "RTE_Components.h"             // Component selection
@@ -126,8 +128,9 @@ int main(void)
   /* Create thread functions that start executing*/
 	
   osThreadNew(app_main, NULL, NULL); 
-	RTC_thread_init();
-	
+    RTC_thread_init();
+	Init_Web();
+    Init_WebTest();
   /* Start thread execution */
   osKernelStart();
 #endif

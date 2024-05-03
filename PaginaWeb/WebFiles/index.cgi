@@ -4,6 +4,8 @@ c h          %02d-%02d-20%02d %02d:%02d:%02d</p> <!-- Fecha y hora del RTC-->
 t        </td>
 t    </div>
 t    <div id="paginaPrincipal" class="tabcontent" style="display:block;">
+t        <p id="rtcTime" hidden></p>
+t        <p id="cons_ref"hidden></p>
 t        <h1 style="text-align: center;">Real Time Audio Processor</h1>
 t        <table class="container">
 t            <tr>
@@ -52,22 +54,23 @@ t     <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.4/raphael-
 t     <script src="https://cdnjs.cloudflare.com/ajax/libs/justgage/1.2.9/justgage.min.js"></script>
 t     <script language=JavaScript type="text/javascript" src="xml_http.js"></script>
 t     <script>
+t         var jg1;
 t         document.addEventListener("DOMContentLoaded", function (event) {
-t             var maxx = 2;
+t             var maxx = 2000;
 t
-t             var jg1 = new JustGage({
+t             jg1 = new JustGage({
 t                 id: "jg1",
-t                 value: 1,
+c i 5             value: %4d,
 t                 min: 0,
 t                 max: maxx,
 t                 title: "Score",
 t                 label: "",
 t                 pointer: true,
 t                 textRenderer: function (val) {
-t                     return (val + ' A' );
+t                     return (val + ' mA' );
 t                 },
 t                 onAnimationEnd: function () {
-t                     console.log('f: onAnimationEnd()');
+t                     // console.log('f: onAnimationEnd()');
 t                 }
 t             });
 t         });
@@ -77,9 +80,10 @@ t           updateMultiple(timeUpdate,  plotRTCTime);
 t           rtc_elTime = setTimeout(periodicUpdateRTC, timeUpdate.period);
 t         }
 t         function plotRTCTime(){
-t           // document.getElementById("rtc").textContent = document.getElementById("rtcTime").textContent;
 t           timeVal = document.getElementById("rtcTime").value;
-t           document.getElementById("rtc").textContent;
+t           document.getElementById("rtc").textContent = timeVal;
+t           consumo = document.getElementById("cons_ref").value;
+t           jg1.refresh(consumo);
 t         }
 t     </script>
 t </body>

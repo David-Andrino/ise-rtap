@@ -1,9 +1,10 @@
 i header.inc
-t         <p style="position: relative; text-align: right;">
+t         <p id="rtc" style="position: relative; text-align: right;">
 c h          %02d-%02d-20%02d %02d:%02d:%02d</p> <!-- Fecha y hora del RTC-->
 t        </td>
 t    </div>
 t    <div id="paginaPrincipal" class="tabcontent" style="display:block;">
+t        <p id="rtcTime" hidden></p>
 t        <h1 style="text-align: center;">Real Time Audio Processor</h1>
 t        <table class="container">
 t            <tr>
@@ -93,10 +94,8 @@ t             </td>
 t         </tr>
 t     </table>
 t </div>
-t </body>
-t </html>
-t <script language=JavaScript type="text/javascript" src="xml_http.js"></script>
-t <script>
+t   <script language=JavaScript type="text/javascript" src="xml_http.js"></script>
+t   <script>
 t   function formatValue() {
 t       var vol = document.getElementById("vol").value;
 t       var formattedVol = vol.padStart(3, '0');
@@ -107,10 +106,13 @@ t   }
 t         var timeUpdate = new periodicObj("time.cgx", 500);
 t         function periodicUpdateRTC(){
 t           updateMultiple(timeUpdate,  plotRTCTime);
+t           rtc_elTime = setTimeout(periodicUpdateRTC, timeUpdate.period);
 t         }
 t         function plotRTCTime(){
-t           rtcVal = document.getElementById("rtc").textContent;
-t           document.getElementById("rtc").textContent = rtcVal;
+t           timeVal = document.getElementById("rtcTime").value;
+t           document.getElementById("rtc").textContent = timeVal;
 t         }
-t </script>
+t     </script>
+t   </body>
+t </html>
 .
