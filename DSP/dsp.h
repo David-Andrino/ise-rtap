@@ -11,7 +11,7 @@
  * @author Estela Mora
  * @author Fernando Sanz
  *
- * Utilizando la librería CMSIS DSP, procesa la señal de entrada, 
+ * Utilizando la librería CMSIS DSP, procesa la señal de entrada,
  * generando la señal de salida.
  *
  */
@@ -23,7 +23,7 @@
  *
  * @return 0 si se ha realizado correctamente. Otro valor si no.
  **/
-extern int  dsp_init(void);
+extern int dsp_init(void);
 
 /**
  * Realiza el procesado de un bloque de datos.
@@ -36,7 +36,7 @@ extern void processSamples(uint16_t* in, uint16_t* out);
 /**
  * Cambia la configuración del filtrado.
  *
- * @param bands Array de 5 elementos con las ganancias de cada banda. 
+ * @param bands Array de 5 elementos con las ganancias de cada banda.
  *              Elementos enteros en el rango [-9, 9]
  * @param vol   Volumen de salida, en décimas. Valor entero en [0, 10]
  **/

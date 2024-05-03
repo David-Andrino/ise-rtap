@@ -1,27 +1,29 @@
 #include "controlThread.h"
-#include "../main.h"
+
+#include <cmsis_os2.h>
+
+#include "../DSP/dspThread.h"
+#include "../LCD/gui_threads.h"
 #include "../MP3/mp3.h"
 #include "../Radio/radio.h"
 #include "../WEB/ThreadWeb.h"
-#include "../DSP/dspThread.h"
-#include "../LCD/gui_threads.h"
+#include "../main.h"
 #include "controlConfig.h"
-#include <cmsis_os2.h>
 
 #define QUEUE_SIZE 64
 
 osMessageQueueId_t ctrl_in_queue;
-ADC_HandleTypeDef hconsadc;
+ADC_HandleTypeDef  hconsadc;
 
 static osTimerId_t   cons_tim;
 static osThreadId_t  ctrl_tid;
 static radioMsg_t    radioMsg;
 static mp3Msg_t      mp3msg;
-static dspMsg_t      dspMsg = { .vol = 10, .bandGains = { 0 } };
+static dspMsg_t      dspMsg = {.vol = 10, .bandGains = {0}};
 static lcd_out_msg_t lcdMsg;
-static web_out_msg_t   webMsg;
-static uint8_t mp3Playing = 0;
-static uint32_t exec1; // Para el timer, ignorar
+static web_out_msg_t webMsg;
+static uint8_t       mp3Playing = 0;
+static uint32_t      exec1;  // Para el timer, ignorar
 
 static void Control_Thread(void* arg);
 static void ctrl_pins_init(void);
@@ -38,28 +40,28 @@ static void ctrl_sampleCons(void*);
 int Init_Control(void) {
     ctrl_pins_init();
     ctrl_cons_init();
-    
+
     ctrl_tid = osThreadNew(Control_Thread, NULL, NULL);
     if (ctrl_tid == NULL) {
         return -1;
     }
-    
+
     ctrl_in_queue = osMessageQueueNew(QUEUE_SIZE, sizeof(ctrl_in_queue), NULL);
     if (ctrl_in_queue == NULL) {
         return -1;
     }
-    
+
     cons_tim = osTimerNew(ctrl_sampleCons, osTimerPeriodic, &exec1, NULL);
     if (cons_tim == NULL) {
         return -1;
     }
-    
+
     return 0;
 }
 
 static void Control_Thread(void* arg) {
-    osTimerStart(&cons_tim, 1000); 
-    
+    osTimerStart(&cons_tim, 1000);
+
     msg_ctrl_t msg;
     while (1) {
         osMessageQueueGet(ctrl_in_queue, &msg, NULL, osWaitForever);
@@ -76,7 +78,8 @@ static void Control_Thread(void* arg) {
             case MSG_RADIO:
                 ctrl_radio(&msg.radio_msg);
                 break;
-            default: case MSG_WEB:
+            default:
+            case MSG_WEB:
                 ctrl_WEB(&msg.web_msg);
                 break;
         }
@@ -86,21 +89,21 @@ static void Control_Thread(void* arg) {
 static void ctrl_LCD(lcd_msg_t* msg) {
     switch (msg->type) {
         case LCD_INPUT_SEL:
-            if (msg->payload == 0) { // Seleccionar radio
+            if (msg->payload == 0) {  // Seleccionar radio
                 HAL_GPIO_WritePin(INPUT_SELECT_GPIO_PORT, INPUT_SELECT_GPIO_PIN, SELECT_INPUT_RADIO);
-            } else {                 // Seleccionar MP3
+            } else {  // Seleccionar MP3
                 HAL_GPIO_WritePin(INPUT_SELECT_GPIO_PORT, INPUT_SELECT_GPIO_PIN, SELECT_INPUT_MP3);
             }
-            
+
             webMsg.type = WEB_OUT_INPUT_SEL;
             webMsg.payload = msg->payload;
             osMessageQueuePut(webQueue, &webMsg, NULL, 0);
             break;
 
         case LCD_OUTPUT_SEL:
-            if (msg->payload == 0) { // Seleccionar cascos
+            if (msg->payload == 0) {  // Seleccionar cascos
                 HAL_GPIO_WritePin(OUTPUT_SELECT_GPIO_PORT, OUTPUT_SELECT_GPIO_PIN, SELECT_OUTPUT_EAR);
-            } else {                 // Seleccionar altavoz
+            } else {  // Seleccionar altavoz
                 HAL_GPIO_WritePin(OUTPUT_SELECT_GPIO_PORT, OUTPUT_SELECT_GPIO_PIN, SELECT_OUTPUT_SPK);
             }
 
@@ -185,21 +188,21 @@ static void ctrl_LCD(lcd_msg_t* msg) {
 
 static void ctrl_RTC(rtc_msg_t* msg) {
     // Update WEB date and time
-    webMsg.type    = WEB_OUT_DATE;
+    webMsg.type = WEB_OUT_DATE;
     webMsg.payload = (msg->day << 16) | (msg->month << 8) | msg->year;
     osMessageQueuePut(webQueue, &webMsg, NULL, 0);
 
-    webMsg.type    = WEB_OUT_HOUR;
+    webMsg.type = WEB_OUT_HOUR;
     webMsg.payload = (msg->hour << 16) | (msg->minute << 8) | msg->second;
     osMessageQueuePut(webQueue, &webMsg, NULL, 0);
 }
 
 // TODO: Actualizar la pantalla y el LCD solo en la radio
 static void ctrl_NFC(nfc_msg_t* msg) {
-    if (msg->type == 0) { // Cancion
+    if (msg->type == 0) {  // Cancion
         mp3msg = msg->content;
         osMessageQueuePut(MP3Queue, &msg->content, NULL, 0);
-    } else {              // Radio
+    } else {  // Radio
         radioMsg = 100 * msg->content;
         osMessageQueuePut(mainToRadioQueue, &radioMsg, NULL, 0);
     }
@@ -214,9 +217,9 @@ static void ctrl_NFC(nfc_msg_t* msg) {
 static void ctrl_WEB(web_msg_t* msg) {
     switch (msg->type) {
         case WEB_INPUT_SEL:
-            if (msg->payload == 0) { // Seleccionar radio
+            if (msg->payload == 0) {  // Seleccionar radio
                 HAL_GPIO_WritePin(INPUT_SELECT_GPIO_PORT, INPUT_SELECT_GPIO_PIN, SELECT_INPUT_RADIO);
-            } else {                 // Seleccionar MP3
+            } else {  // Seleccionar MP3
                 HAL_GPIO_WritePin(INPUT_SELECT_GPIO_PORT, INPUT_SELECT_GPIO_PIN, SELECT_INPUT_MP3);
             }
 
@@ -226,9 +229,9 @@ static void ctrl_WEB(web_msg_t* msg) {
             break;
 
         case WEB_OUTPUT_SEL:
-            if (msg->payload == 0) { // Seleccionar cascos
+            if (msg->payload == 0) {  // Seleccionar cascos
                 HAL_GPIO_WritePin(OUTPUT_SELECT_GPIO_PORT, OUTPUT_SELECT_GPIO_PIN, SELECT_OUTPUT_EAR);
-            } else {                 // Seleccionar altavoz
+            } else {  // Seleccionar altavoz
                 HAL_GPIO_WritePin(OUTPUT_SELECT_GPIO_PORT, OUTPUT_SELECT_GPIO_PIN, SELECT_OUTPUT_SPK);
             }
 
@@ -325,27 +328,27 @@ static void ctrl_pins_init(void) {
     __ENA_GPIO();
     GPIO_InitTypeDef enaGPIO = {
         .Pin = ENA_GPIO_PIN,
-        .Pull = GPIO_NOPULL, 
+        .Pull = GPIO_NOPULL,
         .Mode = GPIO_MODE_OUTPUT_PP,
     };
-    HAL_GPIO_Init(ENA_GPIO_PORT, &enaGPIO);    
-    
+    HAL_GPIO_Init(ENA_GPIO_PORT, &enaGPIO);
+
     __INPUT_SELECT_GPIO();
     GPIO_InitTypeDef radioGPIO = {
         .Pin = INPUT_SELECT_GPIO_PIN,
-        .Pull = GPIO_NOPULL, 
+        .Pull = GPIO_NOPULL,
         .Mode = GPIO_MODE_OUTPUT_PP,
     };
     HAL_GPIO_Init(INPUT_SELECT_GPIO_PORT, &radioGPIO);
-    
+
     __OUTPUT_SELECT_GPIO();
     GPIO_InitTypeDef mp3GPIO = {
         .Pin = OUTPUT_SELECT_GPIO_PIN,
-        .Pull = GPIO_NOPULL, 
+        .Pull = GPIO_NOPULL,
         .Mode = GPIO_MODE_OUTPUT_PP,
     };
     HAL_GPIO_Init(OUTPUT_SELECT_GPIO_PORT, &mp3GPIO);
-    
+
     HAL_GPIO_WritePin(ENA_GPIO_PORT, ENA_GPIO_PIN, ENA_GPIO_ON);
     HAL_GPIO_WritePin(INPUT_SELECT_GPIO_PORT, INPUT_SELECT_GPIO_PIN, SELECT_INPUT_RADIO);
     HAL_GPIO_WritePin(OUTPUT_SELECT_GPIO_PORT, OUTPUT_SELECT_GPIO_PIN, SELECT_OUTPUT_EAR);
@@ -365,11 +368,11 @@ static void ctrl_cons_init(void) {
     __CONS_ENABLE_GPIO();
     GPIO_InitTypeDef consGPIO = {
         .Pin = CONS_GPIO_PIN,
-        .Pull = GPIO_NOPULL, 
+        .Pull = GPIO_NOPULL,
         .Mode = GPIO_MODE_ANALOG,
     };
     HAL_GPIO_Init(CONS_GPIO_PORT, &consGPIO);
-    
+
     __ENA_CONS_ADC();
     hconsadc.Instance = CONS_ADC;
     hconsadc.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV8;
@@ -388,16 +391,15 @@ static void ctrl_cons_init(void) {
     ADC_ChannelConfTypeDef sConfig = {
         .Channel = CONS_ADC_CHANNEL,
         .Rank = 1,
-        .SamplingTime = ADC_SAMPLETIME_480CYCLES
-    };
+        .SamplingTime = ADC_SAMPLETIME_480CYCLES};
     HAL_ADC_ConfigChannel(&hconsadc, &sConfig);
     HAL_ADC_Start(&hconsadc);
 }
 
 static void ctrl_sampleCons(void* arg) {
     HAL_ADC_Stop(&hconsadc);
-    msg_ctrl_t msg = { .type = MSG_CONS };
-    msg.cons_msg   = HAL_ADC_GetValue(&hconsadc);
+    msg_ctrl_t msg = {.type = MSG_CONS};
+    msg.cons_msg = HAL_ADC_GetValue(&hconsadc);
     osMessageQueuePut(ctrl_in_queue, &msg, NULL, 0);
     HAL_ADC_Start(&hconsadc);
 }

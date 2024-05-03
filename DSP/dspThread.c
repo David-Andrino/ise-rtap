@@ -24,7 +24,7 @@ int DSP_Init(void) {
     if (dsp_tid == NULL) {
         return -1;
     }
-    
+
     dspQueue = osMessageQueueNew(DSP_MSG_CNT, sizeof(dspMsg_t), NULL);
     if (dspQueue == NULL) {
         return -1;
@@ -60,19 +60,19 @@ void fullBufferCb(void) { osThreadFlagsSet(dsp_tid, FULL_FLAG); }
 static void DSP_Thread(void* arg) {
     uint16_t* in;
     uint16_t* out;
-    dspMsg_t msg;
-    
+    dspMsg_t  msg;
+
     while (1) {
         int flag = osThreadFlagsWait(HALF_FLAG | FULL_FLAG, osFlagsWaitAny, osWaitForever);
         if (flag == HALF_FLAG) {
-            in  = inBuffer;
+            in = inBuffer;
             out = outBuffer;
         } else {
             in = &inBuffer[DSP_BUFSIZE];
             out = &outBuffer[DSP_BUFSIZE];
         }
         processSamples(in, out);
-        
+
         if (osMessageQueueGetCount(dspQueue) > 0) {
             while (osMessageQueueGet(dspQueue, &msg, NULL, 0) != osErrorResource);
             dsp_configure_filters(msg.bandGains, msg.vol);
