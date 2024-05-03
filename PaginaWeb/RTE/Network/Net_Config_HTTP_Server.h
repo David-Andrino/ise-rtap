@@ -30,7 +30,7 @@
 //   <e>Enable User Authentication
 //   <i>When enabled, requires authentication of the user through
 //   <i>the credentials to access any web page on the server.
-#define HTTP_SERVER_AUTH_ENABLE     1
+#define HTTP_SERVER_AUTH_ENABLE     0
 
 //     <o>Authentication Scheme <0=>Basic <1=>Digest
 //     <i>Defines Access Authentication type
