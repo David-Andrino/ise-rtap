@@ -275,7 +275,7 @@ uint32_t netCGI_Script (const char *env, char *buf, uint32_t buflen, uint32_t *p
 				default:
 				// Case for songs	
 					if (env[2] - 'a' < song_cnt) {
-						len = sprintf (buf, &env[4],canciones[env[2] - 'a'], canciones[env[2] - 'a']);
+						len = sprintf (buf, &env[4], canciones[env[2] - 'a']);
 					} else {
 						len = 0;
 					}
@@ -363,12 +363,14 @@ void sendToQueue(web_msg_type_t type, uint16_t payload){
 }
 
 void searchSong(char* name){
-	for (int i = 0; i < 25; i++){
-		if (strcmp(name, canciones[i]) == 0){
-			sendToQueue(WEB_SONG, i);
-			return;
-		}
-	}
+    uint8_t idx = 0;
+    sscanf(name, "%2hhd", &idx);
+    if (idx < 26 && idx != 0){
+        sendToQueue(WEB_SONG, idx);
+        return;
+    }
+    
+    
 }
 
 #if      defined (__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050)
