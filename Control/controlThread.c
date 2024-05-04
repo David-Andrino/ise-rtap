@@ -12,7 +12,7 @@
 
 #define QUEUE_SIZE 64
 
-osMessageQueueId_t ctrl_in_queue ,lcdQueue;
+osMessageQueueId_t ctrl_in_queue;
 ADC_HandleTypeDef  hconsadc;
 
 static osTimerId_t   cons_tim;
@@ -300,7 +300,7 @@ static void ctrl_WEB(web_msg_t* msg) {
             break;
 
         case WEB_SONG:
-            mp3msg = msg->payload + 1;
+            mp3msg = msg->payload ;
             osMessageQueuePut(MP3Queue, &mp3msg, NULL, 0);
             break;
 
