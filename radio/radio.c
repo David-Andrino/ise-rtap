@@ -148,7 +148,7 @@ void WriteAll(void) {
         x++;
     }
     I2Cdrv1->MasterTransmit(0x10, buffer, 12, false);
-    while (I2Cdrv1->GetStatus().busy);
+    osThreadFlagsWait(RDA_TRANSFER_COMPLETE, osFlagsWaitAny, osWaitForever);
 }
 
 void PowerOn(void) {
@@ -198,19 +198,17 @@ void I2C2_callback(uint32_t event) {
     /* Save received events */
     I2C_Event |= event;
 
-    if (event == ARM_I2C_EVENT_TRANSFER_INCOMPLETE) {
+    if (event & ARM_I2C_EVENT_TRANSFER_DONE) {
         /* Less data was transferred than requested */
-        osThreadFlagsSet(radioToMainQueue, RDA_TRANSFER_COMPLETE);
+        osThreadFlagsSet(radio_tid, RDA_TRANSFER_COMPLETE);
     }
 
-    if (event == ARM_I2C_EVENT_TRANSFER_DONE) {
+    if (event == ARM_I2C_EVENT_TRANSFER_INCOMPLETE) {
         /* Transfer or receive is finished */
-        osThreadFlagsSet(radioToMainQueue, RDA_TRANSFER_COMPLETE);
     }
 
     if (event == ARM_I2C_EVENT_ADDRESS_NACK) {
         /* Slave address was not acknowledged */
-        osThreadFlagsSet(radioToMainQueue, RDA_TRANSFER_COMPLETE);
     }
 
     if (event & ARM_I2C_EVENT_ARBITRATION_LOST) {
@@ -247,7 +245,7 @@ void Readregisters(void) {
 
     osDelay(50);
     I2Cdrv1->MasterReceive(0x10, rcv, 12, false);
-    while (I2Cdrv1->GetStatus().busy) {}
+    osThreadFlagsWait(RDA_TRANSFER_COMPLETE, osFlagsWaitAny, osWaitForever);
     for (int i = 0; i < 6; i++) {
         RDA5807M_ReadReg[i] = ((rcv[i * 2] << 8) | rcv[(i * 2) + 1]);
     }
