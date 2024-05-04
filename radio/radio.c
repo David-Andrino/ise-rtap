@@ -72,7 +72,6 @@ void ThreadRadio(void *argument) {
     RDA5807M_WriteReg[0] = RDA5807M_WriteReg[0] | RDA_RDS_ON;
     osTimerStart(timerRadio, 500U);
 
-    radioResponse_t msgRadioMain = {0};
     radioMsg_t      msgMainRadio = {0};
 
     while (1) {
@@ -93,11 +92,6 @@ void ThreadRadio(void *argument) {
             case SEEKDOWN:
                 SeekDown();
                 Readregisters();
-                break;
-            case INFO:
-                msgRadioMain.freq = seeFrec();
-                msgRadioMain.power = seePwr();
-                osMessageQueuePut(radioToMainQueue, &msgRadioMain, NULL, osWaitForever);
                 break;
             default:
                 Frequency(msgMainRadio);

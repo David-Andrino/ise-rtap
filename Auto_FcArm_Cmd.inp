@@ -1,0 +1,16 @@
+filtros.cgi,
+header.inc,
+index.cgi,
+mp3.cgi,
+radio.cgi,
+styles.css,
+time.cgx,
+xml_http.js,
+imgs\floppy-diskx32.png,
+imgs\loopx32.png,
+imgs\next-songx32.png,
+imgs\play-pausex32.png,
+imgs\prev-songx32.png,
+imgs\RTAP.png,
+imgs\sendx32.png 
+TO Web.c RTE NOPRINT ROOT(WebFiles)
