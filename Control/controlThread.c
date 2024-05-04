@@ -366,6 +366,14 @@ static void ctrl_pins_init(void) {
 
 // TODO: Low power mode
 static void ctrl_lowPower(void) {
+    // Apagar MP3
+    mp3msg = MP3_SLEEP_MODE;
+    osMessageQueuePut(MP3Queue, &mp3msg, NULL, osWaitForever);
+    
+    // Apagar Radio
+    radioMsg = POWEROFF;
+    osMessageQueuePut(mainToRadioQueue, &radioMsg, NULL, osWaitForever);
+    
     while (1) {}
 }
 
