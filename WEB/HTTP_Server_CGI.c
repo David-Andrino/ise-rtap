@@ -275,7 +275,7 @@ uint32_t netCGI_Script (const char *env, char *buf, uint32_t buflen, uint32_t *p
 				default:
 				// Case for songs	
 					if (env[2] - 'a' < song_cnt) {
-						len = sprintf (buf, &env[4], canciones[env[2] - 'a']);
+						len = sprintf (buf, &env[4],canciones[env[2] - 'a'], canciones[env[2] - 'a']);
 					} else {
 						len = 0;
 					}
