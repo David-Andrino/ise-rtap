@@ -128,7 +128,7 @@ static uint8_t Get_Songs(char SD_Songs[][30])
 				SD_Songs[numSongs][j] = '\0';
 				j++;
 			}
-			if(numSongs == 25){
+			if(numSongs == 24){
 				break;
 			}
 			numSongs++;

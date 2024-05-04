@@ -21,14 +21,14 @@ Target DLL:      STLink\ST-LINKIII-KEIL_SWO.dll V3.0.8.0
 Dialog DLL:      TCM.DLL V1.48.0.0
  
 <h2>Project:</h2>
-C:\RTAP\uSD\MDK-ARM\Project.uvprojx
+C:\RTAP\ise-rtap\uSD\MDK-ARM\Project.uvprojx
 Project File Date:  05/04/2024
 
 <h2>Output:</h2>
 *** Using Compiler 'V6.16', folder: 'C:\Keil_v5\ARM\ARMCLANG\Bin'
 Build target 'STM32F769I-Discovery'
 Note: source file '..\Src\ff.c' - object file renamed from 'STM32F769I-Discovery\Exe\ff.o' to 'STM32F769I-Discovery\Exe\ff_1.o'.
-compiling Thread_sd.c...
+compiling sd.c...
 linking...
 Program Size: Code=25340 RO-data=984 RW-data=188 ZI-data=38372  
 "STM32F769I-Discovery\Exe\Project.axf" - 0 Error(s), 0 Warning(s).
@@ -86,43 +86,43 @@ Package Vendor: Keil
    * Component: ARM::CMSIS:CORE:5.5.0
 
    * Component: ARM::CMSIS:RTOS2:Keil RTX5:Library:5.5.3
-      Source file:   CMSIS\RTOS2\RTX\Template\Timer.c
-      Source file:   CMSIS\RTOS2\RTX\Template\svc_user.c
       Include file:  CMSIS\RTOS2\RTX\Include\rtx_os.h
-      Source file:   CMSIS\RTOS2\RTX\Source\rtx_lib.c
       Include file:  CMSIS\RTOS2\RTX\Config\RTX_Config.h
-      Source file:   CMSIS\RTOS2\RTX\Template\Thread.c
-      Source file:   CMSIS\RTOS2\RTX\Template\MemPool.c
       Source file:   CMSIS\RTOS2\RTX\Config\RTX_Config.c
-      Source file:   CMSIS\RTOS2\RTX\Template\Events.c
-      Source file:   CMSIS\RTOS2\RTX\Template\MsgQueue.c
-      Source file:   CMSIS\RTOS2\RTX\Template\Mutex.c
-      Source file:   CMSIS\RTOS2\RTX\Template\Semaphore.c
       Source file:   CMSIS\RTOS2\RTX\Template\main.c
+      Source file:   CMSIS\RTOS2\RTX\Template\MemPool.c
+      Source file:   CMSIS\RTOS2\RTX\Template\Events.c
+      Source file:   CMSIS\RTOS2\RTX\Template\Semaphore.c
+      Source file:   CMSIS\RTOS2\RTX\Source\rtx_lib.c
       Library file:  CMSIS\RTOS2\RTX\Library\ARM\RTX_CM4F.lib
+      Source file:   CMSIS\RTOS2\RTX\Template\Mutex.c
+      Source file:   CMSIS\RTOS2\RTX\Template\Thread.c
+      Source file:   CMSIS\RTOS2\RTX\Template\svc_user.c
+      Source file:   CMSIS\RTOS2\RTX\Template\MsgQueue.c
+      Source file:   CMSIS\RTOS2\RTX\Template\Timer.c
 
    * Component: Keil.STM32F769I-Discovery::Board Support:Drivers:Basic I/O:1.1.0
-      Source file:   Drivers\BSP\STM32F769I-Discovery\stm32f769i_discovery.c
       Include file:  Drivers\BSP\STM32F769I-Discovery\stm32f769i_discovery.h
+      Source file:   Drivers\BSP\STM32F769I-Discovery\stm32f769i_discovery.c
 
    * Component: Keil.STM32F769I-Discovery::Board Support:Drivers:SD:1.1.0
-      Include file:  Drivers\BSP\STM32F769I-Discovery\stm32f769i_discovery_sd.h
       Source file:   Drivers\BSP\STM32F769I-Discovery\stm32f769i_discovery_sd.c
+      Include file:  Drivers\BSP\STM32F769I-Discovery\stm32f769i_discovery_sd.h
 
    * Component: Keil.STM32F769I-Discovery::Board Support:Drivers:SDRAM:1.1.0
       Include file:  Drivers\BSP\STM32F769I-Discovery\stm32f769i_discovery_sdram.h
       Source file:   Drivers\BSP\STM32F769I-Discovery\stm32f769i_discovery_sdram.c
 
    * Component: Keil::Device:STM32Cube Framework:Classic:1.3.0
-      Source file:   MDK\Templates\Src\stm32f7xx_hal_msp.c
-      Include file:  MDK\Templates\Inc\stm32f7xx_it.h
+      Include file:  MDK\Templates\Inc\main.h
       Include file:  CMSIS\Driver\Config\RTE_Device.h
       Source file:   MDK\Templates\Src\stm32f7xx_it.c
-      Include file:  MDK\Templates\Inc\stm32f7xx_hal_conf.h
-      Include file:  MDK\Templates\Inc\main.h
-      Source file:   MDK\Templates_LL\Src\main.c
       Source file:   MDK\Templates\Src\main.c
+      Include file:  MDK\Templates\Inc\stm32f7xx_hal_conf.h
+      Source file:   MDK\Templates_LL\Src\main.c
       Include file:  MDK\Templates_LL\Inc\main.h
+      Source file:   MDK\Templates\Src\stm32f7xx_hal_msp.c
+      Include file:  MDK\Templates\Inc\stm32f7xx_it.h
 
    * Component: Keil::Device:STM32Cube HAL:Common:1.3.0
       Source file:   Drivers\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal.c
@@ -162,16 +162,16 @@ Package Vendor: Keil
       Source file:   Drivers\STM32F7xx_HAL_Driver\Src\stm32f7xx_ll_sdmmc.c
 
    * Component: Keil::Device:STM32Cube HAL:SDRAM:1.3.0
-      Source file:   Drivers\STM32F7xx_HAL_Driver\Src\stm32f7xx_ll_fmc.c
       Source file:   Drivers\STM32F7xx_HAL_Driver\Src\stm32f7xx_hal_sdram.c
+      Source file:   Drivers\STM32F7xx_HAL_Driver\Src\stm32f7xx_ll_fmc.c
 
    * Component: Keil::Device:Startup:1.2.5
+      Source file:   MDK\Device\Source\ARM\STM32F76x_77x_OPT.s
+      Source file:   MDK\Device\Source\ARM\STM32F76x_77x_OTP.s
       Source file:   Drivers\CMSIS\Device\ST\STM32F7xx\Source\Templates\arm\startup_stm32f769xx.s
       Include file:  Drivers\CMSIS\Device\ST\STM32F7xx\Include\stm32f7xx.h
-      Source file:   MDK\Device\Source\ARM\STM32F76x_77x_OTP.s
-      Source file:   MDK\Device\Source\ARM\STM32F76x_77x_OPT.s
       Source file:   Drivers\CMSIS\Device\ST\STM32F7xx\Source\Templates\system_stm32f7xx.c
-Build Time Elapsed:  00:00:00
+Build Time Elapsed:  00:00:01
 </pre>
 </body>
 </html>
