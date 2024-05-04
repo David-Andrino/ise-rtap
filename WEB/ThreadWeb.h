@@ -1,29 +1,77 @@
 #ifndef THREADWEB_H
 #define THREADWEB_H
 
+/**
+ * @file
+ *
+ * @brief Modulo del la pagina web
+ *
+ * @author Ruben Agustin
+ * @author David Andrino
+ * @author Estela Mora
+ * @author Fernando Sanz
+ *
+ * Pagina web para gestionar la interaccion con la placa
+ */
+
 #include "../main.h"
 #include "cmsis_os2.h"
 
+/**
+ * Inicializa el modulo del la pagina web
+ *
+ * @param none
+ *
+ * @return 0 si se ha realizado correctamente. Otro valor si no.
+ **/
 extern int Init_Web (void);
+
+/**
+ * @brief Cola de mensajes por la que la pagina web recibe los mensajes
+ * del thread principal
+ */
 extern osMessageQueueId_t webQueue;
 
+/**
+ * @brief Cerrojo para la estructura de datos que maneja la pagina web
+ */
 extern osMutexId_t web_mutex;
 
+/**
+ * @brief Tamaño del stack de la pagina web
+ */
 extern uint64_t app_main_stk[];
+
+/**
+ * @brief Atributo de la pagina web
+ */
 extern const osThreadAttr_t app_main_attr;
 
+
+/**
+ * Inicializa thread de la pagina web
+ **/
 extern void app_main (void *arg);
 
+/**
+ * @brief Enumeración de las entradas de audio del sistema
+ */
 typedef enum {
 	WEB_RADIO			= 0,
 	WEB_MP3			 	= 1
 } input_t;
 
+/**
+ * @brief Enumeración de las salidas de audio del sistema
+ */
 typedef enum {
 	WEB_ALTAVOZ 		= 0,
 	WEB_AURICULARES 	= 1
 } output_t;
 
+/**
+ * @brief Estructura para los datos que maneja la pagina web
+ */
 typedef struct {
 	input_t entrada;
 	output_t salida;
@@ -36,8 +84,6 @@ typedef struct {
 	uint8_t horas, min, seg;
 	uint8_t dia, mes, ano;
 } web_state_t;
-
-extern web_state_t web_state; 
 
 /**
  * @brief Enumeración de mensajes de salida a la web
@@ -60,4 +106,6 @@ typedef struct {
     web_out_msg_type_t type;
     uint32_t payload;
 }web_out_msg_t;
+
+extern web_state_t web_state;
 #endif
