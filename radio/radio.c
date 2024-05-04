@@ -3,6 +3,7 @@
 #include "Driver_I2C.h"
 #include "cmsis_os2.h"
 #include "../Control/controlThread.h"
+#include "../i2c/i2c.h"
 
 #define RDA_TUNE_ON   0x0010
 #define RDA_TUNE_OFF  0xFFEF
@@ -22,18 +23,15 @@
 osThreadId_t             radio_tid;
 osMessageQueueId_t       radioToMainQueue, mainToRadioQueue;
 static osTimerId_t       timerRadio;
-extern ARM_DRIVER_I2C    Driver_I2C1;
-static ARM_DRIVER_I2C*   I2Cdrv1 = &Driver_I2C1;
+
 static uint16_t          RDA5807M_WriteReg[6];
 static uint16_t          RDA5807M_ReadReg[6];
 static uint16_t          RDA5807M_WriteRegDef[6] = {0xC004, 0x0000, 0x0100, 0x84D4, 0x4000, 0x0000};
-static volatile uint32_t I2C_Event;
 static uint8_t           registros_lectura[12];
 static msg_ctrl_t msgRadioToMain = { .type = MSG_RADIO };
 
 void            ThreadRadio(void *argument);
 static void     timer_callback(void);
-int             I2C_Init(void);
 static void     WriteAll(void);
 static void     PowerOn(void);
 static void     PowerOff(void);
@@ -41,7 +39,6 @@ static void     Frequency(uint32_t freq_kHz);
 static void     SetVolume(uint8_t vol);
 static void     SeekUp(void);
 static void     SeekDown(void);
-static void     I2C2_callback(uint32_t event);
 static void     Readregisters(void);
 static void     InitRegis(void);
 static uint32_t seeFrec(void);
@@ -68,13 +65,12 @@ int Init_Radio(void) {
 }
 
 void ThreadRadio(void *argument) {
-    I2C_Init();
     InitRegis();
     WriteAll();
     RDA5807M_WriteReg[0] = RDA5807M_WriteReg[0] | RDA_RDS_ON;
     osTimerStart(timerRadio, 500U);
 
-    radioMsg_t      msgMainRadio = {0};
+    radioMsg_t msgMainRadio = {0};
 
     while (1) {
         osMessageQueueGet(mainToRadioQueue, &msgMainRadio, NULL, osWaitForever);
@@ -103,15 +99,6 @@ void ThreadRadio(void *argument) {
     }
 }
 
-int I2C_Init(void) {
-    int error = 0;
-    error |= I2Cdrv1->Initialize((ARM_I2C_SignalEvent_t)I2C2_callback);
-    error |= I2Cdrv1->PowerControl(ARM_POWER_FULL);
-    error |= I2Cdrv1->Control(ARM_I2C_BUS_SPEED, ARM_I2C_BUS_SPEED_STANDARD);
-    error |= I2Cdrv1->Control(ARM_I2C_BUS_CLEAR, 0);
-    return error;
-}
-
 void InitRegis(void) {
     for (int i = 0; i < 6; i++) {
         RDA5807M_WriteReg[i] = RDA5807M_WriteRegDef[i];
@@ -135,7 +122,6 @@ void SeekDown() {
     osDelay(500);
     msgRadioToMain.radio_msg = seeFrec();
     osMessageQueuePut(radioToMainQueue, &msgRadioToMain, NULL, osWaitForever);
-
 }
 
 void WriteAll(void) {
@@ -150,8 +136,7 @@ void WriteAll(void) {
         buffer[i] = RDA5807M_WriteReg[x] & 0xFF;
         x++;
     }
-    I2Cdrv1->MasterTransmit(0x10, buffer, 12, false);
-    osThreadFlagsWait(RDA_TRANSFER_COMPLETE, osFlagsWaitAny, osWaitForever);
+    i2c_MasterTransmit(0x10, buffer, 12, false);
 }
 
 void PowerOn(void) {
@@ -197,48 +182,6 @@ void SetVolume(uint8_t vol) {
     RDA5807M_WriteReg[0] = RDA5807M_WriteReg[0] | RDA_RDS_ON;
 }
 
-void I2C2_callback(uint32_t event) {
-    /* Save received events */
-    I2C_Event |= event;
-
-    if (event & ARM_I2C_EVENT_TRANSFER_DONE) {
-        /* Less data was transferred than requested */
-        osThreadFlagsSet(radio_tid, RDA_TRANSFER_COMPLETE);
-    }
-
-    if (event == ARM_I2C_EVENT_TRANSFER_INCOMPLETE) {
-        /* Transfer or receive is finished */
-    }
-
-    if (event == ARM_I2C_EVENT_ADDRESS_NACK) {
-        /* Slave address was not acknowledged */
-    }
-
-    if (event & ARM_I2C_EVENT_ARBITRATION_LOST) {
-        /* Master lost bus arbitration */
-    }
-
-    if (event & ARM_I2C_EVENT_BUS_ERROR) {
-        /* Invalid start/stop position detected */
-    }
-
-    if (event & ARM_I2C_EVENT_BUS_CLEAR) {
-        /* Bus clear operation completed */
-    }
-
-    if (event & ARM_I2C_EVENT_GENERAL_CALL) {
-        /* Slave was addressed with a general call address */
-    }
-
-    if (event & ARM_I2C_EVENT_SLAVE_RECEIVE) {
-        /* Slave addressed as receiver but SlaveReceive operation is not started */
-    }
-
-    if (event & ARM_I2C_EVENT_SLAVE_TRANSMIT) {
-        /* Slave addressed as transmitter but SlaveTransmit operation is not started */
-    }
-}
-
 void timer_callback(void) {
     Readregisters();
 }
@@ -247,8 +190,7 @@ void Readregisters(void) {
     uint8_t rcv[12];
 
     osDelay(50);
-    I2Cdrv1->MasterReceive(0x10, rcv, 12, false);
-    osThreadFlagsWait(RDA_TRANSFER_COMPLETE, osFlagsWaitAny, osWaitForever);
+    i2c_MasterReceive(0x10, rcv, 12, false);
     for (int i = 0; i < 6; i++) {
         RDA5807M_ReadReg[i] = ((rcv[i * 2] << 8) | rcv[(i * 2) + 1]);
     }
