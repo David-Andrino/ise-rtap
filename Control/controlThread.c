@@ -16,7 +16,7 @@ osMessageQueueId_t ctrl_in_queue;
 ADC_HandleTypeDef  hconsadc;
 
 static osTimerId_t   cons_tim;
-static osThreadId_t  ctrl_tid;
+static osThreadId_t  ctrl_tid, cons_tid;
 static radioMsg_t    radioMsg;
 static mp3Msg_t      mp3msg;
 static dspMsg_t      dspMsg = {.vol = 10, .bandGains = {0}};
@@ -26,6 +26,7 @@ static uint8_t       mp3Playing = 0;
 static uint32_t      exec1;  // Para el timer, ignorar
 
 static void Control_Thread(void* arg);
+static void Cons_Thread(void* arg);
 static void ctrl_pins_init(void);
 static void ctrl_cons_init(void);
 static void ctrl_LCD(lcd_msg_t* msg);
@@ -33,9 +34,9 @@ static void ctrl_RTC(rtc_msg_t* msg);
 static void ctrl_NFC(nfc_msg_t* msg);
 static void ctrl_WEB(web_msg_t* msg);
 static void ctrl_radio(uint32_t* msg);
+static void ctrl_cons(uint16_t* msg);
 static void ctrl_lowPower(void);
 static void ctrl_saveConfig(void);
-static void ctrl_sampleCons(void*);
 
 int Init_Control(void) {
     ctrl_pins_init();
@@ -52,8 +53,8 @@ int Init_Control(void) {
         return -1;
     }
 
-    cons_tim = osTimerNew(ctrl_sampleCons, osTimerPeriodic, &exec1, NULL);
-    if (cons_tim == NULL) {
+    cons_tid = osThreadNew(Cons_Thread, NULL, NULL);
+    if (cons_tid == NULL) {
         return -1;
     }
 
@@ -70,9 +71,17 @@ static void Control_Thread(void* arg) {
     radioMsg = POWERON;
     osMessageQueuePut(mainToRadioQueue, &radioMsg, NULL, osWaitForever);
     
-    osTimerStart(&cons_tim, 1000);
+    osTimerStart(cons_tim, 1000);
 
     msg_ctrl_t msg;
+    
+    // TEST
+    msg.type = MSG_LCD;
+    msg.lcd_msg.type = LCD_RADIO_FREQ;
+    msg.lcd_msg.payload = 890;
+    osMessageQueuePut(ctrl_in_queue, &msg, NULL, osWaitForever);
+    // END TEST
+    
     while (1) {
         osMessageQueueGet(ctrl_in_queue, &msg, NULL, osWaitForever);
         switch (msg.type) {
@@ -88,9 +97,13 @@ static void Control_Thread(void* arg) {
             case MSG_RADIO:
                 ctrl_radio(&msg.radio_msg);
                 break;
-            default:
+            case MSG_CONS:
+                ctrl_cons(&msg.cons_msg);
+                break;
             case MSG_WEB:
                 ctrl_WEB(&msg.web_msg);
+                break;
+            default:
                 break;
         }
     }
@@ -334,6 +347,13 @@ static void ctrl_radio(uint32_t* msg) {
     osMessageQueuePut(webQueue, &webMsg, NULL, 0);
 }
 
+static void ctrl_cons(uint16_t* msg) {
+    uint16_t cons = *msg;
+    webMsg.type = WEB_OUT_CONS;
+    webMsg.payload = ((uint32_t)(*msg) * 3000)/4096;
+    osMessageQueuePut(webQueue, &webMsg, NULL, 0);
+}
+    
 static void ctrl_pins_init(void) {
     __ENA_GPIO();
     GPIO_InitTypeDef enaGPIO = {
@@ -414,10 +434,14 @@ static void ctrl_cons_init(void) {
     HAL_ADC_Start(&hconsadc);
 }
 
-static void ctrl_sampleCons(void* arg) {
-    HAL_ADC_Stop(&hconsadc);
+static void Cons_Thread(void* arg) {
     msg_ctrl_t msg = {.type = MSG_CONS};
-    msg.cons_msg = HAL_ADC_GetValue(&hconsadc);
-    osMessageQueuePut(ctrl_in_queue, &msg, NULL, 0);
-    HAL_ADC_Start(&hconsadc);
+    
+    while (1) {
+        HAL_ADC_Start(&hconsadc);
+        osDelay(1);
+        HAL_ADC_Stop(&hconsadc);
+        msg.cons_msg = HAL_ADC_GetValue(&hconsadc);
+        osMessageQueuePut(ctrl_in_queue, &msg, NULL, osWaitForever);
+    }
 }
