@@ -77,14 +77,14 @@ void Thread_Web (void *argument) {
                 }
 			break;
 			case WEB_OUT_DATE:
-				web_state.dia = msgMainToWeb.payload >> 16;
+				web_state.ano = msgMainToWeb.payload >> 16;
                 web_state.mes = ( msgMainToWeb.payload >> 8 ) & 0xFF;
-                web_state.ano = msgMainToWeb.payload & 0xFF;
+                web_state.dia = msgMainToWeb.payload & 0xFF;
 			break;
             case WEB_OUT_HOUR:
-				web_state.seg = msgMainToWeb.payload >> 16;
+				web_state.horas = msgMainToWeb.payload >> 16;
                 web_state.min = ( msgMainToWeb.payload >> 8 ) & 0xFF;
-                web_state.horas = msgMainToWeb.payload & 0xFF;				
+                web_state.seg = msgMainToWeb.payload & 0xFF;				
 			break;
             default:
             break;

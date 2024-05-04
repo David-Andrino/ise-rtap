@@ -22,3 +22,5 @@
 --------------------------------
 - Añandir Defines STM32 STM32F7 STM32F769NIHx STM32F769I_DISCO DEBUG STM32F769xx LV_LVGL_H_INCLUDE_SIMPLE CONFIG_LV_FONT_MONTSERRAT_36=1 CONFIG_LV_FONT_MONTSERRAT_24=1  CONFIG_LV_FONT_MONTSERRAT_18=1 CONFIG_LV_FONT_MONTSERRAT_16=1 CONFIG_LV_USE_FILE_EXPLORER
 - Desactivar Dynamic y IPv6 en Network-> Net_Config_RTH_0.h
+- Cambiar el desplazamiento de los segundos y las horas
+- Cambiar el desplazamiento de los dias y los años
