@@ -1,0 +1,19 @@
+- Crear grupo RTC y añadir los archivos
+- Añadir paquete del HAL RTC
+- Eliminar cola rtcQueue
+- Añadir el include del controlThread.h
+- Crear mensage en RTCThread
+- Meter valores del tiempo leído en el mensage
+- Meter mensage en la cola
+- En el main.c, configurar reloj del RTC:
+	RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE | RCC_OSCILLATORTYPE_LSE;
+	RCC_OscInitStruct.LSEState = RCC_LSE_ON;
+	RCC_PeriphCLKInitTypeDef periph ={
+		.PeriphClockSelection = RCC_PERIPHCLK_RTC,
+		.RTCClockSelection = RCC_RTCCLKSOURCE_LSE
+	};
+	
+	if (HAL_RCCEx_PeriphCLKConfig(&periph) != HAL_OK){
+		Error_Handler();
+	}
+
