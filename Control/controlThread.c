@@ -352,6 +352,10 @@ static void ctrl_cons(uint16_t* msg) {
     webMsg.type = WEB_OUT_CONS;
     webMsg.payload = ((uint32_t)(*msg) * 3000)/4096;
     osMessageQueuePut(webQueue, &webMsg, NULL, 0);
+    
+    lcdMsg.type = LCD_OUT_CONS;
+    lcdMsg.payload = webMsg.payload;
+    osMessageQueuePut(lcdQueue, &lcdMsg, NULL, 0);
 }
     
 static void ctrl_pins_init(void) {
@@ -443,5 +447,6 @@ static void Cons_Thread(void* arg) {
         HAL_ADC_Stop(&hconsadc);
         msg.cons_msg = HAL_ADC_GetValue(&hconsadc);
         osMessageQueuePut(ctrl_in_queue, &msg, NULL, osWaitForever);
+        
     }
 }
