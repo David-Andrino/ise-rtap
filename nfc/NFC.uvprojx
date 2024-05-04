@@ -10,8 +10,8 @@
       <TargetName>Target 1</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
-      <pCCUsed>5060960::V5.06 update 7 (build 960)::.\ARMCC</pCCUsed>
-      <uAC6>0</uAC6>
+      <pCCUsed>6160000::V6.16::ARMCLANG</pCCUsed>
+      <uAC6>1</uAC6>
       <TargetOption>
         <TargetCommonOption>
           <Device>STM32F429ZITx</Device>
@@ -313,7 +313,7 @@
           </ArmAdsMisc>
           <Cads>
             <interw>1</interw>
-            <Optim>1</Optim>
+            <Optim>2</Optim>
             <oTime>0</oTime>
             <SplitLS>0</SplitLS>
             <OneElfS>1</OneElfS>
@@ -322,7 +322,7 @@
             <PlainCh>0</PlainCh>
             <Ropi>0</Ropi>
             <Rwpi>0</Rwpi>
-            <wLevel>2</wLevel>
+            <wLevel>3</wLevel>
             <uThumb>0</uThumb>
             <uSurpInc>0</uSurpInc>
             <uC99>0</uC99>
@@ -389,16 +389,6 @@
               <FilePath>.\main.c</FilePath>
             </File>
             <File>
-              <FileName>ThreadTest.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\ThreadTest.c</FilePath>
-            </File>
-            <File>
-              <FileName>ThreadTest.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\ThreadTest.h</FilePath>
-            </File>
-            <File>
               <FileName>stm32f4xx_it.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\stm32f4xx_it.c</FilePath>
@@ -412,6 +402,11 @@
               <FileName>nfc.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\nfc.h</FilePath>
+            </File>
+            <File>
+              <FileName>controlThread.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\controlThread.h</FilePath>
             </File>
           </Files>
         </Group>

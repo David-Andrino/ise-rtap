@@ -22,7 +22,6 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "ThreadTest.h"
 #include "nfc.h"
 
 #ifdef _RTE_
@@ -117,7 +116,6 @@ int main(void)
   Example: osThreadNew(app_main, NULL, NULL); */
 	
 	status |= Init_NFC();
-	status |= Init_Test();
 	
 	if (status != 0){
 		Error_Handler();
