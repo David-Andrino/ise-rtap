@@ -13,7 +13,7 @@
 #define INIT 1
 
 osThreadId_t tid_Thread_tasks, tid_Thread_time, tid_Thread_stuff;
- 
+
 void Thread_tasks (void *argument);                   // thread function
 void Thread_time (void *argument);
 void Thread_stuff (void *args);
@@ -24,7 +24,7 @@ extern lv_display_t * disp;
 
 RTC_HandleTypeDef hrtc;
 
-//char padres[130000] = {0};  // Ocupa y no hace nada
+const char padres[950 * 4 * 2] = {0};  // Ocupa y no hace nada
 
 void EXTI0_IRQHandler(void){
   HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_0);      // Usuario
@@ -89,19 +89,19 @@ int Init_Thread (void) {
  
 	osThreadAttr_t att_task = {
 		.name = "LVGL Tasks",
-		.stack_size = 5400,
+		.stack_size = 12400,
 		.priority = osPriorityHigh
 	};
 	
 	osThreadAttr_t att_time = {
 		.name = "LVGL Times",
-//		.stack_size = 12400,
+		.stack_size = 12400,
 		.priority = osPriorityHigh
 	};
 	
 	osMutexAttr_t att_mut = {
 		.name = "LVGL Mutex",
-//		.cb_size = 150000
+		.cb_size = 150000
 	};
 	
 	mut = osMutexNew(&att_mut);
@@ -200,10 +200,10 @@ const cadena_t cadenas[] = {{ "Onda Latina", 87.6 }, { "Europa FM", 87.7 }, { "E
 { "Radio Romanul", 107.7 }, { "Onda Aranjuez", 107.8 }, { "Radio Braojos", 107.8 }, { "Radio Estremera", 107.8 }, { "Radio Union", 107.8 }, 
 { "Radio Utopia", 107.8 }, { "Radio 21", 107.8 }, { "Onda Verde", 107.9 }, { "Radio Soto", 107.9 }, { "Radio Viator", 107.9 }, 
 { "Radio 21", 107.9 }, { "Madrid 24 Horas Radio", 108 }, { "exito Radio", 100 }, {"exito Radio", 106.5}, {"exito Radio", 106.6}, 
-{"exito Radio", 107.4}, { "Onda Madrid", 101.3 }, {"Onda Madrid", 106}, { "Radio Madrid", 810 }, {"Radio Madrid", 105.4}, 
+{ "exito Radio", 107.4}, { "Onda Madrid", 101.3 }, {"Onda Madrid", 106}, { "Radio Madrid", 810 }, {"Radio Madrid", 105.4}, 
 { "Dynamis Radio", 87.5 }, {"Dynamis Radio", 98.6}, { "Ushuaia Radio", 87.7 }, {"Ushuaia Radio", 94.9}, { "Ucrania FM", 88.6 }, 
-{"Ucrania FM", 89.7}, { "Pepe Radio", 89.3 }, {"Pepe Radio", 96.2}, { "Radio Maria", 90.7 }, {"Radio Maria", 96.9}, { "Ecuashyri", 91.9 }, 
-{"Ecuashyri", 103.7}, { "Vida FM", 92.2 }, {"Vida FM", 94.2}, {"Vida FM", 104.1}, { "Onda Cero Madrid", 954 }, {"Onda Cero Madrid", 98}, 
+{ "Ucrania FM", 89.7}, { "Pepe Radio", 89.3 }, {"Pepe Radio", 96.2}, { "Radio Maria", 90.7 }, {"Radio Maria", 96.9}, { "Ecuashyri", 91.9 }, 
+{ "Ecuashyri", 103.7}, { "Vida FM", 92.2 }, {"Vida FM", 94.2}, {"Vida FM", 104.1}, { "Onda Cero Madrid", 954 }, {"Onda Cero Madrid", 98}, 
 { "Free FM Rock", 97.4 }, {"Free FM Rock", 97.8}, { "esRadio", 99.1 }, {"esRadio", 105.7}, { "Sol Radio", 99.8 }, {"Sol Radio", 107.1}, 
 { "COPE Madrid", 999 }, {"COPE Madrid", 106.3}};
 

@@ -10,6 +10,9 @@
 #define ABOUT "Ingenieria de Sistemas Electronicos 2024"
 #define DRAGGABBLE 0
 #define MAX_VOLUME 10
+
+#define CLICK_PANTALLA 1
+#define CLICK_WEB      2
 /**********************
  *      TYPEDEFS
  **********************/
@@ -61,7 +64,7 @@ static void crear_panel_snaps_mp3    (lv_obj_t * container);
 static void crear_panel_control_mp3  (lv_obj_t * container);
 static void crear_panel_canciones    (lv_obj_t * container);
 static void crear_panel_seek         (lv_obj_t * container);
-static void crear_panel_salida       (lv_obj_t * container);
+static void crear_panel_salida       (lv_obj_t * container, lv_obj_t * btn_headphones, lv_obj_t * btn_speakers);
 static void crear_panel_camino_audio (lv_obj_t * container);
 static void crear_panel_config_rapida(lv_obj_t * container);
 static void crear_panel_volumen      (lv_obj_t * container, lv_obj_t * vol_slider);
@@ -78,16 +81,17 @@ static void guardar_cadena_cb(lv_event_t * e);
 static void guardar_cadena_cb(lv_event_t * e);
 static void set_channel_from_list_cb(lv_event_t * e);
 static void volume_cb(lv_event_t * e);
-static void headphones_cb(lv_event_t * e) {}
-static void speakers_cb(lv_event_t * e) {}
+static void headphones_cb(lv_event_t * e);
+static void speakers_cb(lv_event_t * e);
 static void mute_cb(lv_event_t * e);
 static void save_cb(lv_event_t * e){}
-static void mp3_cb(lv_event_t * e){}
-static void radio_cb(lv_event_t * e){}
+static void mp3_cb(lv_event_t * e);
+static void radio_cb(lv_event_t * e);
 static void low_power_cb(lv_event_t * e){
 	EnterStandbyMode();
 }
-
+static void cambiar_estilo_entrada(int in);
+static void cambiar_estilo_salida(int out);
 /**********************
  *  STATIC VARIABLES
  **********************/
@@ -100,6 +104,9 @@ static lv_style_t style_subtitle;
 static lv_style_t style_icon;
 static lv_style_t style_bullet;
 static lv_style_t style_ctrl_mp3;
+
+static lv_style_t btn_style_base;     /* Cuando un boton no está seleccionado: azul */
+static lv_style_t btn_style_sel;      /* Cuando un boton está seleccionado: blanco  */
 	
 static const lv_font_t * font_ultralarge;
 static const lv_font_t * font_large;
@@ -111,6 +118,15 @@ static lv_obj_t *volume_slider_radio, *volume_slider_mp3, *volume_slider_filtros
 
 static lv_obj_t * panel_ctrl_mp3;
 
+/* Configuración rápida */
+static lv_obj_t * btn_headphones_conf_rapida;
+static lv_obj_t * btn_speakers_conf_rapida;
+static lv_obj_t * btn_mp3_conf_rapida;
+static lv_obj_t * btn_radio_conf_rapida;
+
+/* Radio */
+static lv_obj_t * btn_headphones_radio;
+static lv_obj_t * btn_speakers_radio;
 static lv_obj_t * textarea_freq;
 static lv_obj_t * slider_freq;
 static lv_obj_t * label_cadena, *label_cadena_txt; 
@@ -118,9 +134,29 @@ static lv_obj_t * list_cadenas;
 static float lista_freq_guardadas[15];
 static int index = 0;
 
+/* MP3 */
+static lv_obj_t * btn_headphones_mp3;
+static lv_obj_t * btn_speakers_mp3;
+
+/* Filtros */
+static lv_obj_t * btn_headphones_filtros;
+static lv_obj_t * btn_speakers_filtros;
+static lv_obj_t * btn_mp3_filtros;
+static lv_obj_t * btn_radio_filtros;
+
 static gui_data_t data = {
 	.vol = 10,
-	.songs = "Song 1\nSong 2\nSong 3\nSong 4\nSong 5",
+	.num_canciones = 10,
+	.songs[0] = "Cancion 0",
+	.songs[1] = "Cancion 1",
+	.songs[2] = "Cancion 2",
+	.songs[3] = "Cancion 3",
+	.songs[4] = "Cancion 4",
+	.songs[5] = "Cancion 5",
+	.songs[6] = "Cancion 6",
+	.songs[7] = "Cancion 7",
+	.songs[8] = "Cancion 8",
+	.songs[9] = "Cancion 197 mil millones",
 	.fcentral[0] = "20Hz",
 	.fcentral[1] = "110Hz",
 	.fcentral[2] = "630Hz",
@@ -185,7 +221,17 @@ void lv_gui(){
 	lv_obj_add_event_cb(tv, tabview_delete_event_cb, LV_EVENT_DELETE, NULL);
 
 	lv_obj_set_style_text_font(lv_screen_active(), font_normal, 0);
-
+	
+	lv_style_init(&btn_style_base);
+	lv_style_set_bg_color(&btn_style_base, lv_palette_main(LV_PALETTE_BLUE));  // Antes: lv_palette_main(LV_PALETTE_LIGHT_BLUE)
+	lv_style_set_border_color(&btn_style_base, lv_palette_darken(LV_PALETTE_LIGHT_BLUE, 3));
+	lv_style_set_text_color(&btn_style_base, lv_color_white());
+	
+	lv_style_init(&btn_style_sel);
+	lv_style_set_bg_color(&btn_style_sel, lv_palette_lighten(LV_PALETTE_LIGHT_BLUE, 3));
+	lv_style_set_border_color(&btn_style_sel, lv_palette_darken(LV_PALETTE_BLUE, 3));
+	lv_style_set_text_color(&btn_style_sel, lv_color_black());
+	
 	lv_obj_t * t1 = lv_tabview_add_tab(tv, "Home");
 	lv_obj_t * t2 = lv_tabview_add_tab(tv, "Radio");
 	lv_obj_t * t3 = lv_tabview_add_tab(tv, "MP3");
@@ -284,10 +330,13 @@ static void create_radio_content(lv_obj_t * tabview) {
 	lv_obj_set_grid_cell(volume_slider_radio, LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_STRETCH, 2, 1);
 	lv_obj_set_grid_cell(mute_btn,            LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_STRETCH, 4, 1);
 	
-	lv_obj_t * panel_salida = lv_obj_create(tabview);
+	static lv_obj_t * panel_salida;
+	panel_salida = lv_obj_create(tabview);
 	lv_obj_set_height(panel_salida, LV_SIZE_CONTENT);
 	lv_obj_set_width(panel_salida , LV_SIZE_CONTENT);
-	crear_panel_salida(panel_salida);	
+	btn_headphones_radio = lv_btn_create(panel_salida);
+	btn_speakers_radio = lv_btn_create(panel_salida);
+	crear_panel_salida(panel_salida, btn_headphones_radio, btn_speakers_radio);	
 	
 	/* Define the grid */
 	static int32_t grid_col_dsc[] = {LV_GRID_FR(2), LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
@@ -350,10 +399,13 @@ static void create_mp3_content(lv_obj_t * tabview){
 	lv_obj_set_grid_cell(volume_slider_mp3, LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_STRETCH, 2, 1);
 	lv_obj_set_grid_cell(mute_btn,          LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_STRETCH, 4, 1);
 
-	lv_obj_t * panel_salida = lv_obj_create(tabview);
+	static lv_obj_t * panel_salida; 
+	panel_salida = lv_obj_create(tabview);
 	lv_obj_set_height(panel_salida, LV_SIZE_CONTENT);
 	lv_obj_set_width(panel_salida , LV_SIZE_CONTENT);
-	crear_panel_salida(panel_salida);
+	btn_headphones_mp3 = lv_btn_create(panel_salida);
+	btn_speakers_mp3 = lv_btn_create(panel_salida);
+	crear_panel_salida(panel_salida, btn_headphones_mp3, btn_speakers_mp3);
 	
 	/* Define the grid */
 	static int32_t grid_col_dsc[] = {LV_GRID_FR(2), LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
@@ -377,19 +429,19 @@ static void create_filters_content(lv_obj_t * tabview){
 	lv_obj_t * panel_title = lv_obj_create(tabview);	  // En este panel va el titulo y los nombres
 	
 	lv_obj_t * panel1 = lv_obj_create(tabview);			    // En este panel van los filtros del ecualizador
-	lv_obj_set_height(panel1, lv_pct(100));
+	lv_obj_set_height(panel1, lv_pct(95));
 	lv_obj_set_width(panel1, LV_SIZE_CONTENT);
 	
 	lv_obj_t * panel_config = lv_obj_create(tabview);		// En este panel va lo de guardar config
-	lv_obj_set_height(panel_config, lv_pct(45));
+	lv_obj_set_height(panel_config, lv_pct(43));
 	lv_obj_set_width(panel_config, LV_SIZE_CONTENT);
 	
 	lv_obj_t * panel_vol = lv_obj_create(tabview);			     // Aqui el volumen
-	lv_obj_set_height(panel_vol, lv_pct(55));
+	lv_obj_set_height(panel_vol, lv_pct(52));
 	lv_obj_set_width(panel_vol, LV_SIZE_CONTENT);
 	
 	lv_obj_t * panel_salida = lv_obj_create(tabview);			// Y aqui la salida
-	lv_obj_set_height(panel_salida, lv_pct(100));
+	lv_obj_set_height(panel_salida, lv_pct(95));
 	lv_obj_set_width(panel_salida, LV_SIZE_CONTENT);
 	
 	/* Titulo */
@@ -1056,9 +1108,7 @@ static void crear_panel_mp3 (lv_obj_t * container){
 	lv_obj_add_style(label_title, &style_title, 0);  // Make font bigger
 	
 	lv_obj_t * panel_snaps = lv_obj_create(container);
-	crear_panel_snaps_mp3(panel_snaps);
-//	lv_obj_set_width(panel_botones, lv_obj_get_width(container));
-//	lv_obj_set_height(panel_botones, lv_obj_get_height(container));
+	crear_panel_snaps_mp3(panel_snaps);	
 	
 	static int32_t grid_col_dsc[] = {LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
 	static int32_t grid_row_dsc[] = {
@@ -1102,14 +1152,11 @@ static void crear_panel_snaps_mp3 (lv_obj_t * container){
 	lv_obj_set_align(container, LV_FLEX_ALIGN_CENTER);
 	
 	lv_style_init(&style_ctrl_mp3);
-	lv_style_set_min_height(&style_ctrl_mp3, lv_pct(40));
+	lv_style_set_min_height(&style_ctrl_mp3, lv_pct(45));
 	lv_style_set_max_height(&style_ctrl_mp3, lv_pct(100));
 	lv_style_set_height(&style_ctrl_mp3, lv_pct(100));
 	lv_style_set_width(&style_ctrl_mp3, lv_pct(100));
 	lv_style_set_border_opa(&style_ctrl_mp3, 0);
-	
-//	lv_obj_set_height(panel_ctrl_mp3, lv_pct(50));
-//	lv_obj_set_width(panel_ctrl_mp3, lv_pct(100));
 	
 	panel_ctrl_mp3 = lv_obj_create(container);
 	crear_panel_control_mp3(panel_ctrl_mp3);
@@ -1118,13 +1165,13 @@ static void crear_panel_snaps_mp3 (lv_obj_t * container){
 	
 	static lv_style_t style;
 	lv_style_init(&style);
-	lv_style_set_height(&style, lv_pct(70));
+	lv_style_set_height(&style, lv_pct(65));
 	lv_style_set_width(&style, lv_pct(100));
 	
 	lv_obj_t * list_canciones = lv_list_create(container);
 	
-	for (int i = 0; i < 5; i ++){
-		lv_list_add_btn(list_canciones, NULL, "AAAAA");
+	for (int i = 0; i < data.num_canciones; i ++){
+		lv_list_add_btn(list_canciones, LV_SYMBOL_AUDIO, data.songs[i]);
 	}
 	lv_obj_set_width(list_canciones, lv_pct(100));
 	lv_obj_add_style(list_canciones, &style, 0);
@@ -1229,20 +1276,20 @@ static void crear_panel_seek (lv_obj_t * container){
 	lv_obj_set_grid_cell(seek_up_btn,   LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_START, 2, 1);
 	lv_obj_set_grid_cell(seek_down_btn, LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_START, 3, 1);
 }
-static void crear_panel_salida (lv_obj_t * container){
+static void crear_panel_salida (lv_obj_t * container, lv_obj_t * btn_headphones, lv_obj_t * btn_speakers){
 	lv_obj_t * label_salida = lv_label_create(container);
 	lv_label_set_text_fmt(label_salida, "Salida");
 	lv_obj_add_style(label_salida, &style_subtitle, 0);  
 	
-	lv_obj_t * headphones_btn = lv_btn_create(container);
-	lv_obj_add_event_cb(headphones_btn, headphones_cb, LV_EVENT_CLICKED, NULL);
-	lv_obj_t * label_headphones = lv_label_create(headphones_btn);
+	lv_obj_add_event_cb(btn_headphones, headphones_cb, LV_EVENT_CLICKED, NULL);
+	lv_obj_t * label_headphones = lv_label_create(btn_headphones);
 	lv_label_set_text_fmt(label_headphones, "Cascos");
+	lv_obj_add_style(btn_headphones, &btn_style_sel, 0);
 	
-	lv_obj_t * speakers_btn = lv_btn_create(container);
-	lv_obj_add_event_cb(speakers_btn, speakers_cb, LV_EVENT_CLICKED, NULL);
-	lv_obj_t * label_altavoz = lv_label_create(speakers_btn);
+	lv_obj_add_event_cb(btn_speakers, speakers_cb, LV_EVENT_CLICKED, NULL);
+	lv_obj_t * label_altavoz = lv_label_create(btn_speakers);
 	lv_label_set_text_fmt(label_altavoz, "Altavoz");
+	lv_obj_add_style(btn_speakers, &btn_style_base, 0);
 
 	static int32_t grid_col_dsc[] = {LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
 	static int32_t grid_row_dsc[] = {
@@ -1256,8 +1303,8 @@ static void crear_panel_salida (lv_obj_t * container){
 	lv_obj_set_grid_dsc_array(container, grid_col_dsc, grid_row_dsc);
 	
 	lv_obj_set_grid_cell(label_salida,   LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_START, 0, 1);
-	lv_obj_set_grid_cell(headphones_btn, LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_START, 2, 1);
-	lv_obj_set_grid_cell(speakers_btn,   LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_START, 3, 1);
+	lv_obj_set_grid_cell(btn_headphones, LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_START, 2, 1);
+	lv_obj_set_grid_cell(btn_speakers,   LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_START, 3, 1);
 }
 static void crear_panel_volumen (lv_obj_t * container, lv_obj_t * vol_slider){
 /* No funciona. Quizas pasando un boton mute como parametro, haciendo mutes globales o estáticos? */	
@@ -1298,25 +1345,29 @@ static void crear_panel_camino_audio(lv_obj_t * container){
 	lv_label_set_text_fmt(label_salida, "Salida audio");
   lv_obj_add_style(label_salida, &style_subtitle, 0);  
 	
-	lv_obj_t * headphones_btn = lv_btn_create(container);
-	lv_obj_add_event_cb(headphones_btn, headphones_cb, LV_EVENT_CLICKED, NULL);
-	lv_obj_t * label_headphones = lv_label_create(headphones_btn);
+	btn_headphones_filtros = lv_btn_create(container);
+	lv_obj_add_event_cb(btn_headphones_filtros, headphones_cb, LV_EVENT_CLICKED, NULL);
+	lv_obj_t * label_headphones = lv_label_create(btn_headphones_filtros);
 	lv_label_set_text_fmt(label_headphones, "Cascos");
+	lv_obj_add_style(btn_headphones_filtros, &btn_style_sel,  0);
 		
-	lv_obj_t * speakers_btn = lv_btn_create(container);
-	lv_obj_add_event_cb(speakers_btn, speakers_cb, LV_EVENT_CLICKED, NULL);
-	lv_obj_t * label_altavoz = lv_label_create(speakers_btn);
+	btn_speakers_filtros = lv_btn_create(container);
+	lv_obj_add_event_cb(btn_speakers_filtros, speakers_cb, LV_EVENT_CLICKED, NULL);
+	lv_obj_t * label_altavoz = lv_label_create(btn_speakers_filtros);
 	lv_label_set_text_fmt(label_altavoz, "Altavoz");
+	lv_obj_add_style(btn_speakers_filtros, &btn_style_base, 0);
 	
-	lv_obj_t * mp3_btn = lv_btn_create(container);
-	lv_obj_add_event_cb(mp3_btn, mp3_cb, LV_EVENT_CLICKED, NULL);
-	lv_obj_t * label_mp3 = lv_label_create(mp3_btn);
+	btn_mp3_filtros = lv_btn_create(container);
+	lv_obj_add_event_cb(btn_mp3_filtros, mp3_cb, LV_EVENT_CLICKED, NULL);
+	lv_obj_t * label_mp3 = lv_label_create(btn_mp3_filtros);
 	lv_label_set_text_fmt(label_mp3, "MP3");
+	lv_obj_add_style(btn_mp3_filtros, &btn_style_sel,  0);
 		
-	lv_obj_t * radio_btn = lv_btn_create(container);
-	lv_obj_add_event_cb(speakers_btn, radio_cb, LV_EVENT_CLICKED, NULL);
-	lv_obj_t * label_radio = lv_label_create(radio_btn);
+	btn_radio_filtros = lv_btn_create(container);
+	lv_obj_add_event_cb(btn_radio_filtros, radio_cb, LV_EVENT_CLICKED, NULL);
+	lv_obj_t * label_radio = lv_label_create(btn_radio_filtros);
 	lv_label_set_text_fmt(label_radio, "Radio");
+	lv_obj_add_style(btn_radio_filtros, &btn_style_base, 0);
 	
 	static int32_t grid_sal_col_dsc[] = {LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
 	static int32_t grid_sal_row_dsc[] = {
@@ -1333,10 +1384,10 @@ static void crear_panel_camino_audio(lv_obj_t * container){
 	lv_obj_set_grid_dsc_array(container, grid_sal_col_dsc, grid_sal_row_dsc);
 	
 	lv_obj_set_grid_cell(label_salida,   LV_GRID_ALIGN_CENTER, 0, 1, LV_GRID_ALIGN_STRETCH, 0, 1);
-	lv_obj_set_grid_cell(headphones_btn, LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_START, 2, 1);
-	lv_obj_set_grid_cell(speakers_btn,   LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_START, 3, 1);
-	lv_obj_set_grid_cell(mp3_btn,        LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_START, 5, 1);
-	lv_obj_set_grid_cell(radio_btn,      LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_START, 6, 1);
+	lv_obj_set_grid_cell(btn_headphones_filtros, LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_START, 2, 1);
+	lv_obj_set_grid_cell(btn_speakers_filtros,   LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_START, 3, 1);
+	lv_obj_set_grid_cell(btn_mp3_filtros,        LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_START, 5, 1);
+	lv_obj_set_grid_cell(btn_radio_filtros,      LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_START, 6, 1);
 }
 static void crear_panel_config_rapida(lv_obj_t * container){
 	/* Botones salida de audio */
@@ -1344,30 +1395,35 @@ static void crear_panel_config_rapida(lv_obj_t * container){
 	lv_label_set_text_fmt(label_salida, "Configuracion rapida");
   lv_obj_add_style(label_salida, &style_subtitle, 0);  
 	
-	lv_obj_t * headphones_btn = lv_btn_create(container);
-	lv_obj_add_event_cb(headphones_btn, headphones_cb, LV_EVENT_CLICKED, NULL);
-	lv_obj_t * label_headphones = lv_label_create(headphones_btn);
+	btn_headphones_conf_rapida = lv_btn_create(container);
+	lv_obj_add_event_cb(btn_headphones_conf_rapida, headphones_cb, LV_EVENT_CLICKED, (void *)CLICK_PANTALLA);
+	lv_obj_t * label_headphones = lv_label_create(btn_headphones_conf_rapida);
 	lv_label_set_text_fmt(label_headphones, "Cascos");
-		
-	lv_obj_t * speakers_btn = lv_btn_create(container);
-	lv_obj_add_event_cb(speakers_btn, speakers_cb, LV_EVENT_CLICKED, NULL);
-	lv_obj_t * label_altavoz = lv_label_create(speakers_btn);
-	lv_label_set_text_fmt(label_altavoz, "Altavoz");
+	lv_obj_add_style(btn_headphones_conf_rapida, &btn_style_sel,  0);
 	
-	lv_obj_t * mp3_btn = lv_btn_create(container);
-	lv_obj_add_event_cb(mp3_btn, mp3_cb, LV_EVENT_CLICKED, NULL);
-	lv_obj_t * label_mp3 = lv_label_create(mp3_btn);
+	btn_speakers_conf_rapida = lv_btn_create(container);
+	lv_obj_add_event_cb(btn_speakers_conf_rapida, speakers_cb, LV_EVENT_CLICKED, NULL);
+	lv_obj_t * label_altavoz = lv_label_create(btn_speakers_conf_rapida);
+	lv_label_set_text_fmt(label_altavoz, "Altavoz");
+	lv_obj_add_style(btn_speakers_conf_rapida, &btn_style_base, 0);
+	
+	btn_mp3_conf_rapida = lv_btn_create(container);
+	lv_obj_add_event_cb(btn_mp3_conf_rapida, mp3_cb, LV_EVENT_CLICKED, NULL);
+	lv_obj_t * label_mp3 = lv_label_create(btn_mp3_conf_rapida);
 	lv_label_set_text_fmt(label_mp3, "MP3");
+	lv_obj_add_style(btn_mp3_conf_rapida,   &btn_style_sel,  0);
 		
-	lv_obj_t * radio_btn = lv_btn_create(container);
-	lv_obj_add_event_cb(radio_btn, radio_cb, LV_EVENT_CLICKED, NULL);
-	lv_obj_t * label_radio = lv_label_create(radio_btn);
+	btn_radio_conf_rapida = lv_btn_create(container);
+	lv_obj_add_event_cb(btn_radio_conf_rapida, radio_cb, LV_EVENT_CLICKED, NULL);
+	lv_obj_t * label_radio = lv_label_create(btn_radio_conf_rapida);
 	lv_label_set_text_fmt(label_radio, "Radio");
+	lv_obj_add_style(btn_radio_conf_rapida, &btn_style_base, 0);
 	
 	lv_obj_t * btn_low_power = lv_btn_create(container);
 	lv_obj_add_event_cb(btn_low_power, low_power_cb, LV_EVENT_CLICKED, NULL);
 	lv_obj_t * label_low_power = lv_label_create(btn_low_power);
 	lv_label_set_text_fmt(label_low_power, "Bajo consumo");
+	lv_obj_add_style(btn_low_power, &btn_style_base, 0);
 	
 	static int32_t grid_sal_col_dsc[] = {LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
 	static int32_t grid_sal_row_dsc[] = {
@@ -1386,10 +1442,10 @@ static void crear_panel_config_rapida(lv_obj_t * container){
 	lv_obj_set_grid_dsc_array(container, grid_sal_col_dsc, grid_sal_row_dsc);
 	
 	lv_obj_set_grid_cell(label_salida,   LV_GRID_ALIGN_CENTER, 0, 1, LV_GRID_ALIGN_STRETCH, 0, 1);
-	lv_obj_set_grid_cell(headphones_btn, LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_START, 2, 1);
-	lv_obj_set_grid_cell(speakers_btn,   LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_START, 3, 1);
-	lv_obj_set_grid_cell(mp3_btn,        LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_START, 5, 1);
-	lv_obj_set_grid_cell(radio_btn,      LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_START, 6, 1);
+	lv_obj_set_grid_cell(btn_headphones_conf_rapida, LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_START, 2, 1);
+	lv_obj_set_grid_cell(btn_speakers_conf_rapida,   LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_START, 3, 1);
+	lv_obj_set_grid_cell(btn_mp3_conf_rapida,        LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_START, 5, 1);
+	lv_obj_set_grid_cell(btn_radio_conf_rapida,      LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_START, 6, 1);
 	lv_obj_set_grid_cell(btn_low_power,  LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_START, 8, 1);
 }
 static void frequency_set_cb(lv_event_t * e) {
@@ -1446,4 +1502,74 @@ static void set_channel_from_list_cb(lv_event_t * e){
 	lv_textarea_set_text(textarea_freq, buf);
 	int val = (freq*10.0); 
 	lv_slider_set_value(slider_freq, val, LV_ANIM_ON);
+}
+
+static void cambiar_estilo_salida(int out){
+	if(out == 0){
+		lv_obj_add_style(btn_headphones_conf_rapida, &btn_style_sel,  0);
+		lv_obj_add_style(btn_headphones_radio,       &btn_style_sel,  0);
+		lv_obj_add_style(btn_headphones_mp3,         &btn_style_sel,  0);
+		lv_obj_add_style(btn_headphones_filtros,     &btn_style_sel,  0);
+		lv_obj_add_style(btn_speakers_conf_rapida,   &btn_style_base, 0);
+		lv_obj_add_style(btn_speakers_radio,         &btn_style_base, 0);
+		lv_obj_add_style(btn_speakers_mp3,           &btn_style_base, 0);
+		lv_obj_add_style(btn_speakers_filtros,       &btn_style_base, 0);
+	} else {
+		lv_obj_add_style(btn_headphones_conf_rapida, &btn_style_base, 0);
+		lv_obj_add_style(btn_headphones_radio,       &btn_style_base, 0);
+		lv_obj_add_style(btn_headphones_mp3,         &btn_style_base, 0);
+		lv_obj_add_style(btn_headphones_filtros,     &btn_style_base, 0);
+		lv_obj_add_style(btn_speakers_conf_rapida,   &btn_style_sel,  0);
+		lv_obj_add_style(btn_speakers_radio,         &btn_style_sel,  0);
+		lv_obj_add_style(btn_speakers_mp3,           &btn_style_sel,  0);
+		lv_obj_add_style(btn_speakers_filtros,       &btn_style_sel,  0);
+	}
+}
+
+static void headphones_cb(lv_event_t * e) {
+	lv_obj_t * btn = lv_event_get_target(e);
+	
+	// Enviar mensaje al thread principal
+	
+	// Cambios de estilo
+	cambiar_estilo_salida(0);
+}
+static void speakers_cb(lv_event_t * e) {
+	lv_obj_t * btn = lv_event_get_target(e);
+	
+	// Enviar mensaje al thread principal
+	
+	// Cambios de estilo
+	cambiar_estilo_salida(1);
+}
+
+static void cambiar_estilo_entrada(int in) {
+	if(in == 0){
+		lv_obj_add_style(btn_mp3_conf_rapida,   &btn_style_sel,  0);
+		lv_obj_add_style(btn_mp3_filtros,       &btn_style_sel,  0);
+		lv_obj_add_style(btn_radio_conf_rapida, &btn_style_base, 0);
+		lv_obj_add_style(btn_radio_filtros,     &btn_style_base, 0);
+	} else{
+		lv_obj_add_style(btn_mp3_conf_rapida,   &btn_style_base, 0);
+		lv_obj_add_style(btn_mp3_filtros,       &btn_style_base, 0);
+		lv_obj_add_style(btn_radio_conf_rapida, &btn_style_sel,  0);
+		lv_obj_add_style(btn_radio_filtros,     &btn_style_sel,  0);
+	}
+}
+
+static void mp3_cb(lv_event_t * e){
+	lv_obj_t * btn = lv_event_get_target(e);
+	
+	// Enviar mensaje al thread principal
+	
+	// Cambios de estilo
+	cambiar_estilo_entrada(0);
+}
+static void radio_cb(lv_event_t * e){
+	lv_obj_t * btn = lv_event_get_target(e);
+	
+	// Enviar mensaje al thread principal
+	
+	// Cambios de estilo
+	cambiar_estilo_entrada(1);
 }
