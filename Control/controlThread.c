@@ -61,6 +61,15 @@ int Init_Control(void) {
 }
 
 static void Control_Thread(void* arg) {
+    
+    // Encender MP3
+    mp3msg = MP3_WAKE_UP;
+    osMessageQueuePut(MP3Queue, &mp3msg, NULL, osWaitForever);
+    
+    // Encender Radio
+    radioMsg = POWERON;
+    osMessageQueuePut(mainToRadioQueue, &radioMsg, NULL, osWaitForever);
+    
     osTimerStart(&cons_tim, 1000);
 
     msg_ctrl_t msg;
