@@ -300,7 +300,7 @@ static void ctrl_WEB(web_msg_t* msg) {
             break;
 
         case WEB_SONG:
-            mp3msg = msg->payload;
+            mp3msg = msg->payload ;
             osMessageQueuePut(MP3Queue, &mp3msg, NULL, 0);
             break;
 

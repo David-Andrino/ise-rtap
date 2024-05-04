@@ -26,31 +26,31 @@ t                 <td colspan="4" style="position: relative;">
 t                     <form action="mp3.cgi" method="post">
 t                     <select name="canciones" id="listacaniones" style="width: 90%; height: 50px;">
 t                         <option value="default">Selecciona una canción</option>
-c m a                     <option value="cancion01">%s</option>
-c m b                     <option value="cancion02">%s</option>
-c m c                     <option value="cancion03">%s</option>
-c m d                     <option value="cancion04">%s</option>
-c m e                     <option value="cancion05">%s</option>
-c m f                     <option value="cancion06">%s</option>
-c m g                     <option value="cancion07">%s</option>
-c m h                     <option value="cancion08">%s</option>
-c m i                     <option value="cancion09">%s</option>
-c m j                     <option value="cancion10">%s</option>
-c m k                     <option value="cancion11">%s</option>
-c m l                     <option value="cancion12">%s</option>
-c m m                     <option value="cancion13">%s</option>
-c m n                     <option value="cancion14">%s</option>
-c m o                     <option value="cancion15">%s</option>
-c m p                     <option value="cancion16">%s</option>
-c m q                     <option value="cancion17">%s</option>
-c m r                     <option value="cancion18">%s</option>
-c m s                     <option value="cancion19">%s</option>
-c m t                     <option value="cancion20">%s</option>
-c m u                     <option value="cancion21">%s</option>
-c m v                     <option value="cancion22">%s</option>
-c m w                     <option value="cancion23">%s</option>
-c m x                     <option value="cancion24">%s</option>
-c m y                     <option value="cancion25">%s</option>
+c m a                     <option value="01">%s</option>
+c m b                     <option value="02">%s</option>
+c m c                     <option value="03">%s</option>
+c m d                     <option value="04">%s</option>
+c m e                     <option value="05">%s</option>
+c m f                     <option value="06">%s</option>
+c m g                     <option value="07">%s</option>
+c m h                     <option value="08">%s</option>
+c m i                     <option value="09">%s</option>
+c m j                     <option value="10">%s</option>
+c m k                     <option value="11">%s</option>
+c m l                     <option value="12">%s</option>
+c m m                     <option value="13">%s</option>
+c m n                     <option value="14">%s</option>
+c m o                     <option value="15">%s</option>
+c m p                     <option value="16">%s</option>
+c m q                     <option value="17">%s</option>
+c m r                     <option value="18">%s</option>
+c m s                     <option value="19">%s</option>
+c m t                     <option value="20">%s</option>
+c m u                     <option value="21">%s</option>
+c m v                     <option value="22">%s</option>
+c m w                     <option value="23">%s</option>
+c m x                     <option value="24">%s</option>
+c m y                     <option value="25">%s</option>
 t                     </select>
 t                       <input type="image" src="imgs/sendx32.png" class="botoncircular"
 t                         style="position: absolute; right: 0; top: 50%; transform: translateY(-50%);

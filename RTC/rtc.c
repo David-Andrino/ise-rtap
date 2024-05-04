@@ -9,23 +9,12 @@ void RTC_Alarm_IRQHandler() {
     HAL_RTC_AlarmIRQHandler(&hrtc);
 }
 
-void EXTI15_10_IRQHandler(void) {
-    HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_13);
-}
-
 void HAL_RTC_AlarmAEventCallback(RTC_HandleTypeDef *rtcHandle) {
     alarmACallback();
 }
 
 void HAL_RTCEx_AlarmBEventCallback(RTC_HandleTypeDef *rtcHandle) {
     alarmBCallback();
-}
-
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
-    if (GPIO_Pin == GPIO_PIN_13) {
-        RTC_setHour(0, 0, 0);
-        RTC_setDate(1, 1, 0);
-    }
 }
 
 int RTC_init(void (*alarmACallback)) {
@@ -51,16 +40,6 @@ int RTC_init(void (*alarmACallback)) {
     if (alarmACallback != NULL) {
         RTC_activateAlarm(RTC_ALARM_A, alarmACallback);
     }
-    
-    // PC13 para el boton
-    GPIO_InitTypeDef buttonGPIO = {
-        .Pin = GPIO_PIN_13,
-        .Mode = GPIO_MODE_IT_FALLING,
-        .Pull = GPIO_PULLUP,
-        .Speed = GPIO_SPEED_LOW
-    };
-    HAL_GPIO_Init(GPIOC, &buttonGPIO);
-    HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
     
     return ret;
 }
