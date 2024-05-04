@@ -2,6 +2,7 @@
 
 #include "Driver_I2C.h"
 #include "cmsis_os2.h"
+#include "../Control/controlThread.h"
 
 #define RDA_TUNE_ON   0x0010
 #define RDA_TUNE_OFF  0xFFEF
@@ -28,6 +29,7 @@ static uint16_t          RDA5807M_ReadReg[6];
 static uint16_t          RDA5807M_WriteRegDef[6] = {0xC004, 0x0000, 0x0100, 0x84D4, 0x4000, 0x0000};
 static volatile uint32_t I2C_Event;
 static uint8_t           registros_lectura[12];
+static msg_ctrl_t msgRadioToMain = { .type = MSG_RADIO };
 
 void            ThreadRadio(void *argument);
 static void     timer_callback(void);
@@ -121,12 +123,19 @@ void SeekUp(void) {
     RDA5807M_WriteReg[0] = RDA5807M_WriteReg[0] | RDA_SEEK_UP;
     WriteAll();
     RDA5807M_WriteReg[0] = RDA5807M_WriteReg[0] & RDA_SEEK_STOP;
+    osDelay(500);
+    msgRadioToMain.radio_msg = seeFrec();
+    osMessageQueuePut(radioToMainQueue, &msgRadioToMain, NULL, osWaitForever);
 }
 
 void SeekDown() {
     RDA5807M_WriteReg[0] = RDA5807M_WriteReg[0] | RDA_SEEK_DOWN;
     WriteAll();
     RDA5807M_WriteReg[0] = RDA5807M_WriteReg[0] & RDA_SEEK_STOP;
+    osDelay(500);
+    msgRadioToMain.radio_msg = seeFrec();
+    osMessageQueuePut(radioToMainQueue, &msgRadioToMain, NULL, osWaitForever);
+
 }
 
 void WriteAll(void) {
