@@ -46,7 +46,8 @@ int Init_Control(void) {
         return -1;
     }
 
-    ctrl_in_queue = osMessageQueueNew(QUEUE_SIZE, sizeof(ctrl_in_queue), NULL);
+    osMessageQueueAttr_t attrs = { .name = "CtrlInQueue" };
+    ctrl_in_queue = osMessageQueueNew(QUEUE_SIZE, sizeof(msg_ctrl_t), &attrs);
     if (ctrl_in_queue == NULL) {
         return -1;
     }
