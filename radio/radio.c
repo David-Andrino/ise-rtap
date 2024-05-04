@@ -21,8 +21,8 @@
 osThreadId_t             radio_tid;
 osMessageQueueId_t       radioToMainQueue, mainToRadioQueue;
 static osTimerId_t       timerRadio;
-extern ARM_DRIVER_I2C    Driver_I2C2;
-static ARM_DRIVER_I2C   *I2Cdrv2 = &Driver_I2C2;
+extern ARM_DRIVER_I2C    Driver_I2C1;
+static ARM_DRIVER_I2C*   I2Cdrv1 = &Driver_I2C1;
 static uint16_t          RDA5807M_WriteReg[6];
 static uint16_t          RDA5807M_ReadReg[6];
 static uint16_t          RDA5807M_WriteRegDef[6] = {0xC004, 0x0000, 0x0100, 0x84D4, 0x4000, 0x0000};
@@ -51,12 +51,8 @@ int Init_Radio(void) {
         return (-1);
     }
 
-    radioToMainQueue = osMessageQueueNew(MAX_MSG, sizeof(radioResponse_t), NULL);
-    if (radioToMainQueue == NULL) {
-        return (-1);
-    }
-
-    mainToRadioQueue = osMessageQueueNew(MAX_MSG, sizeof(radioMsg_t), NULL);
+    osMessageQueueAttr_t attrs = { .name = "RadioQueue" };
+    mainToRadioQueue = osMessageQueueNew(MAX_MSG, sizeof(radioMsg_t), &attrs);
     if (mainToRadioQueue == NULL) {
         return (-1);
     }
@@ -113,10 +109,10 @@ void ThreadRadio(void *argument) {
 
 int I2C_Init(void) {
     int error = 0;
-    error |= I2Cdrv2->Initialize((ARM_I2C_SignalEvent_t)I2C2_callback);
-    error |= I2Cdrv2->PowerControl(ARM_POWER_FULL);
-    error |= I2Cdrv2->Control(ARM_I2C_BUS_SPEED, ARM_I2C_BUS_SPEED_STANDARD);
-    error |= I2Cdrv2->Control(ARM_I2C_BUS_CLEAR, 0);
+    error |= I2Cdrv1->Initialize((ARM_I2C_SignalEvent_t)I2C2_callback);
+    error |= I2Cdrv1->PowerControl(ARM_POWER_FULL);
+    error |= I2Cdrv1->Control(ARM_I2C_BUS_SPEED, ARM_I2C_BUS_SPEED_STANDARD);
+    error |= I2Cdrv1->Control(ARM_I2C_BUS_CLEAR, 0);
     return error;
 }
 
@@ -151,8 +147,8 @@ void WriteAll(void) {
         buffer[i] = RDA5807M_WriteReg[x] & 0xFF;
         x++;
     }
-    I2Cdrv2->MasterTransmit(0x10, buffer, 12, false);
-    while (I2Cdrv2->GetStatus().busy);
+    I2Cdrv1->MasterTransmit(0x10, buffer, 12, false);
+    while (I2Cdrv1->GetStatus().busy);
 }
 
 void PowerOn(void) {
@@ -202,8 +198,6 @@ void I2C2_callback(uint32_t event) {
     /* Save received events */
     I2C_Event |= event;
 
-    /* Optionally, user can define specific actions for an event */
-    osThreadFlagsSet(radioToMainQueue, RDA_TRANSFER_COMPLETE);
     if (event == ARM_I2C_EVENT_TRANSFER_INCOMPLETE) {
         /* Less data was transferred than requested */
         osThreadFlagsSet(radioToMainQueue, RDA_TRANSFER_COMPLETE);
@@ -252,8 +246,8 @@ void Readregisters(void) {
     uint8_t rcv[12];
 
     osDelay(50);
-    I2Cdrv2->MasterReceive(0x10, rcv, 12, false);
-    while (I2Cdrv2->GetStatus().busy) {}
+    I2Cdrv1->MasterReceive(0x10, rcv, 12, false);
+    while (I2Cdrv1->GetStatus().busy) {}
     for (int i = 0; i < 6; i++) {
         RDA5807M_ReadReg[i] = ((rcv[i * 2] << 8) | rcv[(i * 2) + 1]);
     }
