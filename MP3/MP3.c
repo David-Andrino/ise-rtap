@@ -8,8 +8,8 @@
 #define MAX_MSG   8
 #define USART_LEN 8
 
-extern ARM_DRIVER_USART  Driver_USART3;
-static ARM_DRIVER_USART* USARTdrv = &Driver_USART3;
+extern ARM_DRIVER_USART  Driver_USART6;
+static ARM_DRIVER_USART* USARTdrv = &Driver_USART6;
 
 static void USART_Callback(uint32_t event);
 static void USART_Init(ARM_DRIVER_USART* drv);
@@ -27,7 +27,8 @@ int Init_MP3(void) {
         return (-1);
     }
 
-    MP3Queue = osMessageQueueNew(MAX_MSG, sizeof(mp3Msg_t), NULL);
+    osMessageQueueAttr_t attrs = { .name = "MP3Queue" };
+    MP3Queue = osMessageQueueNew(MAX_MSG, sizeof(mp3Msg_t), &attrs);
     if (MP3Queue == NULL) {
         return (-1);
     }
