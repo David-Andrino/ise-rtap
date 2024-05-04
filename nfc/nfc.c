@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include "controlThread.h"
 
+#define NFC_FLAG 0x01 // Eliminarlo al integrar
+
 osThreadId_t nfc_tid; 
 msg_ctrl_t msg;
 
