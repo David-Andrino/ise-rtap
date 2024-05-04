@@ -10,9 +10,6 @@
 #define ABOUT "Ingenieria de Sistemas Electronicos 2024"
 #define DRAGGABBLE 0
 #define MAX_VOLUME 10
-
-#define CLICK_PANTALLA 1
-#define CLICK_WEB      2
 /**********************
  *      TYPEDEFS
  **********************/
@@ -223,7 +220,7 @@ void lv_gui(){
 	lv_obj_set_style_text_font(lv_screen_active(), font_normal, 0);
 	
 	lv_style_init(&btn_style_base);
-	lv_style_set_bg_color(&btn_style_base, lv_palette_main(LV_PALETTE_BLUE));  // Antes: lv_palette_main(LV_PALETTE_LIGHT_BLUE)
+	lv_style_set_bg_color(&btn_style_base, lv_palette_main(LV_PALETTE_BLUE));
 	lv_style_set_border_color(&btn_style_base, lv_palette_darken(LV_PALETTE_LIGHT_BLUE, 3));
 	lv_style_set_text_color(&btn_style_base, lv_color_white());
 	
@@ -877,8 +874,8 @@ static void scale_consumo_anim_cb(void * var, int32_t v){
    lv_obj_t * needle = lv_obj_get_child(var, 0);
    lv_scale_set_image_needle_value(var, needle, v);
 
-   lv_obj_t * label = lv_obj_get_child(var, 1);
-   lv_label_set_text_fmt(label, "%"LV_PRId32, v);
+//   lv_obj_t * label = lv_obj_get_child(var, 1);
+//   lv_label_set_text_fmt(label, "%"LV_PRId32, v);
 }
 static void crear_panel_consumo (lv_obj_t * container){
 	lv_obj_t * label_consumo_title = lv_label_create(container);
@@ -898,14 +895,14 @@ static void crear_panel_consumo (lv_obj_t * container){
 	lv_obj_update_layout(container);
 	lv_obj_set_height(scale_consumo, 250);
 	
-	lv_scale_set_range(scale_consumo, 0, 2000);
-	lv_scale_set_total_tick_count(scale_consumo,17);
+	lv_scale_set_range(scale_consumo, 0, 3000);
+	lv_scale_set_total_tick_count(scale_consumo, 25);    // Antes 17
 	lv_scale_set_major_tick_every(scale_consumo, 4);
 	lv_obj_set_style_length(scale_consumo, 10, LV_PART_ITEMS);
 	lv_obj_set_style_length(scale_consumo, 20, LV_PART_INDICATOR);
 	lv_scale_set_angle_range(scale_consumo, 225);
 	lv_scale_set_rotation(scale_consumo, 180);
-
+	 
 	lv_style_init(&scale_consumo_section1_main_style);
 	lv_style_set_arc_width(&scale_consumo_section1_main_style, 2);
 	lv_style_set_arc_color(&scale_consumo_section1_main_style, lv_palette_main(LV_PALETTE_GREEN));
@@ -946,18 +943,18 @@ static void crear_panel_consumo (lv_obj_t * container){
 	
 	lv_scale_section_t * section;
 	section = lv_scale_add_section(scale_consumo);
-	lv_scale_section_set_range(section, 0, 500);
+	lv_scale_section_set_range(section, 0, 750);
 	lv_scale_section_set_style(section, LV_PART_MAIN, &scale_consumo_section1_main_style);
 	lv_scale_section_set_style(section, LV_PART_INDICATOR, &scale_consumo_section1_indicator_style);
 	lv_scale_section_set_style(section, LV_PART_ITEMS, &scale_consumo_section1_tick_style);
 	section = lv_scale_add_section(scale_consumo);
-	lv_scale_section_set_range(section, 500, 1500);
+	lv_scale_section_set_range(section, 750, 2250);
 	lv_scale_section_set_style(section, LV_PART_MAIN, &scale_consumo_section2_main_style);
 	lv_scale_section_set_style(section, LV_PART_INDICATOR, &scale_consumo_section2_indicator_style);
 	lv_scale_section_set_style(section, LV_PART_ITEMS, &scale_consumo_section2_tick_style);
 
 	section = lv_scale_add_section(scale_consumo);
-	lv_scale_section_set_range(section, 1500, 2000);
+	lv_scale_section_set_range(section, 2250, 3000);
 	lv_scale_section_set_style(section, LV_PART_MAIN, &scale_consumo_section3_main_style);
 	lv_scale_section_set_style(section, LV_PART_INDICATOR, &scale_consumo_section3_indicator_style);
 	lv_scale_section_set_style(section, LV_PART_ITEMS, &scale_consumo_section3_tick_style);
@@ -967,7 +964,10 @@ static void crear_panel_consumo (lv_obj_t * container){
 	lv_obj_set_style_line_width(needle_consumo, 5, 0);
 	lv_obj_set_style_line_rounded(needle_consumo, true, 0);
 	lv_obj_set_style_line_color(needle_consumo, lv_palette_main(LV_PALETTE_RED), 0);
-		
+	
+	static const char * custom_labels[] = {"0 A", "0'5 A", "1 A", "1'5 A", "2 A", "2'5 A    ", "3 A", NULL};
+	lv_scale_set_text_src(scale_consumo, custom_labels);
+	
 	static int32_t grid_col_dsc[] = {LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
 	static int32_t grid_row_dsc[] = {
 			LV_GRID_CONTENT,  /* Subtitulo */
@@ -1396,7 +1396,7 @@ static void crear_panel_config_rapida(lv_obj_t * container){
   lv_obj_add_style(label_salida, &style_subtitle, 0);  
 	
 	btn_headphones_conf_rapida = lv_btn_create(container);
-	lv_obj_add_event_cb(btn_headphones_conf_rapida, headphones_cb, LV_EVENT_CLICKED, (void *)CLICK_PANTALLA);
+	lv_obj_add_event_cb(btn_headphones_conf_rapida, headphones_cb, LV_EVENT_CLICKED, NULL);
 	lv_obj_t * label_headphones = lv_label_create(btn_headphones_conf_rapida);
 	lv_label_set_text_fmt(label_headphones, "Cascos");
 	lv_obj_add_style(btn_headphones_conf_rapida, &btn_style_sel,  0);
