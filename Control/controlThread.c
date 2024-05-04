@@ -219,8 +219,6 @@ static void ctrl_RTC(rtc_msg_t* msg) {
     webMsg.payload = (msg->hour << 16) | (msg->minute << 8) | msg->second;
     osMessageQueuePut(webQueue, &webMsg, NULL, 0);
 }
-
-// TODO: Actualizar la pantalla y el LCD solo en la radio
 static void ctrl_NFC(nfc_msg_t* msg) {
     if (msg->type == 0) {  // Cancion
         mp3msg = msg->content;
@@ -228,15 +226,22 @@ static void ctrl_NFC(nfc_msg_t* msg) {
     } else {  // Radio
         radioMsg = 100 * msg->content;
         osMessageQueuePut(mainToRadioQueue, &radioMsg, NULL, 0);
+        
+        // Actualizar frecuencia del LCD y WEB
+        lcdMsg.type = LCD_OUT_RADIO_FREQ;
+        lcdMsg.payload = msg->content;
+        osMessageQueuePut(lcdQueue, &lcdMsg, NULL, 0);
+
+        webMsg.type = WEB_OUT_RADIO_FREQ;
+        webMsg.payload = lcdMsg.payload;
+        osMessageQueuePut(webQueue, &webMsg, NULL, 0);
     }
 }
 
 // ========================================================
 // TODOs de controlador de web
 // TODO: Guardar datos en SD. Bucle infinito para acordarme
-// TODO: La radio tiene que devolver en que frecuencia ha acabado
 // ========================================================
-
 static void ctrl_WEB(web_msg_t* msg) {
     switch (msg->type) {
         case WEB_INPUT_SEL:
