@@ -32,7 +32,7 @@ typedef uint32_t radioMsg_t;
 /**
  * @brief Thread responsable de gestionar el Sintonizador
  */
-extern osThreadId_t       radio_tid;
+extern osThreadId_t radio_tid;
 
 /**
  * @brief Cola de mensajes por la que el sintonizador recibe los mensajes
@@ -41,9 +41,8 @@ extern osThreadId_t       radio_tid;
 extern osMessageQueueId_t mainToRadioQueue;
 
 /**
- * Inicializa el modulo del sintonizador FM
- *
- * @param none
+ * Inicializa el modulo del sintonizador FM. Debe haberse inicializado
+ * el protector de I2C previamente.
  *
  * @return 0 si se ha realizado correctamente. Otro valor si no.
  **/
