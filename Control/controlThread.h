@@ -1,3 +1,17 @@
+/**
+ * @file
+ *
+ * @brief Módulo de control de RTAP
+ *
+ * @author Ruben Agustin
+ * @author David Andrino
+ * @author Estela Mora
+ * @author Fernando Sanz
+ *
+ * Módulo principal de inteligencia del sistema. Recibe eventos por 
+ * una cola y reacciona acorde a ellos
+ *
+ */
 #ifndef CONTROL_THREAD_H
 #define CONTROL_THREAD_H
 
@@ -6,8 +20,17 @@
 
 #include "../main.h"
 
+/**
+ * @brief Cola de mensajes de entrada al módulo
+ */
 extern osMessageQueueId_t ctrl_in_queue;
-int                       Init_Control(void);
+
+/**
+ * @brief Inicialización del módulo de control
+ *
+ * @return 0 si se ha realizado correctamente. Otro valor si no.
+ */
+int Init_Control(void);
 
 // ==================================== MSG TYPES ======================================
 /**
@@ -46,8 +69,8 @@ typedef enum {
  * @brief Estructura para los mensajes de entrada del LCD
  */
 typedef struct {
-    lcd_msg_type_t type;
-    uint16_t       payload;
+    lcd_msg_type_t type;    /**< Tipo de mensaje del LCD */
+    uint16_t       payload; /**< Contenido del mensaje. Depende del tipo. */
 } lcd_msg_t;
 
 // ==================================== WEB =======================================
@@ -74,8 +97,8 @@ typedef enum {
  * @brief Estructura para los mensajes de entrada del LCD
  */
 typedef struct {
-    web_msg_type_t type;
-    uint16_t       payload;
+    web_msg_type_t type;    /**< Tipo del mensaje de */
+    uint16_t       payload; /**< Contenido del mensaje. Depende del tipo */
 } web_msg_t;
 
 // ====================================== NFC ========================================
@@ -100,14 +123,15 @@ typedef struct {
  * @brief Estructura para los mensajes de entrada
  */
 typedef struct {
-    msg_ctrl_type_t type;
+    msg_ctrl_type_t type;    /**< Tipo de mensaje de entrada. 
+                                  Dependiendo de este valor se debe interpretar el contenido */
     union {
-        nfc_msg_t nfc_msg;
-        lcd_msg_t lcd_msg;
-        rtc_msg_t rtc_msg;
-        web_msg_t web_msg;
-        uint16_t  cons_msg;
-        uint32_t  radio_msg;
+        nfc_msg_t nfc_msg;   /**< Contenido de un mensaje de tipo MSG_NFC   */
+        lcd_msg_t lcd_msg;   /**< Contenido de un mensaje de tipo MSG_LCD   */
+        rtc_msg_t rtc_msg;   /**< Contenido de un mensaje de tipo MSG_RTC   */
+        web_msg_t web_msg;   /**< Contenido de un mensaje de tipo MSG_WEB   */
+        uint16_t  cons_msg;  /**< Contenido de un mensaje de tipo MSG_CONS  */
+        uint32_t  radio_msg; /**< Contenido de un mensaje de tipo MSG_RADIO */
     };
 } msg_ctrl_t;
 
