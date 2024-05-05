@@ -178,23 +178,23 @@ void netCGI_ProcessData (uint8_t code, const char *data, uint32_t len) {
 			}
 			else if (strncmp(var, "eq1=",4) == 0){
 				sscanf(var, "eq1=%hhd", &web_state.eq1);
-				sendToQueue(WEB_BANDS, 0x0000 | web_state.eq1);
+				sendToQueue(WEB_BANDS, 0x0000 | (web_state.eq1 & 0xFF));
 			}
 			else if (strncmp(var, "eq2=",4) == 0){
 				sscanf(var, "eq2=%hhd", &web_state.eq2);
-				sendToQueue(WEB_BANDS, 0x0100 | web_state.eq2);
+				sendToQueue(WEB_BANDS, 0x0100 | (web_state.eq2 & 0xFF));
 			}
 			else if (strncmp(var, "eq3=",4) == 0){
 				sscanf(var, "eq3=%hhd", &web_state.eq3);	
-				sendToQueue(WEB_BANDS, 0x0200 | web_state.eq3);				
+				sendToQueue(WEB_BANDS, 0x0200 | (web_state.eq3 & 0xFF));				
 			}
 			else if (strncmp(var, "eq4=",4) == 0){
 				sscanf(var, "eq4=%hhd", &web_state.eq4);
-				sendToQueue(WEB_BANDS, 0x0300 | web_state.eq4);
+				sendToQueue(WEB_BANDS, 0x0300 | (web_state.eq4 & 0xFF));
 			}
 			else if (strncmp(var, "eq5=",4) == 0){
 				sscanf(var, "eq5=%hhd", &web_state.eq5);
-				sendToQueue(WEB_BANDS, 0x0400 | web_state.eq5);
+				sendToQueue(WEB_BANDS, 0x0400 | (web_state.eq5 & 0xFF));
 			}
 			else if (strncmp(var, "canciones=",10) == 0){
 				searchSong(&var[10]);
