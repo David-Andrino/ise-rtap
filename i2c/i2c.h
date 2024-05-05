@@ -1,5 +1,5 @@
 /**
- * @file
+ * @file i2c.h
  *
  * @brief Módulo de acceso concurrente al periférico I2C
  *
@@ -22,7 +22,7 @@
  * Inicializa el modulo del I2C. Debe llamarse antes de inicializar los 
  * módulos que lo utilizan.
  *
- * @return 0 si se ha realizado correctamente. Otro valor si no.
+ * @return int 0 si se ha realizado correctamente. Otro valor si no.
  **/
 int Init_I2C(void);
 

@@ -2,7 +2,7 @@
 #define RADIO_H
 
 /**
- * @file
+ * @file radio.h
  *
  * @brief Modulo del Sintonizador FM
  *

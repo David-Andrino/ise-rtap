@@ -1,5 +1,5 @@
 /**
- * @file
+ * @file controlThread.h
  *
  * @brief Módulo de control de RTAP
  *

@@ -2,7 +2,7 @@
 #define MP3_H
 
 /**
- * @file
+ * @file MP3.h
  *
  * @brief Modulo del Reproductor MP3
  *
@@ -20,7 +20,8 @@
 
 // ==================================== MP3 MSG TYPES ======================================
 /**
- * @brief Enumeración de los tipos de mensaje de entrada al módulo del MP3
+ * @brief Enumeración de los tipos de mensaje de entrada al módulo del MP3. Otro valor
+ *        implica un cambio de frecuencia
  */
 typedef enum {
     MP3_NEXT_SONG = 256,
@@ -55,7 +56,7 @@ extern osMessageQueueId_t MP3Queue;
  *
  * @param none
  *
- * @return 0 si se ha realizado correctamente. Otro valor si no.
+ * @return int 0 si se ha realizado correctamente. Otro valor si no.
  **/
 extern int Init_MP3(void);
 

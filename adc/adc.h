@@ -3,7 +3,7 @@
 #include <stdint.h>
 
 /**
- * @file
+ * @file adc.h
  *
  * @brief Modulo de adquisicion de datos de RTAP
  *

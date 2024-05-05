@@ -1,5 +1,5 @@
 /**
- * @file
+ * @file controlConfig.h
  *
  * @brief Fichero de configuración del módulo de control
  *

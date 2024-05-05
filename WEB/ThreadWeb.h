@@ -2,7 +2,7 @@
 #define THREADWEB_H
 
 /**
- * @file
+ * @file ThreadWeb.h
  *
  * @brief Modulo del la pagina web
  *
@@ -22,7 +22,7 @@
  *
  * @param none
  *
- * @return 0 si se ha realizado correctamente. Otro valor si no.
+ * @return int 0 si se ha realizado correctamente. Otro valor si no.
  **/
 extern int Init_Web (void);
 
@@ -38,19 +38,21 @@ extern osMessageQueueId_t webQueue;
 extern osMutexId_t web_mutex;
 
 /**
- * @brief Tamaño del stack de la pagina web
+ * @brief Stack de la pagina web
  */
 extern uint64_t app_main_stk[];
 
 /**
- * @brief Atributo de la pagina web
+ * @brief Atributos de la pagina web
  */
 extern const osThreadAttr_t app_main_attr;
 
 
 /**
- * Inicializa thread de la pagina web
- **/
+ * @brief Funcion principal de la pagina web
+ * 
+ * @param arg 
+ */
 extern void app_main (void *arg);
 
 /**
@@ -89,14 +91,14 @@ typedef struct {
  * @brief Enumeración de mensajes de salida a la web
  */
 typedef enum {
-	WEB_OUT_INPUT_SEL,      /* Cambio de entrada. Contenido es 0 para la radio y 1 para MP3 */
-	WEB_OUT_OUTPUT_SEL,     /* Cambio de salida. Contenido es 0 para cascos y 1 para altavoz */
-    WEB_OUT_VOL,            /* Cambio de volumen. Contenido es el volumen [0, 10]*/
-	WEB_OUT_CONS,           /* Medida de consumo. Contenido es mA en [0, 2000] */
-    WEB_OUT_RADIO_FREQ,     /* Cambio de frecuencia de la radio. Contenido es la frecuencia en centenas de kHz */
-    WEB_OUT_BANDS,          /* Cambio de filtro. Contenido es primer byte la banda [0,4] segundo la cantidad [-9, 9] */
-    WEB_OUT_DATE,	        /* Fecha  del sistema*/
-    WEB_OUT_HOUR	        /* Hora  del sistema*/
+	WEB_OUT_INPUT_SEL,      /**< Cambio de entrada. Contenido es 0 para la radio y 1 para MP3 */
+	WEB_OUT_OUTPUT_SEL,     /**< Cambio de salida. Contenido es 0 para cascos y 1 para altavoz */
+    WEB_OUT_VOL,            /**< Cambio de volumen. Contenido es el volumen [0, 10]*/
+	WEB_OUT_CONS,           /**< Medida de consumo. Contenido es mA en [0, 2000] */
+    WEB_OUT_RADIO_FREQ,     /**< Cambio de frecuencia de la radio. Contenido es la frecuencia en centenas de kHz */
+    WEB_OUT_BANDS,          /**< Cambio de filtro. Contenido es primer byte la banda [0,4] segundo la cantidad [-9, 9] */
+    WEB_OUT_DATE,	        /**< Fecha  del sistema*/
+    WEB_OUT_HOUR	        /**< Hora  del sistema*/
 } web_out_msg_type_t;
 
 /**
