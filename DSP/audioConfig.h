@@ -1,7 +1,23 @@
 #ifndef AUDIO_CONFIG_H
 #define AUDIO_CONFIG_H
 
-// Tamano del buffer de procesado, el del adc y dac es el doble
+/**
+ * @file
+ *
+ * @brief Fichero de configuración del camino analógico de audio
+ *
+ * @author Ruben Agustin
+ * @author David Andrino
+ * @author Estela Mora
+ * @author Fernando Sanz
+ *
+ * Permite configurar:
+ * - Tamaño de buffer de procesado
+ * - GPIO, ADC y DMA de entrada
+ * - GPIO, DAC y DMA de salida
+ * - TIM de muestreo
+ *
+ */
 #define DSP_BUFSIZE 2048
 
 #define SAMPLING_GPIO_PIN        GPIO_PIN_3
