@@ -2,7 +2,7 @@
 #define AUDIO_CONFIG_H
 
 /**
- * @file
+ * @file audioConfig.h
  *
  * @brief Fichero de configuración del camino analógico de audio
  *
