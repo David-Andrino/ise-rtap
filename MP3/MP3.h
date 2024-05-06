@@ -24,20 +24,20 @@
  *        implica un cambio de frecuencia
  */
 typedef enum {
-    MP3_NEXT_SONG = 256,
-    MP3_PREV_SONG,
-    MP3_VOL_UP,
-    MP3_VOL_DOWN,
-    MP3_SLEEP_MODE,
-    MP3_WAKE_UP,
-    MP3_RESET,
-    MP3_PLAY,
-    MP3_PAUSE,
-    MP3_STOP_PLAY,
-    MP3_START_CYCLE,
-    MP3_STOP_CYCLE,
-    MP3_ENA_DAC,
-    MP3_DIS_DAC
+    MP3_NEXT_SONG = 256,                /**< Siguiente canción */        
+    MP3_PREV_SONG,                      /**< Anterior canción */
+    MP3_VOL_UP,                         /**< Subir volumen */
+    MP3_VOL_DOWN,                       /**< Bajar volumen */
+    MP3_SLEEP_MODE,                     /**< Activar sleep mode */
+    MP3_WAKE_UP,                        /**< Desactivar sleep mode */
+    MP3_RESET,                          /**< Realizar un reset */
+    MP3_PLAY,                           /**< Reproducir la canción */
+    MP3_PAUSE,                          /**< Pausar la canción */
+    MP3_STOP_PLAY,                      /**< Para de reproducir */
+    MP3_START_CYCLE,                    /**< Poner canción en bucle */
+    MP3_STOP_CYCLE,                     /**< Descativar canción en bucle */
+    MP3_ENA_DAC,                        /**< Habilitar el DAC */
+    MP3_DIS_DAC                         /**< Deshabilitar el DAC */
 } mp3Msg_t;
 
 /**

@@ -59,32 +59,33 @@ extern void app_main (void *arg);
  * @brief Enumeración de las entradas de audio del sistema
  */
 typedef enum {
-	WEB_RADIO			= 0,
-	WEB_MP3			 	= 1
+	WEB_RADIO			= 0,        /**< Seleccionar radio como entrada */
+	WEB_MP3			 	= 1         /**< Seleccionar MP3 como entrada */
 } input_t;
 
 /**
  * @brief Enumeración de las salidas de audio del sistema
  */
 typedef enum {
-	WEB_ALTAVOZ 		= 0,
-	WEB_AURICULARES 	= 1
+	WEB_AURICULARES 	= 0,        /**< Seleccionar auriculares como salida */
+	WEB_ALTAVOZ 		= 1         /**< Seleccionar altavoz como salida */
 } output_t;
 
 /**
  * @brief Estructura para los datos que maneja la pagina web
  */
 typedef struct {
-	input_t entrada;
-	output_t salida;
-	uint8_t bajo_consumo;
-	uint8_t vol, prev_vol;
-	uint8_t mute;
-	uint16_t consumo;
-	uint32_t freq_actual;
-	int8_t eq1, eq2, eq3, eq4, eq5;
-	uint8_t horas, min, seg;
-	uint8_t dia, mes, ano;
+	input_t entrada;                        /**< Entrada seleccionada */
+	output_t salida;                        /**< Salida seleccionada */
+	uint8_t bajo_consumo;                   /**< Modo bajo consumo */
+	uint8_t vol;                            /**< Volumen seleccionado */
+    uint8_t prev_vol;                       /**< Volumen anterior */
+	uint8_t mute;                           /**< Estado de mute */
+	uint16_t consumo;                       /**< Consumo del sistema */
+	uint32_t freq_actual;                   /**< Frecuencia seleccionada */
+	int8_t eq1, eq2, eq3, eq4, eq5;         /**< Valores de las bandas */
+	uint8_t horas, min, seg;                /**< Hora del sistema */
+	uint8_t dia, mes, ano;                  /**< Fecha del sistema */
 } web_state_t;
 
 /**
@@ -105,8 +106,8 @@ typedef enum {
  * @brief Estructura para los mensajes de salida a la web
  */
 typedef struct {
-    web_out_msg_type_t type;
-    uint32_t payload;
+    web_out_msg_type_t type;        /**< Tipo de mensaje */
+    uint32_t payload;               /**< Contenido del mensaje */
 }web_out_msg_t;
 
 extern web_state_t web_state;
