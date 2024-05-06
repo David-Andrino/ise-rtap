@@ -14,10 +14,16 @@
  *      TYPEDEFS
  **********************/
 typedef enum {
-    DISP_SMALL,
-    DISP_MEDIUM,
-    DISP_LARGE,
+	DISP_SMALL,
+	DISP_MEDIUM,
+	DISP_LARGE,
 } disp_size_t;
+
+typedef enum {
+	BTN_CTRL_PREV = 0,
+	BTN_CTRL_PLAY,
+	BTN_CTRL_NEXT
+} btn_ctrl_t;
 
 static gui_data_t data = {
 	.vol = 10,
@@ -74,8 +80,8 @@ static void tabview_delete_event_cb(lv_event_t * e);
 
 static void drag_event_handler(lv_event_t * e);
 static void frequency_set_cb(lv_event_t * e);
-static void seek_up_cb(lv_event_t * e) {}
-static void seek_down_cb(lv_event_t * e) {}
+static void seek_up_cb(lv_event_t * e);
+static void seek_down_cb(lv_event_t * e);
 static void guardar_cadena_cb(lv_event_t * e);
 static void guardar_cadena_cb(lv_event_t * e);
 static void set_channel_from_list_cb(lv_event_t * e);
@@ -84,9 +90,9 @@ static void headphones_cb(lv_event_t * e);
 static void speakers_cb(lv_event_t * e);
 static void mute_cb(lv_event_t * e);
 static void save_cb(lv_event_t * e){}
-static void mp3_cb(lv_event_t * e); // Seleccion del mp3 como entrada de audio
-static void mp3_ctrl_cb(lv_event_t * e){} // Botones play/pause, next song, prev song
-static void mp3_list_cb(lv_event_t * e); // Seleccion de cancion desde la lista
+static void mp3_cb(lv_event_t * e);       // Seleccion del mp3 como entrada de audio
+static void mp3_ctrl_cb(lv_event_t * e);  // Botones play/pause, next song, prev song
+static void mp3_list_cb(lv_event_t * e);  // Seleccion de cancion desde la lista
 static void radio_cb(lv_event_t * e);
 static void low_power_cb(lv_event_t * e){ EnterStandbyMode(); }
 static void filter_cb(lv_event_t * e);
@@ -354,8 +360,8 @@ static void create_radio_content(lv_obj_t * tabview) {
 	
 	lv_obj_t * mute_btn = lv_btn_create(panel_vol);
 	lv_obj_add_event_cb(mute_btn, mute_cb, LV_EVENT_CLICKED, NULL);
-	lv_obj_t * label_play_btn = lv_label_create(mute_btn);
-	lv_label_set_text_fmt(label_play_btn, "%s  Mute", LV_SYMBOL_MUTE);
+	lv_obj_t * label_mute_btn = lv_label_create(mute_btn);
+	lv_label_set_text_fmt(label_mute_btn, "%s  Mute", LV_SYMBOL_MUTE);
 	
 	static int32_t grid_vol_col_dsc[] = {LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
 	static int32_t grid_vol_row_dsc[] = {
@@ -423,8 +429,8 @@ static void create_mp3_content(lv_obj_t * tabview){
 	
 	lv_obj_t * mute_btn = lv_btn_create(panel_vol);
 	lv_obj_add_event_cb(mute_btn, mute_cb, LV_EVENT_CLICKED, NULL);
-	lv_obj_t * label_play_btn = lv_label_create(mute_btn);
-	lv_label_set_text_fmt(label_play_btn, "%s  Mute", LV_SYMBOL_MUTE);
+	lv_obj_t * label_mute_btn = lv_label_create(mute_btn);
+	lv_label_set_text_fmt(label_mute_btn, "%s  Mute", LV_SYMBOL_MUTE);
 	
 	static int32_t grid_vol_col_dsc[] = {LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
 	static int32_t grid_vol_row_dsc[] = {
@@ -569,8 +575,8 @@ static void create_filters_content(lv_obj_t * tabview){
 	
 	lv_obj_t * mute_btn = lv_btn_create(panel_vol);
 	lv_obj_add_event_cb(mute_btn, mute_cb, LV_EVENT_CLICKED, NULL);
-	lv_obj_t * label_play_btn = lv_label_create(mute_btn);
-	lv_label_set_text_fmt(label_play_btn, "%s  Mute", LV_SYMBOL_MUTE);
+	lv_obj_t * label_mute_btn = lv_label_create(mute_btn);
+	lv_label_set_text_fmt(label_mute_btn, "%s  Mute", LV_SYMBOL_MUTE);
 	
 	#if DRAGGABBLE
 	lv_obj_add_event_cb(panel_title, drag_event_handler, LV_EVENT_ALL, NULL);
@@ -1258,14 +1264,17 @@ static void crear_panel_control_mp3(lv_obj_t * container){
 	static lv_style_t style_play;
 	lv_style_init(&style_play);
 	
+	btn_ctrl_t ctrl_play = BTN_CTRL_PLAY;
+	btn_ctrl_t ctrl_prev = BTN_CTRL_PREV;
+	btn_ctrl_t ctrl_next = BTN_CTRL_NEXT;
+	
 	lv_style_set_radius(&style_play, LV_RADIUS_CIRCLE);
-//	lv_style_set_bg_color(&style_play, lv_color_white());
-//	lv_style_set_bg_grad_color(&style_play, lv_palette_main(LV_PALETTE_PINK));
 	lv_style_set_bg_grad_color(&style_play, lv_palette_lighten(LV_PALETTE_PINK, 2));
 	lv_style_set_bg_grad_dir(&style_play, LV_GRAD_DIR_VER);
 
 	lv_obj_t * btn_play = lv_btn_create(container);
 	lv_obj_add_style(btn_play, &style_play, LV_PART_MAIN);
+	lv_obj_add_event_cb(btn_play, mp3_ctrl_cb, LV_EVENT_CLICKED, &ctrl_play);
 	lv_style_set_pad_all(&style_play, 30);          // Make btn bigger
 	
 	lv_obj_t * label_play = lv_label_create(btn_play);
@@ -1276,10 +1285,8 @@ static void crear_panel_control_mp3(lv_obj_t * container){
 	lv_style_init(&style_next_prev);
 
 	lv_style_set_radius(&style_next_prev, LV_RADIUS_CIRCLE);
-//	lv_style_set_bg_color(&style_next_prev, lv_color_white());
 	lv_style_set_bg_grad_color(&style_next_prev, lv_palette_lighten(LV_PALETTE_PINK, 2));
 	lv_style_set_bg_grad_dir(&style_next_prev, LV_GRAD_DIR_VER);
-//	lv_style_set_text_color(&style_next_prev, lv_color_white());
 
 	lv_obj_t * btn_prev = lv_btn_create(container);
 	lv_obj_add_style(btn_prev, &style_next_prev, LV_PART_MAIN);
@@ -1287,6 +1294,7 @@ static void crear_panel_control_mp3(lv_obj_t * container){
 	
 	lv_obj_t * label_prev = lv_label_create(btn_prev);
 	lv_label_set_text(label_prev, " " LV_SYMBOL_PREV " ");
+	lv_obj_add_event_cb(btn_prev, mp3_ctrl_cb, LV_EVENT_CLICKED, &ctrl_prev);
 	lv_obj_add_style(label_prev, &style_subtitle, 0);  // Make font bigger
 	
 	lv_obj_t * btn_next = lv_btn_create(container);
@@ -1295,6 +1303,7 @@ static void crear_panel_control_mp3(lv_obj_t * container){
 	
 	lv_obj_t * label_next = lv_label_create(btn_next);
 	lv_label_set_text(label_next, " " LV_SYMBOL_NEXT " ");
+	lv_obj_add_event_cb(btn_next, mp3_ctrl_cb, LV_EVENT_CLICKED, &ctrl_next);
 	lv_obj_add_style(label_next, &style_subtitle, 0);  // Make font bigger
 	
 	static int32_t grid_col_dsc[] = {LV_GRID_FR(1), LV_GRID_FR(2), LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
@@ -1693,12 +1702,51 @@ static void mp3_list_cb(lv_event_t * e){
 	lv_obj_t * btn = lv_event_get_target(e);
 	lv_obj_t * list = lv_obj_get_parent(btn);
 	
+	// Notificar al principal
+	msg_to_main.lcd_msg.type = LCD_SONG;
+	for(int i = 0; i < lv_obj_get_child_cnt(list); i ++){
+		lv_obj_t* child = lv_obj_get_child(list, i);
+		if(child == btn){
+			msg_to_main.lcd_msg.payload = i;
+			break;
+		} 
+	}
+	osMessageQueuePut(ctrl_in_queue, &msg_to_main, NULL, 0);
+	
+	// Un efecto chulo
 	lv_obj_fade_out(label_title_mp3, 300, 0);
 	lv_label_set_text_fmt(label_cancion, "%s", lv_list_get_btn_text(list, btn));
 	lv_obj_fade_in(label_cancion, 300, 300);
 	lv_timer_t * tim = lv_timer_create(restaurar_titulo_mp3, 2500, NULL); // Tenemos que hacerlo con un timer, con varios delays solo se aplica la ultima animacion
 	lv_timer_set_repeat_count(tim, 1);
+}
+static void mp3_ctrl_cb(lv_event_t * e){
+	btn_ctrl_t * action = lv_event_get_user_data(e);
 	
+	switch(*action){
+		case BTN_CTRL_PREV:
+			msg_to_main.lcd_msg.type = LCD_PREV_SONG;
+		break;
+		case BTN_CTRL_PLAY:
+			msg_to_main.lcd_msg.type = LCD_PLAY_PAUSE;
+		break;
+		case BTN_CTRL_NEXT:
+			msg_to_main.lcd_msg.type = LCD_NEXT_SONG;
+		break;
+	}
+	osMessageQueuePut(ctrl_in_queue, &msg_to_main, NULL, 0);
+}
+static void seek_down_cb(lv_event_t * e) {
+	// Notificar al principal
+	msg_to_main.lcd_msg.type = LCD_SEEK;
+	msg_to_main.lcd_msg.payload = 0;
+	osMessageQueuePut(ctrl_in_queue, &msg_to_main, NULL, 0);
+}
+static void seek_up_cb(lv_event_t * e){
+	// Notificar al principal
+	msg_to_main.lcd_msg.type = LCD_SEEK;
+	msg_to_main.lcd_msg.payload = 1;
+	osMessageQueuePut(ctrl_in_queue, &msg_to_main, NULL, 0);
 }
 static void radio_cb(lv_event_t * e){
 	lv_obj_t * btn = lv_event_get_target(e);
@@ -1763,6 +1811,6 @@ static void filter_cb(lv_event_t * e){
 		msg_to_main.lcd_msg.payload = (3 << 8) | (current_value & 0xFF);
 	} else if(slider == slider_b5){
 		msg_to_main.lcd_msg.payload = (4 << 8) | (current_value & 0xFF);
-	}  
+	}
 	osMessageQueuePut(ctrl_in_queue, &msg_to_main, NULL, 0);
 }
