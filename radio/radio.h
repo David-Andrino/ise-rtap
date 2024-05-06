@@ -17,10 +17,29 @@
 #include <cmsis_os2.h>
 #include <stdint.h>
 
-#define POWERON  0
+/**
+ * @brief Encender la radio
+ */
+#define POWERON  0    
+
+/**
+ * @brief Apagar la radio
+ */
 #define POWEROFF 1
+
+/**
+ * @brief Hacer un SeekUp
+ */
 #define SEEKUP   2
+
+/**
+ * @brief Hacer un SeekDown
+ */
 #define SEEKDOWN 3
+
+/**
+ * @brief Mandar frecuencia sintonizada
+ */
 #define INFO     4
 // Resto de valores, sintonizar
 
