@@ -454,7 +454,7 @@ static void Cons_Thread(void* arg) {
     
     while (1) {
         HAL_ADC_Start(&hconsadc);
-        osDelay(1);
+        osDelay(1000);
         HAL_ADC_Stop(&hconsadc);
         msg.cons_msg = HAL_ADC_GetValue(&hconsadc);
         osMessageQueuePut(ctrl_in_queue, &msg, NULL, osWaitForever);
