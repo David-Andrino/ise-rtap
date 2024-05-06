@@ -71,6 +71,8 @@ void ThreadNFC (void *argument) {
 		Leer_NFC(); //Leer contenido NDEF NFC
 		
 		Enviar_Lectura(); //Formatear la lectura y enviarla por la cola
+		
+		osThreadFlagsClear(NFC_FLAG); //Limpiar flag antes de habilitar el RF para que vuelva a medir I2C
   }
 }
 
@@ -82,14 +84,14 @@ void GPIO_Init(void){
 	
 	GPIO_InitStruct.Pin = GPO_GPIO_PIN; 
 	GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
-  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
 	
 	HAL_GPIO_Init(GPO_GPIO_PORT, &GPIO_InitStruct);
 	
 	GPIO_InitStruct.Pin = DIS_GPIO_PIN; 
 	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
 	
 	HAL_GPIO_Init(DIS_GPIO_PORT, &GPIO_InitStruct);
 }
@@ -99,7 +101,9 @@ void EXTI15_10_IRQHandler(void) {
 }
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin){
-	osThreadFlagsSet(nfc_tid, NFC_FLAG);
+	if(GPIO_Pin == GPO_GPIO_PIN){
+		osThreadFlagsSet(nfc_tid, NFC_FLAG);
+	}
 }
 
 void Leer_NFC(void){
@@ -112,21 +116,19 @@ void Leer_NFC(void){
   ReadNDEF();
   Deselect();
 
-	osThreadFlagsClear(NFC_FLAG); //Limpiar flag antes de habilitar el RF para que vuelva a medir I2C
 	HAL_GPIO_WritePin(DIS_GPIO_PORT, DIS_GPIO_PIN, DIS_GPIO_OFF); //Habilitar RF - Deshabilitar I2C
 }
 
 void OpenSession(void){
 	
   i2c_MasterTransmit(0x56, openSession, 1, false); 												
-
 }
 
 void SelectNFC(void){	
 	uint8_t selectNFCResponse[5];
 													 
 	i2c_MasterTransmit(0x56, selectNFC, 16, false);	
-													 
+	osDelay(5);
 	i2c_MasterReceive(0x56,selectNFCResponse,5,false);
 
 }
@@ -134,16 +136,17 @@ void SelectNFC(void){
 void SelectNDEF(void){
 	uint8_t selectNDEFResponse[5];
 	
-	i2c_MasterTransmit(0x56, selectNDEF, 10, false);	
-													 
-	i2c_MasterReceive(0x56,selectNDEFResponse,5,false);								
+	i2c_MasterTransmit(0x56, selectNDEF, 10, false);		
+	osDelay(5);	
+	i2c_MasterReceive(0x56,selectNDEFResponse,5,false);						
+	
 }
 
 void ReadNDEFLength(void){
 	uint8_t readNDEFLengthResponse[7];
 	
-	i2c_MasterTransmit(0x56, readNDEFLength, 8, false);	
-													 
+	i2c_MasterTransmit(0x56, readNDEFLength, 8, false);			
+	osDelay(5);	
 	i2c_MasterReceive(0x56,readNDEFLengthResponse,7,false);	
 
 }
@@ -152,7 +155,7 @@ void ReadNDEF(void){
 	uint8_t* bufferLectura = (uint8_t*) readNDEFResponse;
 	
 	i2c_MasterTransmit(0x56, readNDEF, 8, false);	
- 
+	osDelay(5);
 	i2c_MasterReceive(0x56,bufferLectura,18,false);		
 
 }
@@ -161,7 +164,7 @@ void Deselect(void){
 	uint8_t deselectResponse[3];
 	
 	i2c_MasterTransmit(0x56, deselect, 3, false);	
-													 
+	osDelay(5);	
 	i2c_MasterReceive(0x56,deselectResponse,3,false);
 
 }
