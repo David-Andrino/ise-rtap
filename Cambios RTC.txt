@@ -16,4 +16,6 @@
 	if (HAL_RCCEx_PeriphCLKConfig(&periph) != HAL_OK){
 		Error_Handler();
 	}
-
+- Cambiar el servidor NTP
+- Añadir el paquete del SNTP
+- Restar 1 día a la fecha

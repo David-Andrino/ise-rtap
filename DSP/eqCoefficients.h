@@ -1,12 +1,35 @@
+/**
+ * @file eqCoefficients.h
+ *
+ * @brief Coeficientes para el módulo de ecualización
+ *
+ * @author Ruben Agustin
+ * @author David Andrino
+ * @author Estela Mora
+ * @author Fernando Sanz
+ *
+ * Coeficientes obtenidos de la aplicación de ecualización gráfica 
+ * de la librería CMSIS DSP.
+ * https://www.keil.com/pack/doc/CMSIS/DSP/html/arm_graphic_equalizer_example_q31_8c-example.html
+ */
 #ifndef EQ_COEFFS_H
 #define EQ_COEFFS_H
 
 #include "arm_math.h"
 
+/**
+ * @brief Desplazamiento de coeficientes
+ */
 #define COEFF_SHIFT 2
+
+/**
+ * @brief Calcular el índice de un coeficiente en la tabla de coeficientes
+ */
 #define GET_COEFF_IDX(BAND, GAIN) (190 * (BAND) + 10 * ((GAIN) + 9))
 
-// Obtenido de https://www.keil.com/pack/doc/CMSIS/DSP/html/arm_graphic_equalizer_example_q31_8c-example.html
+/**
+ * @brief Coeficientes para las 5 bandas de ecualización
+ */
 const q31_t coeffTable[950] = {
   /* Band 1, -9 dB gain */
   535576962, -1071153923, 535576962, 1073741824, -536870912, 535576962, -1063501998, 527979313, 1060865294, -524146981,
@@ -109,6 +132,9 @@ const q31_t coeffTable[950] = {
   744051710, -1164315096, 481197437, 702532174, -272930673, 744051710, 1164315096, 481197437, -702532174, -272930673
 };
 
+/**
+ * @brief Coeficientes para el volumen
+ */
 const q31_t volCoeffs[10] =  {
     0, 214748365, 429496730, 644245094, 858993459, 1073741824, 1288490189, 1503238554, 1717986918, 1932735283
 };

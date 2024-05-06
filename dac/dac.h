@@ -3,7 +3,7 @@
 #include <stdint.h>
 
 /**
- * @file
+ * @file dac.h
  *
  * @brief Modulo de salida de audio de RTAP
  *
@@ -15,16 +15,12 @@
  * Utiliza un DAC disparado por un timer para generar muestras a 48 kHz.
  * Mediante DMA, obtiene los valores de un buffer.
  *
- * Perifericos utilizados:
- * - TIM2
- * - GPIO PA4
- * - DAC1
  */
 
 /**
  * Inicializa el modulo de salida de audio.
  *
- * @return 0 si se ha realizado correctamente. Otro valor si no.
+ * @return int 0 si se ha realizado correctamente. Otro valor si no.
  **/
 int audio_init();
 

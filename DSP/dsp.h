@@ -2,17 +2,17 @@
 #define DSP_H
 
 /**
- * @file
+ * @file dsp.h
  *
- * @brief Modulo de procesado digital de señales
+ * @brief Modulo de procesado digital de seï¿½ales
  *
  * @author Ruben Agustin
  * @author David Andrino
  * @author Estela Mora
  * @author Fernando Sanz
  *
- * Utilizando la librería CMSIS DSP, procesa la señal de entrada,
- * generando la señal de salida.
+ * Utilizando la librerï¿½a CMSIS DSP, procesa la seï¿½al de entrada,
+ * generando la seï¿½al de salida.
  *
  */
 
@@ -21,7 +21,7 @@
 /**
  * Inicializa el modulo de procesado digital.
  *
- * @return 0 si se ha realizado correctamente. Otro valor si no.
+ * @return int 0 si se ha realizado correctamente. Otro valor si no.
  **/
 extern int dsp_init(void);
 
@@ -34,11 +34,11 @@ extern int dsp_init(void);
 extern void processSamples(uint16_t* in, uint16_t* out);
 
 /**
- * Cambia la configuración del filtrado.
+ * Cambia la configuraciï¿½n del filtrado.
  *
  * @param bands Array de 5 elementos con las ganancias de cada banda.
  *              Elementos enteros en el rango [-9, 9]
- * @param vol   Volumen de salida, en décimas. Valor entero en [0, 10]
+ * @param vol   Volumen de salida, en dï¿½cimas. Valor entero en [0, 10]
  **/
 extern void dsp_configure_filters(int8_t* bands, uint8_t vol);
 

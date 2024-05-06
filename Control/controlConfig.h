@@ -1,3 +1,19 @@
+/**
+ * @file controlConfig.h
+ *
+ * @brief Fichero de configuración del módulo de control
+ *
+ * @author Ruben Agustin
+ * @author David Andrino
+ * @author Estela Mora
+ * @author Fernando Sanz
+ *
+ * Permite configurar el módulo de control. Particularmente, gestiona el
+ * rango de frecuencias de la radio, los pines de habilitación y 
+ * selección de entrada y salida y el pin de la medición de consumo.
+ *
+ */
+
 #ifndef CONTROL_CONFIG_H
 #define CONTROL_CONFIG_H
 

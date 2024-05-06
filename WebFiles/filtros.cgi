@@ -26,7 +26,7 @@ t             <td colspan="4">
 t                 <div class="slider-container">
 t                   <form action="filtros.cgi" method="post">
 t                     <div>
-t                     <input type="range" id="eq1" name="eq1" min="-9" max="9"
+t                     <input type="range" id="eq1" name="eq1" min="-2" max="2"
 c f 1                          step="1" value="%d" onchange="submit();">
 t                         <label class="slider-label" for="eq1">20Hz</label>
 t                     </div>
