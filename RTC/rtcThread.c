@@ -11,8 +11,8 @@
 #define RTC_SEC_FLAG 0x01
 #define RTC_NTP_FLAG 0x02
 
-const NET_ADDR4 sntp_servers[3] = { // 03/02/2024 7:04 PM
-    {NET_ADDR_IP4, 123, 185,  90, 148, 209}, // 0.pool.ntp.org
+const NET_ADDR4 sntp_servers[3] = { 
+    {NET_ADDR_IP4, 123, 82,  223, 203, 159}, // 0.pool.ntp.org
     {NET_ADDR_IP4, 123, 208,  85,  20, 220}, // 1.pool.ntp.org
     {NET_ADDR_IP4, 123, 158, 227,  98,  15}, // 2.pool.ntp.org    
 };
@@ -91,7 +91,7 @@ __NO_RETURN int RTC_thread_main(void* args) {
                 utcTime = localtime(&ntp_time);
             }
                 
-            RTC_setDate(utcTime->tm_mday + 1, utcTime->tm_mon + 1, utcTime->tm_year - 100);
+            RTC_setDate(utcTime->tm_mday, utcTime->tm_mon + 1, utcTime->tm_year - 100);
             RTC_setHour(utcTime->tm_hour, utcTime->tm_min, utcTime->tm_sec);
         }
     }
