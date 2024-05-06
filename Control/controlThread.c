@@ -71,6 +71,9 @@ static void Control_Thread(void* arg) {
     radioMsg = POWERON;
     osMessageQueuePut(mainToRadioQueue, &radioMsg, NULL, osWaitForever);
     
+    // Encender amplificador de audio
+    HAL_GPIO_WritePin(ENA_GPIO_PORT, ENA_GPIO_PIN, ENA_GPIO_ON);
+    
     osTimerStart(cons_tim, 1000);
 
     msg_ctrl_t msg;
@@ -402,6 +405,9 @@ static void ctrl_lowPower(void) {
     // Apagar Radio
     radioMsg = POWEROFF;
     osMessageQueuePut(mainToRadioQueue, &radioMsg, NULL, osWaitForever);
+    
+    // Apagar amplificador de audio
+    HAL_GPIO_WritePin(ENA_GPIO_PORT, ENA_GPIO_PIN, ENA_GPIO_OFF);
     
     while (1) {}
 }
