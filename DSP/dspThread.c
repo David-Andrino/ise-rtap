@@ -73,8 +73,7 @@ static void DSP_Thread(void* arg) {
         }
         processSamples(in, out);
 
-        if (osMessageQueueGetCount(dspQueue) > 0) {
-            while (osMessageQueueGet(dspQueue, &msg, NULL, 0) != osErrorResource);
+        while (osMessageQueueGet(dspQueue, &msg, NULL, 0) != osErrorResource) {
             dsp_configure_filters(msg.bandGains, msg.vol);
         }
     }
