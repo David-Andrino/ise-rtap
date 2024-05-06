@@ -1707,7 +1707,7 @@ static void mp3_list_cb(lv_event_t * e){
 	for(int i = 0; i < lv_obj_get_child_cnt(list); i ++){
 		lv_obj_t* child = lv_obj_get_child(list, i);
 		if(child == btn){
-			msg_to_main.lcd_msg.payload = i;
+			msg_to_main.lcd_msg.payload = i+1;
 			break;
 		} 
 	}
