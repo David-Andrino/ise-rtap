@@ -3,7 +3,7 @@
 #include <stdint.h>
 
 /**
- * @file
+ * @file adc.h
  *
  * @brief Modulo de adquisicion de datos de RTAP
  *
@@ -14,12 +14,6 @@
  *
  * Utiliza un ADC disparado por un timer para tomar medidas a 48 kHz. Mediante
  * DMA, copia dichas medidas a un buffer.
- *
- * Perifericos utilizados:
- *   - GPIO PA3
- *   - ADC1 CH3
- *   - TIM2
- *   - DMA2 Stream4
  *
  */
 

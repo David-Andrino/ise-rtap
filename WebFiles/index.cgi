@@ -27,8 +27,10 @@ t                     <label for="entrada_radio" style="font-size: 20px;">Radio<
 t
 c i 2                 <input type="radio" id="entrada_mp3" name="entrada" value="mp3" OnClick="submit();" %s>
 t                     <label for="entrada_mp3" style="font-size: 20px;">MP3</label>
+t                   </form>
 t
 t                     <br><br>
+t                   <form action="index.cgi" method="post">
 c i 3                 <input type="radio" id="salida_altavoz" name="salida" value="altavoz" OnClick="submit();" %s>
 t                     <label for="salida_altavoz" style="font-size: 20px;">Altavoz</label>
 t
