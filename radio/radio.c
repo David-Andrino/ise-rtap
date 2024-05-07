@@ -112,7 +112,7 @@ void SeekUp(void) {
     RDA5807M_WriteReg[0] = RDA5807M_WriteReg[0] & RDA_SEEK_STOP;
     osDelay(500);
     msgRadioToMain.radio_msg = seeFrec();
-    osMessageQueuePut(radioToMainQueue, &msgRadioToMain, NULL, osWaitForever);
+    osMessageQueuePut(ctrl_in_queue, &msgRadioToMain, NULL, osWaitForever);
 }
 
 void SeekDown() {
@@ -121,7 +121,7 @@ void SeekDown() {
     RDA5807M_WriteReg[0] = RDA5807M_WriteReg[0] & RDA_SEEK_STOP;
     osDelay(500);
     msgRadioToMain.radio_msg = seeFrec();
-    osMessageQueuePut(radioToMainQueue, &msgRadioToMain, NULL, osWaitForever);
+    osMessageQueuePut(ctrl_in_queue, &msgRadioToMain, NULL, osWaitForever);
 }
 
 void WriteAll(void) {
