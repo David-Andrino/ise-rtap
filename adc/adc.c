@@ -11,8 +11,8 @@ static int convs = 0, value = 0;
 static int adc_init(void);
 static int adc_dma_init(void);
 
-static sampling_Callback halfCb = NULL;
-static sampling_Callback fullCb = NULL;
+static volatile sampling_Callback halfCb = NULL;
+static volatile sampling_Callback fullCb = NULL;
 
 void DMA2_Stream4_IRQHandler(void) { HAL_DMA_IRQHandler(&hdma); }
 
