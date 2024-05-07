@@ -879,13 +879,17 @@ static void ta_event_cb(lv_event_t * e){
        lv_obj_set_height(tv, LV_VER_RES);
        lv_obj_add_flag(kb, LV_OBJ_FLAG_HIDDEN);
        lv_indev_reset(NULL, ta);
-
    }
    else if(code == LV_EVENT_READY || code == LV_EVENT_CANCEL) {
-       lv_obj_set_height(tv, LV_VER_RES);
-       lv_obj_add_flag(kb, LV_OBJ_FLAG_HIDDEN);
-       lv_indev_reset(NULL, ta);   /*To forget the last clicked object to make it focusable again*/
-   }
+		lv_obj_set_height(tv, LV_VER_RES);
+		lv_obj_add_flag(kb, LV_OBJ_FLAG_HIDDEN);
+		lv_indev_reset(NULL, ta);   /*To forget the last clicked object to make it focusable again*/
+		// Notificar al principal
+		int freq = lv_slider_get_value(slider_freq);
+		msg_to_main.lcd_msg.type    = LCD_RADIO_FREQ;
+		msg_to_main.lcd_msg.payload = freq;
+		osMessageQueuePut(ctrl_in_queue, &msg_to_main, NULL, 0);	
+	}
 }
 static void tabview_delete_event_cb(lv_event_t * e){
    lv_event_code_t code = lv_event_get_code(e);
@@ -1121,7 +1125,7 @@ static void crear_panel_freq (lv_obj_t * container){
 	lv_obj_remove_style_all(slider_freq); 
 	lv_obj_add_style(slider_freq, style_knob, LV_PART_KNOB);	
 	
-	lv_obj_add_event_cb(slider_freq, frequency_set_cb, LV_EVENT_VALUE_CHANGED, NULL);
+	lv_obj_add_event_cb(slider_freq, frequency_set_cb, LV_EVENT_ALL, NULL);
 	
 	/* Label "cadena" */
 	label_cadena_txt = lv_label_create(container);
@@ -1145,7 +1149,7 @@ static void crear_panel_freq (lv_obj_t * container){
 	lv_obj_t * guardar_cadena_btn = lv_btn_create(container);
 	lv_obj_add_event_cb(guardar_cadena_btn, guardar_cadena_cb, LV_EVENT_CLICKED, NULL);
 	lv_obj_t * label_guardar_cadena = lv_label_create(guardar_cadena_btn);
-	lv_label_set_text_fmt(label_guardar_cadena, "%s Guardar", LV_SYMBOL_SAVE);
+	lv_label_set_text_fmt(label_guardar_cadena, "%s Favoritos", LV_SYMBOL_DOWNLOAD);
 	
 	static int32_t grid_col_dsc[] = {LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
 	static int32_t grid_row_dsc[] = {
@@ -1564,6 +1568,7 @@ static void set_freq(lv_obj_t * obj, uint16_t val){
 }
 static void frequency_set_cb(lv_event_t * e) {
 	lv_obj_t * obj = lv_event_get_target(e);
+	lv_event_code_t code = lv_event_get_code(e);
 	
 	char buf[10] = "";
 	uint16_t freq;
@@ -1576,11 +1581,13 @@ static void frequency_set_cb(lv_event_t * e) {
 	}
 	
 	// Notificar al principal
-	msg_to_main.lcd_msg.type    = LCD_RADIO_FREQ;
-	msg_to_main.lcd_msg.payload = freq;
-	osMessageQueuePut(ctrl_in_queue, &msg_to_main, NULL, 0);	
-	
-	set_freq(obj, freq);
+	if(code == LV_EVENT_RELEASED){
+		msg_to_main.lcd_msg.type    = LCD_RADIO_FREQ;
+		msg_to_main.lcd_msg.payload = freq;
+		osMessageQueuePut(ctrl_in_queue, &msg_to_main, NULL, 0);	
+	}
+	if(code == LV_EVENT_VALUE_CHANGED || code == LV_EVENT_RELEASED)
+		set_freq(obj, freq);
 }
 static void guardar_cadena_cb(lv_event_t * e) {
 	char buf2[50] = "";
@@ -1614,6 +1621,11 @@ static void set_channel_from_list_cb(lv_event_t * e){
 	lv_textarea_set_text(textarea_freq, buf);
 	int val = (freq*10.0); 
 	lv_slider_set_value(slider_freq, val, LV_ANIM_ON);
+	
+	//Notificar al principal
+	msg_to_main.lcd_msg.type    = LCD_RADIO_FREQ;
+	msg_to_main.lcd_msg.payload = val;
+	osMessageQueuePut(ctrl_in_queue, &msg_to_main, NULL, 0);	
 }
 
 static void cambiar_estilo_salida(int out){
