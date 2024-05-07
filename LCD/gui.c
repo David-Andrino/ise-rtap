@@ -19,12 +19,6 @@ typedef enum {
 	DISP_LARGE,
 } disp_size_t;
 
-typedef enum {
-	BTN_CTRL_PREV = 0,
-	BTN_CTRL_PLAY,
-	BTN_CTRL_NEXT
-} btn_ctrl_t;
-
 static gui_data_t data = {
 	.vol = 10,
 	.num_canciones = 10,
@@ -148,6 +142,7 @@ static int index = 0;
 static lv_obj_t * label_title_mp3, *label_cancion;
 static lv_obj_t * btn_headphones_mp3;
 static lv_obj_t * btn_speakers_mp3;
+static lv_obj_t * btn_play_mp3, *btn_prev_mp3, *btn_next_mp3;
 
 /* Filtros */
 static lv_obj_t * btn_headphones_filtros;
@@ -1264,20 +1259,17 @@ static void crear_panel_control_mp3(lv_obj_t * container){
 	static lv_style_t style_play;
 	lv_style_init(&style_play);
 	
-	btn_ctrl_t ctrl_play = BTN_CTRL_PLAY;
-	btn_ctrl_t ctrl_prev = BTN_CTRL_PREV;
-	btn_ctrl_t ctrl_next = BTN_CTRL_NEXT;
-	
+
 	lv_style_set_radius(&style_play, LV_RADIUS_CIRCLE);
 	lv_style_set_bg_grad_color(&style_play, lv_palette_lighten(LV_PALETTE_PINK, 2));
 	lv_style_set_bg_grad_dir(&style_play, LV_GRAD_DIR_VER);
 
-	lv_obj_t * btn_play = lv_btn_create(container);
-	lv_obj_add_style(btn_play, &style_play, LV_PART_MAIN);
-	lv_obj_add_event_cb(btn_play, mp3_ctrl_cb, LV_EVENT_CLICKED, &ctrl_play);
+	btn_play_mp3 = lv_btn_create(container);
+	lv_obj_add_style(btn_play_mp3, &style_play, LV_PART_MAIN);
+	lv_obj_add_event_cb(btn_play_mp3, mp3_ctrl_cb, LV_EVENT_CLICKED, NULL);
 	lv_style_set_pad_all(&style_play, 30);          // Make btn bigger
 	
-	lv_obj_t * label_play = lv_label_create(btn_play);
+	lv_obj_t * label_play = lv_label_create(btn_play_mp3);
 	lv_label_set_text(label_play, LV_SYMBOL_PLAY " " LV_SYMBOL_PAUSE);
 	lv_obj_add_style(label_play, &style_title, 0);  // Make font bigger
 	
@@ -1288,22 +1280,22 @@ static void crear_panel_control_mp3(lv_obj_t * container){
 	lv_style_set_bg_grad_color(&style_next_prev, lv_palette_lighten(LV_PALETTE_PINK, 2));
 	lv_style_set_bg_grad_dir(&style_next_prev, LV_GRAD_DIR_VER);
 
-	lv_obj_t * btn_prev = lv_btn_create(container);
-	lv_obj_add_style(btn_prev, &style_next_prev, LV_PART_MAIN);
+	btn_prev_mp3 = lv_btn_create(container);
+	lv_obj_add_style(btn_prev_mp3, &style_next_prev, LV_PART_MAIN);
 	lv_style_set_pad_all(&style_next_prev, 25);          // Make btn bigger
 	
-	lv_obj_t * label_prev = lv_label_create(btn_prev);
+	lv_obj_t * label_prev = lv_label_create(btn_prev_mp3);
 	lv_label_set_text(label_prev, " " LV_SYMBOL_PREV " ");
-	lv_obj_add_event_cb(btn_prev, mp3_ctrl_cb, LV_EVENT_CLICKED, &ctrl_prev);
+	lv_obj_add_event_cb(btn_prev_mp3, mp3_ctrl_cb, LV_EVENT_CLICKED, NULL);
 	lv_obj_add_style(label_prev, &style_subtitle, 0);  // Make font bigger
 	
-	lv_obj_t * btn_next = lv_btn_create(container);
-	lv_obj_add_style(btn_next, &style_next_prev, LV_PART_MAIN);
+	btn_next_mp3 = lv_btn_create(container);
+	lv_obj_add_style(btn_next_mp3, &style_next_prev, LV_PART_MAIN);
 	lv_style_set_pad_all(&style_next_prev, 20);          // Make btn bigger
 	
-	lv_obj_t * label_next = lv_label_create(btn_next);
+	lv_obj_t * label_next = lv_label_create(btn_next_mp3);
 	lv_label_set_text(label_next, " " LV_SYMBOL_NEXT " ");
-	lv_obj_add_event_cb(btn_next, mp3_ctrl_cb, LV_EVENT_CLICKED, &ctrl_next);
+	lv_obj_add_event_cb(btn_next_mp3, mp3_ctrl_cb, LV_EVENT_CLICKED, NULL);
 	lv_obj_add_style(label_next, &style_subtitle, 0);  // Make font bigger
 	
 	static int32_t grid_col_dsc[] = {LV_GRID_FR(1), LV_GRID_FR(2), LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
@@ -1314,9 +1306,9 @@ static void crear_panel_control_mp3(lv_obj_t * container){
 	
 	lv_obj_set_grid_dsc_array(container, grid_col_dsc, grid_row_dsc);
 	
-	lv_obj_set_grid_cell(btn_prev, LV_GRID_ALIGN_CENTER, 0, 1, LV_GRID_ALIGN_CENTER, 0, 1);
-	lv_obj_set_grid_cell(btn_play, LV_GRID_ALIGN_CENTER, 1, 1, LV_GRID_ALIGN_CENTER, 0, 1);
-	lv_obj_set_grid_cell(btn_next, LV_GRID_ALIGN_CENTER, 2, 1, LV_GRID_ALIGN_CENTER, 0, 1);
+	lv_obj_set_grid_cell(btn_prev_mp3, LV_GRID_ALIGN_CENTER, 0, 1, LV_GRID_ALIGN_CENTER, 0, 1);
+	lv_obj_set_grid_cell(btn_play_mp3, LV_GRID_ALIGN_CENTER, 1, 1, LV_GRID_ALIGN_CENTER, 0, 1);
+	lv_obj_set_grid_cell(btn_next_mp3, LV_GRID_ALIGN_CENTER, 2, 1, LV_GRID_ALIGN_CENTER, 0, 1);
 }
 
 static void crear_panel_canciones   (lv_obj_t * container){
@@ -1721,19 +1713,15 @@ static void mp3_list_cb(lv_event_t * e){
 	lv_timer_set_repeat_count(tim, 1);
 }
 static void mp3_ctrl_cb(lv_event_t * e){
-	btn_ctrl_t * action = lv_event_get_user_data(e);
+	lv_obj_t * btn = lv_event_get_target(e);
 	
-	switch(*action){
-		case BTN_CTRL_PREV:
+	if(btn == btn_prev_mp3)
 			msg_to_main.lcd_msg.type = LCD_PREV_SONG;
-		break;
-		case BTN_CTRL_PLAY:
+	else if (btn == btn_play_mp3)
 			msg_to_main.lcd_msg.type = LCD_PLAY_PAUSE;
-		break;
-		case BTN_CTRL_NEXT:
+	else if (btn == btn_next_mp3)
 			msg_to_main.lcd_msg.type = LCD_NEXT_SONG;
-		break;
-	}
+	
 	osMessageQueuePut(ctrl_in_queue, &msg_to_main, NULL, 0);
 }
 static void seek_down_cb(lv_event_t * e) {
