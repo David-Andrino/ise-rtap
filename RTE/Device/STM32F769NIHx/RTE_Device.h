@@ -2268,7 +2268,7 @@
 
 // <e> SDMMC1 (SD/SDIO/MMC card host interface 1) [Driver_MCI0]
 // <i> Configuration settings for Driver_MCI0 in component ::CMSIS Driver:MCI
-#define RTE_SDMMC1                      0
+#define RTE_SDMMC1                      1
 
 //   <h> SDMMC Peripheral Bus
 //     <o> SDMMC1_CK Pin <0=>PC12

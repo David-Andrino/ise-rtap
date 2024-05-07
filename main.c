@@ -129,12 +129,25 @@ int main(void) {
     osKernelInitialize();
 
     /* Create thread functions that start executing,
-    Example: osThreadNew(app_main, NULL, NULL); */
-
+    Example: */
+		extern int RTC_thread_init(), Init_Web(), Init_I2C(), DSP_Init();
+		Init_I2C();
+		RTC_thread_init();
+		DSP_Init();
+		Init_Web();
+		
+		extern int Init_Control();
+		Init_Control();
+		extern int Init_Threads_LCD();
+		Init_Threads_LCD();
+		extern int Init_MP3();
+		Init_MP3();
+		extern int Init_Radio();
+		Init_Radio();
     /* Start thread execution */
     osKernelStart();
 #endif
-
+		
     /* Infinite loop */
     while (1) {
     }
@@ -165,9 +178,11 @@ static void SystemClock_Config(void) {
     RCC_OscInitTypeDef RCC_OscInitStruct;
 
     /* Enable HSE Oscillator and activate PLL with HSE as source */
-    RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
+    RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE | RCC_OSCILLATORTYPE_LSE;
     RCC_OscInitStruct.HSEState = RCC_HSE_ON;
+		RCC_OscInitStruct.LSEState = RCC_LSE_ON;
     RCC_OscInitStruct.HSIState = RCC_HSI_OFF;
+	
     RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
     RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
     RCC_OscInitStruct.PLL.PLLM = 25;
@@ -182,6 +197,15 @@ static void SystemClock_Config(void) {
     if (HAL_PWREx_EnableOverDrive() != HAL_OK) {
         Error_Handler();
     }
+		
+		RCC_PeriphCLKInitTypeDef periph ={
+			.PeriphClockSelection = RCC_PERIPHCLK_RTC,
+			.RTCClockSelection = RCC_RTCCLKSOURCE_LSE
+		};
+	
+		if (HAL_RCCEx_PeriphCLKConfig(&periph) != HAL_OK){
+			Error_Handler();
+		}
 
     /* Select PLL as system clock source and configure the HCLK, PCLK1 and PCLK2
        clocks dividers */
