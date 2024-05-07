@@ -1,0 +1,3 @@
+Añadir carpeta FatFs
+Añadir Board Support -> Drivers -> Basic I/O, I/O y SD y resolve
+Probar si así funciona la SD, sino hay que añadir SDRAM
