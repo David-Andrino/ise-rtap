@@ -1,0 +1,23 @@
+\section{Verificación de requisitos}
+
+Se recogen los requisitos del sistema y una explicación de su cumplimiento en la \autoref{tab:requisitos}
+
+\begin{longtable}{l p{5cm} p{5cm}}
+    \toprule
+    \textbf{Requisito} & \textbf{Descripción} & \textbf{Razonamiento} \\ \midrule
+    1 & El sistema debe estar basado en la placa de desarrollo Núcleo 144 STM32F429 (o similar) & El sistema estará basado en la placa de desarrolo 32F769IDISCOVERY, un modelo similar al requerido \\ \\
+    2 & Se debe mantener en funcionamiento el servidor Web desarrollado en la parte 1 de la asignatura, con sincronización por NTP y uso del RTC para mantener la hora del sistema & El sistema permitirá su acceso web y mantendrá la hora gracias al RTC interno del microprocesador y se sincronizará con el protocolo NTP \\ \\
+    3 & El sistema debe permitir guardar parámetros de configuración en memoria no volátil & El sistema almacenará los parámetros de configuración y las emisoras favoritas en una tarjeta micro SD \\ \\
+    4 & El sistema debe ser autónomo y alimentado por baterías & El sistema estará alimentado por baterías, midiendo el consumo y permitiendo su carga \\ \\
+    5 & Se debe implementar algún modo de bajo consumo para alargar la vida útil de la batería & El sistema contará con dicho modo para alargar la duración de la batería \\ \\
+    6 & El sistema debe incluir algún subsistema analógico, de mediana complejidad (amplificador, filtro, acondicionador de señal, modulador, etc.), preferentemente montado en un PCB & El sistema cuenta con la circuitería de baterías (controlador de carga, medidor de consumo, convertidor) y con la multiplexación analógica de audio. \\ \\
+    7 & Se debe proporcionar una interfaz de usuario lo más amigable posible para el control del funcionamiento del equipo & El sistema será accesible mediante interfaz web, una pantalla táctil y tarjetas NFC  \\ \\
+    8 & El sistema debe incluir la conexión y el control de al menos dos sensores externos conectados mediante diferentes buses de comunicaciones (1-wire, I2C, SPI, serie, CAN, etc.) & 
+        \textbullet\ \ I2C: Módulo FM, lector SD, sensor NFC \newline
+        \textbullet\ \ SPI: Pantalla y sensor táctil \newline
+        \textbullet\ \ SAI: Códec de audio \newline
+    \\ \\
+    \bottomrule
+    \caption{Requisitos del proyecto}
+    \label{tab:requisitos}
+\end{longtable}

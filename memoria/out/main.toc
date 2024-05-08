@@ -1,0 +1,4 @@
+\babel@toc {spanish}{}\relax 
+\contentsline {section}{\numberline {1}Introducción}{1}{section.1}%
+\contentsline {section}{\numberline {2}Diagrama de la solución}{2}{section.2}%
+\contentsline {section}{\numberline {3}Verificación de requisitos}{3}{section.3}%
