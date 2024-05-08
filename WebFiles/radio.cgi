@@ -39,7 +39,7 @@ t                   </form>
 t                 </td>
 t                 <td colspan="4" >
 t                   <form id="form_vol" action="radio.cgi" method="post">
-c r 2                 <input type="range" id="vol" name="vol" min="0" max="100" value="%03d"
+c r 2                 <input type="range" id="vol" name="vol" min="0" max="10" value="%03d"
 t                       step="20" onchange="formatValue()">
 t                     <input type="hidden" id="formatted_vol" name="formatted_vol">
 t                   </form>
