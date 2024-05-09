@@ -22,6 +22,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "Board_LED.h"
 
 #include "i2c/i2c.h"
 #include "rtc/rtcThread.h"
@@ -142,16 +143,20 @@ int main(void) {
     Example: */
     
 
+    int st = 0;
+    st |= Init_I2C();
+    st |= RTC_thread_init();
+    st |= DSP_Init();
+    st |= Init_Web(songNames, songCount);
     
-    Init_I2C();
-    RTC_thread_init();
-    DSP_Init();
-    Init_Web(songNames, songCount);
+    st |= Init_Control(&initial_config);
+    st |= Init_Threads_LCD(songNames, songCount, initial_config.bands);
+    st |= Init_MP3();
+    st |= Init_Radio();
     
-    Init_Control(&initial_config);
-    Init_Threads_LCD(songNames, songCount, initial_config.bands);
-    Init_MP3();
-    Init_Radio();
+    if (st != 0) {
+        Error_Handler();
+    }
     /* Start thread execution */
     osKernelStart();
 #endif
@@ -234,7 +239,12 @@ static void SystemClock_Config(void) {
  */
 static void Error_Handler(void) {
     /* User may add here some code to deal with this error */
+    LED_Initialize();
+    int cnt = 0x01;
     while (1) {
+        LED_SetOut(cnt);
+        cnt = ~cnt;
+        HAL_Delay(500);
     }
 }
 
