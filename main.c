@@ -23,13 +23,6 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 
-#ifdef _RTE_
-#include "RTE_Components.h"  // Component selection
-#endif
-#ifdef RTE_CMSIS_RTOS2  // when RTE component CMSIS RTOS2 is used
-#include "cmsis_os2.h"  // ::CMSIS:RTOS2
-#endif
-
 #ifdef RTE_CMSIS_RTOS2_RTX5
 /**
  * Override default HAL_GetTick function
@@ -130,6 +123,9 @@ int main(void) {
 
     /* Create thread functions that start executing,
     Example: */
+		extern void Init_Thread_SD();
+		Init_Thread_SD();
+		
 		extern int RTC_thread_init(), Init_Web(), Init_I2C(), DSP_Init();
 		Init_I2C();
 		RTC_thread_init();
@@ -242,20 +238,59 @@ static void MPU_Config(void) {
     /* Disable the MPU */
     HAL_MPU_Disable();
 
-    /* Configure the MPU attributes as WT for SRAM */
-    MPU_InitStruct.Enable = MPU_REGION_ENABLE;
-    MPU_InitStruct.BaseAddress = 0x20000000;
-    MPU_InitStruct.Size = MPU_REGION_SIZE_512KB;
-    MPU_InitStruct.AccessPermission = MPU_REGION_FULL_ACCESS;
-    MPU_InitStruct.IsBufferable = MPU_ACCESS_NOT_BUFFERABLE;
-    MPU_InitStruct.IsCacheable = MPU_ACCESS_CACHEABLE;
-    MPU_InitStruct.IsShareable = MPU_ACCESS_NOT_SHAREABLE;
-    MPU_InitStruct.Number = MPU_REGION_NUMBER0;
-    MPU_InitStruct.TypeExtField = MPU_TEX_LEVEL0;
-    MPU_InitStruct.SubRegionDisable = 0x00;
-    MPU_InitStruct.DisableExec = MPU_INSTRUCTION_ACCESS_ENABLE;
+    /* Configure the Embedded SRAM1 as (default): cacheable, write-back, 
+     allocate on read or write miss, non-shareable normal memory, execute never
 
-    HAL_MPU_ConfigRegion(&MPU_InitStruct);
+     Note:
+     DTCM starting at address 0x20000000 with size of 128 kB, regardless of 
+     MPU settings behaves as non-cacheable, non-shareable normal memory */
+
+  MPU_InitStruct.Enable           = MPU_REGION_ENABLE;
+  MPU_InitStruct.BaseAddress      = 0x20000000U;
+  MPU_InitStruct.Size             = MPU_REGION_SIZE_512KB;
+  MPU_InitStruct.AccessPermission = MPU_REGION_FULL_ACCESS;
+  MPU_InitStruct.IsBufferable     = MPU_ACCESS_BUFFERABLE;
+  MPU_InitStruct.IsCacheable      = MPU_ACCESS_CACHEABLE;
+  MPU_InitStruct.IsShareable      = MPU_ACCESS_NOT_SHAREABLE;
+  MPU_InitStruct.Number           = MPU_REGION_NUMBER0;
+  MPU_InitStruct.TypeExtField     = MPU_TEX_LEVEL1;
+  MPU_InitStruct.SubRegionDisable = 0x00U;
+  MPU_InitStruct.DisableExec      = MPU_INSTRUCTION_ACCESS_DISABLE;
+  HAL_MPU_ConfigRegion(&MPU_InitStruct);
+
+  /* Configure the Embedded SRAM2 as: non-cacheable, non-shareable normal memory, execute never */
+
+  MPU_InitStruct.Enable           = MPU_REGION_ENABLE;
+  MPU_InitStruct.BaseAddress      = 0x2007C000U;
+  MPU_InitStruct.Size             = MPU_REGION_SIZE_16KB;
+  MPU_InitStruct.AccessPermission = MPU_REGION_FULL_ACCESS;
+  MPU_InitStruct.IsBufferable     = MPU_ACCESS_NOT_BUFFERABLE;
+  MPU_InitStruct.IsCacheable      = MPU_ACCESS_NOT_CACHEABLE;
+  MPU_InitStruct.IsShareable      = MPU_ACCESS_NOT_SHAREABLE;
+  MPU_InitStruct.Number           = MPU_REGION_NUMBER1;
+  MPU_InitStruct.TypeExtField     = MPU_TEX_LEVEL1;
+  MPU_InitStruct.SubRegionDisable = 0x00U;
+  MPU_InitStruct.DisableExec      = MPU_INSTRUCTION_ACCESS_DISABLE;
+  HAL_MPU_ConfigRegion(&MPU_InitStruct);
+
+  /* Configure the External SDRAM as: non-cacheable, non-shareable normal memory, execute never
+
+     Note:
+     External SDRAM starting at address 0xC0000000, regardless of MPU settings 
+     behaves as non-cacheable memory */
+
+  MPU_InitStruct.Enable           = MPU_REGION_ENABLE;
+  MPU_InitStruct.BaseAddress      = 0xC0000000U;
+  MPU_InitStruct.Size             = MPU_REGION_SIZE_16MB;
+  MPU_InitStruct.AccessPermission = MPU_REGION_FULL_ACCESS;
+  MPU_InitStruct.IsBufferable     = MPU_ACCESS_NOT_BUFFERABLE;
+  MPU_InitStruct.IsCacheable      = MPU_ACCESS_NOT_CACHEABLE;
+  MPU_InitStruct.IsShareable      = MPU_ACCESS_NOT_SHAREABLE;
+  MPU_InitStruct.Number           = MPU_REGION_NUMBER2;
+  MPU_InitStruct.TypeExtField     = MPU_TEX_LEVEL1;
+  MPU_InitStruct.SubRegionDisable = 0x00U;
+  MPU_InitStruct.DisableExec      = MPU_INSTRUCTION_ACCESS_DISABLE;
+  HAL_MPU_ConfigRegion(&MPU_InitStruct);
 
     /* Enable the MPU */
     HAL_MPU_Enable(MPU_PRIVILEGED_DEFAULT);

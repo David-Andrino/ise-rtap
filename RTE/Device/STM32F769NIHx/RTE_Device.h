@@ -2268,7 +2268,7 @@
 
 // <e> SDMMC1 (SD/SDIO/MMC card host interface 1) [Driver_MCI0]
 // <i> Configuration settings for Driver_MCI0 in component ::CMSIS Driver:MCI
-#define RTE_SDMMC1                      1
+#define RTE_SDMMC1                      0
 
 //   <h> SDMMC Peripheral Bus
 //     <o> SDMMC1_CK Pin <0=>PC12
@@ -2407,7 +2407,7 @@
 //     <o4> Priority <0=>Low <1=>Medium <2=>High <3=>Very High
 //     <i>  Selects DMA Priority
 //   </e>
-#define RTE_SDMMC1_RX_DMA               1
+#define RTE_SDMMC1_RX_DMA               0
 #define RTE_SDMMC1_RX_DMA_NUMBER        2
 #define RTE_SDMMC1_RX_DMA_STREAM        3
 #define RTE_SDMMC1_RX_DMA_CHANNEL       4
@@ -2423,7 +2423,7 @@
 //     <o4> Priority <0=>Low <1=>Medium <2=>High <3=>Very High
 //     <i>  Selects DMA Priority
 //   </e>
-#define RTE_SDMMC1_TX_DMA               1
+#define RTE_SDMMC1_TX_DMA               0
 #define RTE_SDMMC1_TX_DMA_NUMBER        2
 #define RTE_SDMMC1_TX_DMA_STREAM        6
 #define RTE_SDMMC1_TX_DMA_CHANNEL       4
@@ -2434,7 +2434,7 @@
 
 // <e> SDMMC2 (SD/SDIO/MMC card host interface 2) [Driver_MCI1]
 // <i> Configuration settings for Driver_MCI1 in component ::CMSIS Driver:MCI
-#define RTE_SDMMC2                      0
+#define RTE_SDMMC2                      1
 
 //   <h> SDMMC Peripheral Bus
 //     <o> SDMMC2_CK Pin <0=>PD6
@@ -2456,7 +2456,7 @@
   #error "Invalid SDMMC2_CMD Pin Configuration!"
 #endif
 //     <o> SDMMC2_D0 Pin <0=>PB14 <1=>PG9
-#define   RTE_SDMMC2_D0_PORT_ID         0
+#define   RTE_SDMMC2_D0_PORT_ID         1
 #if      (RTE_SDMMC2_D0_PORT_ID == 0)
   #define RTE_SDMMC2_D0_PORT            GPIOB
   #define RTE_SDMMC2_D0_PIN             GPIO_PIN_14
@@ -2469,7 +2469,7 @@
   #error "Invalid SDMMC2_D0 Pin Configuration!"
 #endif
 //     <e> SDMMC2_D[1 .. 3]
-#define   RTE_SDMMC2_BUS_WIDTH_4        1
+#define   RTE_SDMMC2_BUS_WIDTH_4        0
 //       <o> SDMMC2_D1 Pin <0=>PB15 <1=>PG10
 #define   RTE_SDMMC2_D1_PORT_ID         0
 #if      (RTE_SDMMC2_D1_PORT_ID == 0)
@@ -2566,8 +2566,8 @@
 //   </e>
 #define RTE_SDMMC2_CD_PIN_EN            1
 #define RTE_SDMMC2_CD_ACTIVE            0
-#define RTE_SDMMC2_CD_PORT              GPIO_PORT(2)
-#define RTE_SDMMC2_CD_PIN               12
+#define RTE_SDMMC2_CD_PORT              GPIO_PORT(8)
+#define RTE_SDMMC2_CD_PIN               15
 #define RTE_SDMMC2_CD_PULL              1
 
 //   <e> Write Protect Pin

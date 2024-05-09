@@ -23,9 +23,19 @@
 /* Keil.ARM Compiler::Compiler:Event Recorder:DAP:1.5.1 */
 #define RTE_Compiler_EventRecorder
           #define RTE_Compiler_EventRecorder_DAP
+/* Keil.ARM Compiler::Compiler:I/O:File:File System:1.2.0 */
+#define RTE_Compiler_IO_File            /* Compiler I/O: File */
+          #define RTE_Compiler_IO_File_FS         /* Compiler I/O: File (File System) */
 /* Keil.ARM Compiler::Compiler:I/O:STDOUT:ITM:1.2.0 */
 #define RTE_Compiler_IO_STDOUT          /* Compiler I/O: STDOUT */
           #define RTE_Compiler_IO_STDOUT_ITM      /* Compiler I/O: STDOUT ITM */
+/* Keil.MDK-Pro::File System:CORE:LFN Debug:6.14.1 */
+#define RTE_FileSystem_Core             /* File System Core */
+          #define RTE_FileSystem_LFN              /* File System with Long Filename support */
+          #define RTE_FileSystem_Debug            /* File System Debug Version */
+/* Keil.MDK-Pro::File System:Drive:Memory Card:6.14.1 */
+#define RTE_FileSystem_Drive_MC_0       /* File System Memory Card Drive 0 */
+
 /* Keil.MDK-Pro::Network:CORE:IPv4/IPv6 Release:7.15.0 */
 #define RTE_Network_Core                /* Network Core */
           #define RTE_Network_IPv4                /* Network IPv4 Stack */
@@ -49,6 +59,9 @@
         #define RTE_Drivers_I2C2                /* Driver I2C2 */
         #define RTE_Drivers_I2C3                /* Driver I2C3 */
         #define RTE_Drivers_I2C4                /* Driver I2C4 */
+/* Keil::CMSIS Driver:MCI:1.13.0 */
+#define RTE_Drivers_MCI0                /* Driver MCI0 */
+        #define RTE_Drivers_MCI1                /* Driver MCI1 */
 /* Keil::CMSIS Driver:USART:1.21.0 */
 #define RTE_Drivers_USART1              /* Driver USART1 */
         #define RTE_Drivers_USART2              /* Driver USART2 */
@@ -80,12 +93,16 @@
 #define RTE_DEVICE_HAL_I2C
 /* Keil::Device:STM32Cube HAL:LTDC:1.3.0 */
 #define RTE_DEVICE_HAL_LTDC
+/* Keil::Device:STM32Cube HAL:MMC:1.3.0 */
+#define RTE_DEVICE_HAL_MMC
 /* Keil::Device:STM32Cube HAL:PWR:1.3.0 */
 #define RTE_DEVICE_HAL_PWR
 /* Keil::Device:STM32Cube HAL:RCC:1.3.0 */
 #define RTE_DEVICE_HAL_RCC
 /* Keil::Device:STM32Cube HAL:RTC:1.3.0 */
 #define RTE_DEVICE_HAL_RTC
+/* Keil::Device:STM32Cube HAL:SD:1.3.0 */
+#define RTE_DEVICE_HAL_SD
 /* Keil::Device:STM32Cube HAL:SDRAM:1.3.0 */
 #define RTE_DEVICE_HAL_SDRAM
 /* Keil::Device:STM32Cube HAL:TIM:1.3.0 */
