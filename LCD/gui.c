@@ -83,7 +83,7 @@ static void volume_cb(lv_event_t * e);
 static void headphones_cb(lv_event_t * e);
 static void speakers_cb(lv_event_t * e);
 static void mute_cb(lv_event_t * e);
-static void save_cb(lv_event_t * e){}
+static void save_cb(lv_event_t * e);
 static void mp3_cb(lv_event_t * e);       // Seleccion del mp3 como entrada de audio
 static void mp3_ctrl_cb(lv_event_t * e);  // Botones play/pause, next song, prev song
 static void mp3_list_cb(lv_event_t * e);  // Seleccion de cancion desde la lista
@@ -1766,5 +1766,10 @@ static void filter_cb(lv_event_t * e){
 	} else if(slider == slider_b5){
 		msg_to_main.lcd_msg.payload = (4 << 8) | (current_value & 0xFF);
 	}
+	osMessageQueuePut(ctrl_in_queue, &msg_to_main, NULL, 0);
+}
+static void save_cb(lv_event_t * e) {
+	// Notificar al principal
+	msg_to_main.lcd_msg.type = LCD_SAVE_SD; // El payload no afecta
 	osMessageQueuePut(ctrl_in_queue, &msg_to_main, NULL, 0);
 }

@@ -23,6 +23,16 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 
+#include "i2c/i2c.h"
+#include "rtc/rtcThread.h"
+#include "dsp/dspThread.h"
+#include "WEB/ThreadWeb.h"
+#include "Control/controlThread.h"
+#include "LCD/gui_threads.h"
+#include "MP3/mp3.h"
+#include "Radio/radio.h"
+#include "SD/sd.h"
+
 #ifdef RTE_CMSIS_RTOS2_RTX5
 /**
  * Override default HAL_GetTick function
@@ -85,9 +95,6 @@ static char songNames[25][30];
 static int  songCount = 0;
 
 /* Private functions ---------------------------------------------------------*/
-
-
-#include "SD/sd.h"
 /**
  * @brief  Main program
  * @param  None
@@ -133,23 +140,18 @@ int main(void) {
 
     /* Create thread functions that start executing,
     Example: */
-		extern void Init_Thread_SD();
-		// Init_Thread_SD();
-		
-		extern int RTC_thread_init(), Init_Web(char lista_canciones[][30], int cnt_canciones), Init_I2C(), DSP_Init();
-		Init_I2C();
-		RTC_thread_init();
-		DSP_Init();
-		Init_Web(songNames, songCount);
-		
-		extern int Init_Control(sd_config_t* initial_config);
-		Init_Control(&initial_config);
-		extern int Init_Threads_LCD(char lista_canciones[][30], int cnt_canciones, int8_t *bands);
-		Init_Threads_LCD(songNames, songCount, initial_config.bands);
-		extern int Init_MP3();
-		Init_MP3();
-		extern int Init_Radio();
-		Init_Radio();
+    
+
+    
+    Init_I2C();
+    RTC_thread_init();
+    DSP_Init();
+    Init_Web(songNames, songCount);
+    
+    Init_Control(&initial_config);
+    Init_Threads_LCD(songNames, songCount, initial_config.bands);
+    Init_MP3();
+    Init_Radio();
     /* Start thread execution */
     osKernelStart();
 #endif

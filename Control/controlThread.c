@@ -421,12 +421,21 @@ static void ctrl_lowPower(void) {
     // Apagar amplificador de audio
     HAL_GPIO_WritePin(ENA_GPIO_PORT, ENA_GPIO_PIN, ENA_GPIO_OFF);
     
+    osDelay(10); // Dar tiempo a que MP3 y RADIO acaben
+    
     while (1) {}
 }
 
-// TODO: Save to SD
 static void ctrl_saveConfig() {
-    while (1) {}
+    sd_config_t config = {
+        .volume = dspMsg.vol,
+        .bands[0] = dspMsg.bandGains[0],
+        .bands[1] = dspMsg.bandGains[1],
+        .bands[2] = dspMsg.bandGains[2],
+        .bands[3] = dspMsg.bandGains[3],
+        .bands[4] = dspMsg.bandGains[4],
+    };
+    volatile int tmp = SD_write_config(&config); // No funciona :(
 }
 
 static void ctrl_cons_init(void) {
@@ -470,6 +479,5 @@ static void Cons_Thread(void* arg) {
         HAL_ADC_Stop(&hconsadc);
         msg.cons_msg = HAL_ADC_GetValue(&hconsadc);
         osMessageQueuePut(ctrl_in_queue, &msg, NULL, osWaitForever);
-        
     }
 }

@@ -130,7 +130,7 @@ static int write_append_file (char *file, char *buf, bool append, int size) {
 		fputc(buf[i++], f);
 	}
   fclose (f);                         /* close the output file                */
-  return 0;
+  return ferror(f);
 }
 /*-----------------------------------------------------------------------------
  *        Process input string for long or short name entry
@@ -253,5 +253,5 @@ int SD_write_config(sd_config_t* config) {
 	
 	snprintf((char*)tmpBuf, 18, "%2hhd %2hhd %2hhd %2hhd %2hhd %2hhu", config->bands[0], config->bands[1], config->bands[2], config->bands[3], config->bands[4], config->volume);
 	
-	return write_file("RTAP/config.txt", tmpBuf, 18);
+	return write_file("RTAP/Config.txt", tmpBuf, 18);
 }
