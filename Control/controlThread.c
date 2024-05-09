@@ -408,7 +408,6 @@ static void ctrl_pins_init(void) {
     HAL_GPIO_WritePin(OUTPUT_SELECT_GPIO_PORT, OUTPUT_SELECT_GPIO_PIN, SELECT_OUTPUT_EAR);
 }
 
-// TODO: Low power mode
 static void ctrl_lowPower(void) {
     // Apagar MP3
     mp3msg = MP3_SLEEP_MODE;
@@ -423,7 +422,7 @@ static void ctrl_lowPower(void) {
     
     osDelay(10); // Dar tiempo a que MP3 y RADIO acaben
     
-    while (1) {}
+    EnterStandbyMode();
 }
 
 static void ctrl_saveConfig() {

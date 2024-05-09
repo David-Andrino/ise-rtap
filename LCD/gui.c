@@ -88,7 +88,7 @@ static void mp3_cb(lv_event_t * e);       // Seleccion del mp3 como entrada de a
 static void mp3_ctrl_cb(lv_event_t * e);  // Botones play/pause, next song, prev song
 static void mp3_list_cb(lv_event_t * e);  // Seleccion de cancion desde la lista
 static void radio_cb(lv_event_t * e);
-static void low_power_cb(lv_event_t * e){ EnterStandbyMode(); }
+static void low_power_cb(lv_event_t * e);
 static void filter_cb(lv_event_t * e);
 	
 static void cambiar_estilo_entrada(int in);
@@ -1771,5 +1771,10 @@ static void filter_cb(lv_event_t * e){
 static void save_cb(lv_event_t * e) {
 	// Notificar al principal
 	msg_to_main.lcd_msg.type = LCD_SAVE_SD; // El payload no afecta
+	osMessageQueuePut(ctrl_in_queue, &msg_to_main, NULL, 0);
+}
+static void low_power_cb(lv_event_t * e) {
+	// Notificar al principal
+    msg_to_main.lcd_msg.type = LCD_LOW_POWER; // El payload no afecta
 	osMessageQueuePut(ctrl_in_queue, &msg_to_main, NULL, 0);
 }
