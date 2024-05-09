@@ -175,33 +175,10 @@ void async_cb(void * new_data){
 			case LCD_OUT_CONS:
 				;
 				char str[32]; /* Buffer to hold the string */
-				
 				sprintf(str, "Consumo actual %d mA", msg->payload);
-
 				lv_label_set_text(label_consumo, str);
 				lv_scale_set_line_needle_value(scale_consumo, needle_consumo, 80, msg->payload);
 			break;
-//			case LCD_SAVE_SD:
-//				
-//			break;
-//			case LCD_LOW_POWER:
-//				
-//			break;
-//			case LCD_LOOP:
-//				
-//			break;
-//			case LCD_SEEK:
-//				
-//			break;
-//			case LCD_NEXT_SONG:
-//				
-//			break;
-//			case LCD_PREV_SONG:
-//				
-//			break;
-//			case LCD_PLAY_PAUSE:
-//				
-//			break;
 			default:
 			break;
 		}

@@ -131,7 +131,7 @@ static int write_append_file (char *file, char *buf, bool append, int size) {
   }
 	
 	int i = 0;
-	while((buf[i] != NULL) || (i < size)){  // No esta detectando el fin de un string
+	while((buf[i] != NULL) && (i < size)){  // No esta detectando el fin de un string
 		fputc(buf[i++], f);
 	}
   fclose (f);                         /* close the output file                */

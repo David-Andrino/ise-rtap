@@ -20,6 +20,14 @@
 #ifndef __MAIN_H
 #define __MAIN_H
 
+
+#ifdef _RTE_
+#include "RTE_Components.h"  // Component selection
+#endif
+#ifdef RTE_CMSIS_RTOS2  // when RTE component CMSIS RTOS2 is used
+#include "cmsis_os2.h"  // ::CMSIS:RTOS2
+#endif
+
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f7xx_hal.h"
 
