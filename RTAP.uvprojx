@@ -300,20 +300,20 @@
               </OCR_RVCT8>
               <OCR_RVCT9>
                 <Type>0</Type>
-                <StartAddress>0x20020000</StartAddress>
-                <Size>0x60000</Size>
+                <StartAddress>0x20000000</StartAddress>
+                <Size>0x76000</Size>
               </OCR_RVCT9>
               <OCR_RVCT10>
                 <Type>0</Type>
-                <StartAddress>0x20000000</StartAddress>
-                <Size>0x20000</Size>
+                <StartAddress>0x20076000</StartAddress>
+                <Size>0x4000</Size>
               </OCR_RVCT10>
             </OnChipMemories>
             <RvctStartVector></RvctStartVector>
           </ArmAdsMisc>
           <Cads>
             <interw>1</interw>
-            <Optim>1</Optim>
+            <Optim>4</Optim>
             <oTime>0</oTime>
             <SplitLS>0</SplitLS>
             <OneElfS>1</OneElfS>
@@ -337,7 +337,7 @@
             <v6Rtti>0</v6Rtti>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define>STM32 STM32F7 STM32F769NIHx STM32F769I_DISCO DEBUG STM32F769xx LV_LVGL_H_INCLUDE_SIMPLE CONFIG_LV_FONT_MONTSERRAT_36=1 CONFIG_LV_FONT_MONTSERRAT_24=1  CONFIG_LV_FONT_MONTSERRAT_18=1 CONFIG_LV_FONT_MONTSERRAT_16=1 CONFIG_LV_USE_FILE_EXPLORER</Define>
+              <Define>STM32 STM32F7 STM32F769NIHx STM32F769I_DISCO DEBUG STM32F769xx LV_LVGL_H_INCLUDE_SIMPLE CONFIG_LV_FONT_MONTSERRAT_36=1 CONFIG_LV_FONT_MONTSERRAT_24=1  CONFIG_LV_FONT_MONTSERRAT_18=1 CONFIG_LV_FONT_MONTSERRAT_16=1 CONFIG_LV_USE_FILE_EXPLORER CONFIG_LV_DEF_REFR_PERIOD=33 CONFIG_LV_MEM_POOL_EXPAND_SIZE=2048 CONFIG_LV_MEM_SIZE=131072</Define>
               <Undefine></Undefine>
               <IncludePath></IncludePath>
             </VariousControls>
@@ -381,7 +381,7 @@
       </TargetOption>
       <Groups>
         <Group>
-          <GroupName>Source Group 1</GroupName>
+          <GroupName>main</GroupName>
           <Files>
             <File>
               <FileName>main.c</FileName>
@@ -428,16 +428,6 @@
               <FileType>5</FileType>
               <FilePath>.\ADC\adc.h</FilePath>
             </File>
-            <File>
-              <FileName>test-adc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\ADC\test-adc.c</FilePath>
-            </File>
-            <File>
-              <FileName>test-adc.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\ADC\test-adc.h</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
@@ -452,16 +442,6 @@
               <FileName>dac.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\DAC\dac.h</FilePath>
-            </File>
-            <File>
-              <FileName>test-dac.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\DAC\test-dac.c</FilePath>
-            </File>
-            <File>
-              <FileName>test-dac.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\DAC\test-dac.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -507,6 +487,51 @@
               <FileName>gui_threads.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\LCD\gui_threads.h</FilePath>
+            </File>
+            <File>
+              <FileName>gui.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\LCD\gui.c</FilePath>
+            </File>
+            <File>
+              <FileName>gui.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\LCD\gui.h</FilePath>
+            </File>
+            <File>
+              <FileName>gui_threads.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\LCD\gui_threads.c</FilePath>
+            </File>
+            <File>
+              <FileName>tft.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\LCD\tft.c</FilePath>
+            </File>
+            <File>
+              <FileName>tft.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\LCD\tft.h</FilePath>
+            </File>
+            <File>
+              <FileName>touchpad.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\LCD\touchpad.c</FilePath>
+            </File>
+            <File>
+              <FileName>touchpad.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\LCD\touchpad.h</FilePath>
+            </File>
+            <File>
+              <FileName>lv_conf.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\lv_conf.h</FilePath>
+            </File>
+            <File>
+              <FileName>logo_rtap.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\LCD\logo_rtap.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -691,6 +716,9 @@
           </Files>
         </Group>
         <Group>
+          <GroupName>::Board Support</GroupName>
+        </Group>
+        <Group>
           <GroupName>::CMSIS</GroupName>
         </Group>
         <Group>
@@ -703,6 +731,9 @@
           <GroupName>::Device</GroupName>
         </Group>
         <Group>
+          <GroupName>::LVGL</GroupName>
+        </Group>
+        <Group>
           <GroupName>::Network</GroupName>
         </Group>
       </Groups>
@@ -711,6 +742,12 @@
 
   <RTE>
     <apis>
+      <api Capiversion="1.0.1" Cclass="Board Support" Cgroup="Touchscreen" exclusive="0">
+        <package name="MDK-Middleware" schemaVersion="1.4" url="http://www.keil.com/pack/" vendor="Keil" version="7.13.0"/>
+        <targetInfos>
+          <targetInfo name="Target 1"/>
+        </targetInfos>
+      </api>
       <api Capiversion="2.2.0" Cclass="CMSIS Driver" Cgroup="Ethernet MAC" exclusive="0">
         <package name="CMSIS" schemaVersion="1.3" url="http://www.keil.com/pack/" vendor="ARM" version="5.8.0"/>
         <targetInfos>
@@ -755,8 +792,8 @@
           <targetInfo name="Target 1"/>
         </targetInfos>
       </component>
-      <component Cclass="CMSIS" Cgroup="DSP" Cvariant="Source" Cvendor="ARM" Cversion="1.9.0-dev" condition="CMSIS DSP">
-        <package name="CMSIS" schemaVersion="1.3" url="http://www.keil.com/pack/" vendor="ARM" version="5.8.0"/>
+      <component Cclass="CMSIS" Cgroup="DSP" Cvariant="Source" Cvendor="ARM" Cversion="1.15.0" condition="CMSISCORE">
+        <package name="CMSIS-DSP" schemaVersion="1.7.7" url="https://www.keil.com/pack/" vendor="ARM" version="1.15.0"/>
         <targetInfos>
           <targetInfo name="Target 1"/>
         </targetInfos>
@@ -767,14 +804,14 @@
           <targetInfo name="Target 1"/>
         </targetInfos>
       </component>
-      <component Cbundle="ARM Compiler" Cclass="Compiler" Cgroup="Event Recorder" Cvariant="DAP" Cvendor="Keil" Cversion="1.4.0" condition="Cortex-M Device">
-        <package name="ARM_Compiler" schemaVersion="1.6.3" url="http://www.keil.com/pack/" vendor="Keil" version="1.6.3"/>
+      <component Cbundle="ARM Compiler" Cclass="Compiler" Cgroup="Event Recorder" Cvariant="DAP" Cvendor="Keil" Cversion="1.5.1" condition="Cortex-M Device">
+        <package name="ARM_Compiler" schemaVersion="1.7.7" url="https://www.keil.com/pack/" vendor="Keil" version="1.7.2"/>
         <targetInfos>
           <targetInfo name="Target 1"/>
         </targetInfos>
       </component>
       <component Cbundle="ARM Compiler" Cclass="Compiler" Cgroup="I/O" Csub="STDOUT" Cvariant="ITM" Cvendor="Keil" Cversion="1.2.0" condition="ARMCC Cortex-M with ITM">
-        <package name="ARM_Compiler" schemaVersion="1.6.3" url="http://www.keil.com/pack/" vendor="Keil" version="1.6.3"/>
+        <package name="ARM_Compiler" schemaVersion="1.7.7" url="https://www.keil.com/pack/" vendor="Keil" version="1.7.2"/>
         <targetInfos>
           <targetInfo name="Target 1"/>
         </targetInfos>
@@ -809,6 +846,36 @@
           <targetInfo name="Target 1"/>
         </targetInfos>
       </component>
+      <component Cbundle="STM32F769I-Discovery" Cclass="Board Support" Cgroup="Drivers" Csub="Basic I/O" Cvendor="Keil" Cversion="1.1.0" condition="STM32F769I-Discovery BSP">
+        <package name="STM32F7xx_DFP" schemaVersion="1.7.28" url="https://www.keil.com/pack/" vendor="Keil" version="2.16.0"/>
+        <targetInfos>
+          <targetInfo name="Target 1"/>
+        </targetInfos>
+      </component>
+      <component Cbundle="STM32F769I-Discovery" Cclass="Board Support" Cgroup="Drivers" Csub="LCD" Cvendor="Keil" Cversion="1.1.0" condition="STM32F769I-Discovery BSP LCD">
+        <package name="STM32F7xx_DFP" schemaVersion="1.7.28" url="https://www.keil.com/pack/" vendor="Keil" version="2.16.0"/>
+        <targetInfos>
+          <targetInfo name="Target 1"/>
+        </targetInfos>
+      </component>
+      <component Cbundle="STM32F769I-Discovery" Cclass="Board Support" Cgroup="Drivers" Csub="SDRAM" Cvendor="Keil" Cversion="1.1.0" condition="STM32F769I-Discovery BSP SDRAM">
+        <package name="STM32F7xx_DFP" schemaVersion="1.7.28" url="https://www.keil.com/pack/" vendor="Keil" version="2.16.0"/>
+        <targetInfos>
+          <targetInfo name="Target 1"/>
+        </targetInfos>
+      </component>
+      <component Cbundle="STM32F769I-Discovery" Cclass="Board Support" Cgroup="Drivers" Csub="Touch Screen" Cvendor="Keil" Cversion="1.1.0" condition="STM32F769I-Discovery BSP TS">
+        <package name="STM32F7xx_DFP" schemaVersion="1.7.28" url="https://www.keil.com/pack/" vendor="Keil" version="2.16.0"/>
+        <targetInfos>
+          <targetInfo name="Target 1"/>
+        </targetInfos>
+      </component>
+      <component Capiversion="1.0.0" Cbundle="STM32F769I-Discovery" Cclass="Board Support" Cgroup="Touchscreen" Cvendor="Keil" Cversion="1.1.0" condition="STM32F769I-Discovery TS">
+        <package name="STM32F7xx_DFP" schemaVersion="1.7.28" url="https://www.keil.com/pack/" vendor="Keil" version="2.16.0"/>
+        <targetInfos>
+          <targetInfo name="Target 1"/>
+        </targetInfos>
+      </component>
       <component Capiversion="2.1.0" Cclass="CMSIS Driver" Cgroup="Ethernet MAC" Cvendor="Keil" Cversion="1.12.0" condition="STM32F7 CMSIS_Driver ETH_MAC">
         <package name="STM32F7xx_DFP" schemaVersion="1.7.28" url="https://www.keil.com/pack/" vendor="Keil" version="2.16.0"/>
         <targetInfos>
@@ -816,7 +883,7 @@
         </targetInfos>
       </component>
       <component Capiversion="2.0.0" Cclass="CMSIS Driver" Cgroup="Ethernet PHY" Csub="LAN8742A" Cvendor="Keil" Cversion="1.3.0" condition="CMSIS Core">
-        <package name="CMSIS-Driver" schemaVersion="1.4.9" url="http://www.keil.com/pack/" vendor="ARM" version="2.6.1"/>
+        <package name="CMSIS-Driver" schemaVersion="1.7.7" url="https://www.keil.com/pack/" vendor="ARM" version="2.7.2"/>
         <targetInfos>
           <targetInfo name="Target 1"/>
         </targetInfos>
@@ -869,7 +936,31 @@
           <targetInfo name="Target 1"/>
         </targetInfos>
       </component>
+      <component Cclass="Device" Cgroup="STM32Cube HAL" Csub="DMA2D" Cvendor="Keil" Cversion="1.3.0" condition="STM32F7 HAL">
+        <package name="STM32F7xx_DFP" schemaVersion="1.7.28" url="https://www.keil.com/pack/" vendor="Keil" version="2.16.0"/>
+        <targetInfos>
+          <targetInfo name="Target 1"/>
+        </targetInfos>
+      </component>
+      <component Cclass="Device" Cgroup="STM32Cube HAL" Csub="DSI" Cvendor="Keil" Cversion="1.3.0" condition="STM32F7x8_7x9 HAL">
+        <package name="STM32F7xx_DFP" schemaVersion="1.7.28" url="https://www.keil.com/pack/" vendor="Keil" version="2.16.0"/>
+        <targetInfos>
+          <targetInfo name="Target 1"/>
+        </targetInfos>
+      </component>
       <component Cclass="Device" Cgroup="STM32Cube HAL" Csub="GPIO" Cvendor="Keil" Cversion="1.3.0" condition="STM32F7 HAL">
+        <package name="STM32F7xx_DFP" schemaVersion="1.7.28" url="https://www.keil.com/pack/" vendor="Keil" version="2.16.0"/>
+        <targetInfos>
+          <targetInfo name="Target 1"/>
+        </targetInfos>
+      </component>
+      <component Cclass="Device" Cgroup="STM32Cube HAL" Csub="I2C" Cvendor="Keil" Cversion="1.3.0" condition="STM32F7 HAL DMA">
+        <package name="STM32F7xx_DFP" schemaVersion="1.7.28" url="https://www.keil.com/pack/" vendor="Keil" version="2.16.0"/>
+        <targetInfos>
+          <targetInfo name="Target 1"/>
+        </targetInfos>
+      </component>
+      <component Cclass="Device" Cgroup="STM32Cube HAL" Csub="LTDC" Cvendor="Keil" Cversion="1.3.0" condition="STM32F7x6_7x7_7x8_7x9_750 HAL">
         <package name="STM32F7xx_DFP" schemaVersion="1.7.28" url="https://www.keil.com/pack/" vendor="Keil" version="2.16.0"/>
         <targetInfos>
           <targetInfo name="Target 1"/>
@@ -888,6 +979,12 @@
         </targetInfos>
       </component>
       <component Cclass="Device" Cgroup="STM32Cube HAL" Csub="RTC" Cvendor="Keil" Cversion="1.3.0" condition="STM32F7 HAL">
+        <package name="STM32F7xx_DFP" schemaVersion="1.7.28" url="https://www.keil.com/pack/" vendor="Keil" version="2.16.0"/>
+        <targetInfos>
+          <targetInfo name="Target 1"/>
+        </targetInfos>
+      </component>
+      <component Cclass="Device" Cgroup="STM32Cube HAL" Csub="SDRAM" Cvendor="Keil" Cversion="1.3.0" condition="STM32F7 HAL DMA">
         <package name="STM32F7xx_DFP" schemaVersion="1.7.28" url="https://www.keil.com/pack/" vendor="Keil" version="2.16.0"/>
         <targetInfos>
           <targetInfo name="Target 1"/>
@@ -929,6 +1026,18 @@
           <targetInfo name="Target 1"/>
         </targetInfos>
       </component>
+      <component Cbundle="LVGL9" Cclass="LVGL" Cgroup="Display" Cvariant="ILI9341" Cvendor="LVGL" Cversion="9.1.0" condition="LVGL-Essential">
+        <package name="lvgl" schemaVersion="1.7.31" url="https://raw.githubusercontent.com/lvgl/lvgl/master/env_support/cmsis-pack/" vendor="LVGL" version="9.1.0"/>
+        <targetInfos>
+          <targetInfo name="Target 1"/>
+        </targetInfos>
+      </component>
+      <component Cbundle="LVGL9" Cclass="LVGL" Cgroup="Essential" Cvendor="LVGL" Cversion="9.1.0">
+        <package name="lvgl" schemaVersion="1.7.31" url="https://raw.githubusercontent.com/lvgl/lvgl/master/env_support/cmsis-pack/" vendor="LVGL" version="9.1.0"/>
+        <targetInfos>
+          <targetInfo name="Target 1"/>
+        </targetInfos>
+      </component>
     </components>
     <files>
       <file attr="config" category="source" name="CMSIS\RTOS2\RTX\Config\RTX_Config.c" version="5.1.1">
@@ -949,8 +1058,8 @@
       </file>
       <file attr="config" category="header" name="Config\EventRecorderConf.h" version="1.1.0">
         <instance index="0">RTE\Compiler\EventRecorderConf.h</instance>
-        <component Cbundle="ARM Compiler" Cclass="Compiler" Cgroup="Event Recorder" Cvariant="DAP" Cvendor="Keil" Cversion="1.4.0" condition="Cortex-M Device"/>
-        <package name="ARM_Compiler" schemaVersion="1.6.3" url="http://www.keil.com/pack/" vendor="Keil" version="1.6.3"/>
+        <component Cbundle="ARM Compiler" Cclass="Compiler" Cgroup="Event Recorder" Cvariant="DAP" Cvendor="Keil" Cversion="1.5.1" condition="Cortex-M Device"/>
+        <package name="ARM_Compiler" schemaVersion="1.7.7" url="https://www.keil.com/pack/" vendor="Keil" version="1.7.2"/>
         <targetInfos>
           <targetInfo name="Target 1"/>
         </targetInfos>
@@ -983,6 +1092,14 @@
         <instance index="0">RTE\Device\STM32F769NIHx\system_stm32f7xx.c</instance>
         <component Cclass="Device" Cgroup="Startup" Cvendor="Keil" Cversion="1.2.5" condition="STM32F7 CMSIS"/>
         <package name="STM32F7xx_DFP" schemaVersion="1.7.28" url="https://www.keil.com/pack/" vendor="Keil" version="2.16.0"/>
+        <targetInfos>
+          <targetInfo name="Target 1"/>
+        </targetInfos>
+      </file>
+      <file attr="config" category="preIncludeGlobal" name="lv_conf_cmsis.h" version="2.1.5">
+        <instance index="0">RTE\LVGL\lv_conf_cmsis.h</instance>
+        <component Cbundle="LVGL9" Cclass="LVGL" Cgroup="Essential" Cvendor="LVGL" Cversion="9.1.0"/>
+        <package name="lvgl" schemaVersion="1.7.31" url="https://raw.githubusercontent.com/lvgl/lvgl/master/env_support/cmsis-pack/" vendor="LVGL" version="9.1.0"/>
         <targetInfos>
           <targetInfo name="Target 1"/>
         </targetInfos>

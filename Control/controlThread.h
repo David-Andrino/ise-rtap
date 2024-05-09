@@ -53,7 +53,7 @@ typedef enum {
     LCD_VOL,        /**< Cambio de volumen. Contenido es el volumen */
     LCD_BANDS,      /**< Cambio de filtro. Contenido es primer byte la banda [0,4] segundo la cantidad [-9, 9] */
     LCD_RADIO_FREQ, /**< Cambio de frecuencia de la radio. Contenido es la frecuencia en centenas de kHz */
-    LCD_SONG,       /**< Cambio de canción. Contenido es el número de canción */
+    LCD_SONG,       /**< Cambio de canción. Contenido es el número de canción, empezando por la 0 */
     LCD_INPUT_SEL,  /**< Cambio de entrada. Contenido es 0 para la radio y 1 para MP3 */
     LCD_OUTPUT_SEL, /**< Cambio de salida. Contenido es 0 para cascos y 1 para altavoz */
     LCD_SAVE_SD,    /**< Guardar configuración en la SD. Contenido ignorado */

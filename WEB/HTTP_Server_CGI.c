@@ -14,14 +14,11 @@
 #include "../Control/controlThread.h"
 #include <stdlib.h>
 #include "ThreadWeb.h"
-#include "ThreadTestWeb.h"
 
 #if      defined (__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050)
 #pragma  clang diagnostic push
 #pragma  clang diagnostic ignored "-Wformat-nonliteral"
 #endif
-
-
 
 //// Local variables.
 static uint8_t ip_addr[NET_ADDR_IP6_LEN];

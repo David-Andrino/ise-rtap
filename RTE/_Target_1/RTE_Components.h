@@ -20,7 +20,7 @@
 #define RTE_CMSIS_RTOS2                 /* CMSIS-RTOS2 */
         #define RTE_CMSIS_RTOS2_RTX5            /* CMSIS-RTOS2 Keil RTX5 */
         #define RTE_CMSIS_RTOS2_RTX5_SOURCE     /* CMSIS-RTOS2 Keil RTX5 Source */
-/* Keil.ARM Compiler::Compiler:Event Recorder:DAP:1.4.0 */
+/* Keil.ARM Compiler::Compiler:Event Recorder:DAP:1.5.1 */
 #define RTE_Compiler_EventRecorder
           #define RTE_Compiler_EventRecorder_DAP
 /* Keil.ARM Compiler::Compiler:I/O:STDOUT:ITM:1.2.0 */
@@ -68,16 +68,26 @@
 #define RTE_DEVICE_HAL_CORTEX
 /* Keil::Device:STM32Cube HAL:DAC:1.3.0 */
 #define RTE_DEVICE_HAL_DAC
+/* Keil::Device:STM32Cube HAL:DMA2D:1.3.0 */
+#define RTE_DEVICE_HAL_DMA2D
 /* Keil::Device:STM32Cube HAL:DMA:1.3.0 */
 #define RTE_DEVICE_HAL_DMA
+/* Keil::Device:STM32Cube HAL:DSI:1.3.0 */
+#define RTE_DEVICE_HAL_DSI
 /* Keil::Device:STM32Cube HAL:GPIO:1.3.0 */
 #define RTE_DEVICE_HAL_GPIO
+/* Keil::Device:STM32Cube HAL:I2C:1.3.0 */
+#define RTE_DEVICE_HAL_I2C
+/* Keil::Device:STM32Cube HAL:LTDC:1.3.0 */
+#define RTE_DEVICE_HAL_LTDC
 /* Keil::Device:STM32Cube HAL:PWR:1.3.0 */
 #define RTE_DEVICE_HAL_PWR
 /* Keil::Device:STM32Cube HAL:RCC:1.3.0 */
 #define RTE_DEVICE_HAL_RCC
 /* Keil::Device:STM32Cube HAL:RTC:1.3.0 */
 #define RTE_DEVICE_HAL_RTC
+/* Keil::Device:STM32Cube HAL:SDRAM:1.3.0 */
+#define RTE_DEVICE_HAL_SDRAM
 /* Keil::Device:STM32Cube HAL:TIM:1.3.0 */
 #define RTE_DEVICE_HAL_TIM
 /* Keil::Device:STM32Cube LL:Common:1.3.0 */
@@ -90,6 +100,12 @@
 #define RTE_DEVICE_LL_UTILS
 /* Keil::Device:Startup:1.2.5 */
 #define RTE_DEVICE_STARTUP_STM32F7XX    /* Device Startup for STM32F7 */
+/* LVGL.LVGL9::LVGL:Display:ILI9341:9.1.0 */
+/* use display driver for ILI9341 */
+#define LV_USE_ILI9341	    1
+/* LVGL.LVGL9::LVGL:Essential:9.1.0 */
+/*! \brief Enable LVGL */
+#define RTE_GRAPHICS_LVGL
 
 
 #endif /* RTE_COMPONENTS_H */
