@@ -293,7 +293,7 @@ static void home_create(lv_obj_t * tabview){
  
 	/*Create the third panel*/
 	lv_obj_t * panel_consumo = lv_obj_create(tabview);
-  crear_panel_consumo(panel_consumo);
+    crear_panel_consumo(panel_consumo);
 	lv_obj_set_height(panel_consumo, lv_pct(100));
 
 	static int32_t grid_main_col_dsc[] = {LV_GRID_FR(1), LV_GRID_FR(2), LV_GRID_TEMPLATE_LAST};
@@ -921,7 +921,7 @@ static void crear_panel_consumo (lv_obj_t * container){
 	lv_obj_update_layout(container);
 	lv_obj_set_height(scale_consumo, 250);
 	
-	lv_scale_set_range(scale_consumo, 0, 3000);
+	lv_scale_set_range(scale_consumo, 0, 1500); // Antes 3000
 	lv_scale_set_total_tick_count(scale_consumo, 25);    // Antes 17
 	lv_scale_set_major_tick_every(scale_consumo, 4);
 	lv_obj_set_style_length(scale_consumo, 10, LV_PART_ITEMS);
@@ -969,18 +969,18 @@ static void crear_panel_consumo (lv_obj_t * container){
 	
 	lv_scale_section_t * section;
 	section = lv_scale_add_section(scale_consumo);
-	lv_scale_section_set_range(section, 0, 750);
+	lv_scale_section_set_range(section, 0, 375); // Antes 0, 750
 	lv_scale_section_set_style(section, LV_PART_MAIN, &scale_consumo_section1_main_style);
 	lv_scale_section_set_style(section, LV_PART_INDICATOR, &scale_consumo_section1_indicator_style);
 	lv_scale_section_set_style(section, LV_PART_ITEMS, &scale_consumo_section1_tick_style);
 	section = lv_scale_add_section(scale_consumo);
-	lv_scale_section_set_range(section, 750, 2250);
+	lv_scale_section_set_range(section, 375, 1125); // Antes 750, 2250
 	lv_scale_section_set_style(section, LV_PART_MAIN, &scale_consumo_section2_main_style);
 	lv_scale_section_set_style(section, LV_PART_INDICATOR, &scale_consumo_section2_indicator_style);
 	lv_scale_section_set_style(section, LV_PART_ITEMS, &scale_consumo_section2_tick_style);
 
 	section = lv_scale_add_section(scale_consumo);
-	lv_scale_section_set_range(section, 2250, 3000);
+	lv_scale_section_set_range(section, 1125, 1500); // Antes 2250, 3000
 	lv_scale_section_set_style(section, LV_PART_MAIN, &scale_consumo_section3_main_style);
 	lv_scale_section_set_style(section, LV_PART_INDICATOR, &scale_consumo_section3_indicator_style);
 	lv_scale_section_set_style(section, LV_PART_ITEMS, &scale_consumo_section3_tick_style);
@@ -991,8 +991,9 @@ static void crear_panel_consumo (lv_obj_t * container){
 	lv_obj_set_style_line_rounded(needle_consumo, true, 0);
 	lv_obj_set_style_line_color(needle_consumo, lv_palette_main(LV_PALETTE_RED), 0);
 	
-	static const char * custom_labels[] = {"0 A", "0'5 A", "1 A", "1'5 A", "2 A", "2'5 A    ", "3 A", NULL};
-	lv_scale_set_text_src(scale_consumo, custom_labels);
+	// Antes: static const char * custom_labels[] = {"0 A", "0'5 A", "1 A", "1'5 A", "2 A", "2'5 A    ", "3 A", NULL};
+	static const char * custom_labels[] = {"0 A", "0'25 A", "0'5 A", "0'75 A", "1 A", "1'25 A    ", "1'5 A", NULL};
+    lv_scale_set_text_src(scale_consumo, custom_labels);
 	
 	static int32_t grid_col_dsc[] = {LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
 	static int32_t grid_row_dsc[] = {
