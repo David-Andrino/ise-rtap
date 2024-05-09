@@ -144,8 +144,8 @@ int main(void) {
 		
 		extern int Init_Control(sd_config_t* initial_config);
 		Init_Control(&initial_config);
-		extern int Init_Threads_LCD(char lista_canciones[][30], int cnt_canciones);
-		Init_Threads_LCD(songNames, songCount);
+		extern int Init_Threads_LCD(char lista_canciones[][30], int cnt_canciones, int8_t *bands);
+		Init_Threads_LCD(songNames, songCount, initial_config.bands);
 		extern int Init_MP3();
 		Init_MP3();
 		extern int Init_Radio();

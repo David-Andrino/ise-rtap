@@ -482,7 +482,7 @@ static void create_filters_content(lv_obj_t * tabview){
 	lv_obj_set_size(slider_b1, 20, TAM_V);
 	lv_obj_add_event_cb(slider_b1, filter_cb, LV_EVENT_RELEASED, NULL);
 	lv_slider_set_range(slider_b1, -2, 2);
-	lv_slider_set_value(slider_b1, 0, LV_ANIM_ON);
+	lv_slider_set_value(slider_b1, band_amplitudes[0], LV_ANIM_ON);
 	
 	lv_obj_t * slider_b1_label = lv_label_create(panel1);
 	lv_label_set_text(slider_b1_label, data.fcentral[0]);
@@ -492,7 +492,7 @@ static void create_filters_content(lv_obj_t * tabview){
 	slider_b2 = lv_slider_create(panel1);
 	lv_obj_set_size(slider_b2, 20, TAM_V);
 	lv_obj_add_event_cb(slider_b2, filter_cb, LV_EVENT_RELEASED, NULL);
-	lv_slider_set_value(slider_b2, 0, LV_ANIM_OFF);
+	lv_slider_set_value(slider_b2, band_amplitudes[1], LV_ANIM_OFF);
 	lv_slider_set_range(slider_b2, -9, 9);
 	
 	lv_obj_t * slider_b2_label = lv_label_create(panel1);
@@ -503,7 +503,7 @@ static void create_filters_content(lv_obj_t * tabview){
 	slider_b3 = lv_slider_create(panel1);
 	lv_obj_set_size(slider_b3, 20, TAM_V);
 	lv_obj_add_event_cb(slider_b3, filter_cb, LV_EVENT_RELEASED, NULL);
-	lv_slider_set_value(slider_b3, 0, LV_ANIM_OFF);
+	lv_slider_set_value(slider_b3, band_amplitudes[2], LV_ANIM_OFF);
 	lv_slider_set_range(slider_b3, -9, 9);
 	
 	lv_obj_t * slider_b3_label = lv_label_create(panel1);
@@ -514,7 +514,7 @@ static void create_filters_content(lv_obj_t * tabview){
 	slider_b4 = lv_slider_create(panel1);
 	lv_obj_set_size(slider_b4, 20, TAM_V);
 	lv_obj_add_event_cb(slider_b4, filter_cb, LV_EVENT_RELEASED, NULL);
-	lv_slider_set_value(slider_b4, 0, LV_ANIM_OFF);
+	lv_slider_set_value(slider_b4, band_amplitudes[3], LV_ANIM_OFF);
 	lv_slider_set_range(slider_b4, -9, 9);
 	
 	lv_obj_t * slider_b4_label = lv_label_create(panel1);
@@ -525,7 +525,7 @@ static void create_filters_content(lv_obj_t * tabview){
 	slider_b5 = lv_slider_create(panel1);
 	lv_obj_set_size(slider_b5, 20, TAM_V);
 	lv_obj_add_event_cb(slider_b5, filter_cb, LV_EVENT_RELEASED, NULL);
-	lv_slider_set_value(slider_b5, 0, LV_ANIM_OFF);
+	lv_slider_set_value(slider_b5, band_amplitudes[4], LV_ANIM_OFF);
 	lv_slider_set_range(slider_b5, -9, 9);
 	
 	lv_obj_t * slider_b5_label = lv_label_create(panel1);

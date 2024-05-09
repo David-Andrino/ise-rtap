@@ -71,23 +71,18 @@ static void Control_Thread(void* arg) {
     
     if (sd_config.bands[0] != 0 || sd_config.bands[1] != 0 || sd_config.bands[2] != 0
         || sd_config.bands[3] != 0 || sd_config.bands[4] != 0 || sd_config.volume != 10) {
-        lcd_out_msg_t lcd_out;
-        lcd_out.payload = MSG_OUT_BANDS;
+
         msg.type = MSG_LCD;
         msg.lcd_msg.type = LCD_BANDS;
         for (int i = 0; i < 5; i++) {
-            msg.lcd_msg.payload = sd_config.bands[i];
-            lcd_out.payload     = sd_config.bands[i];
-            osMessageQueuePut(lcdQueue, &lcd_out, NULL, 0);
+            msg.lcd_msg.payload = (i << 8) | (sd_config.bands[i] & 0xFF);
             osMessageQueuePut(ctrl_in_queue, &msg, NULL, 0);
+            osDelay(1);
         }
         
         msg.lcd_msg.type = LCD_VOL;
         msg.lcd_msg.payload = sd_config.volume;
         osMessageQueuePut(ctrl_in_queue, &msg, NULL, 0);
-        
-        lcd_out.type = LCD_OUT_VOL;
-        osMessageQueuePut(lcdQueue, &lcd_out, NULL, 0);
     }
     // Encender MP3
     mp3msg = MP3_WAKE_UP;

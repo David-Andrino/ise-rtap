@@ -26,6 +26,8 @@ static osMutexId_t mut;
 
 extern lv_display_t * disp;
 
+int8_t band_amplitudes[5];
+
 RTC_HandleTypeDef hrtc;
 
 osMessageQueueId_t lcdQueue;
@@ -78,10 +80,11 @@ void EnterStandbyMode(void){
 	HAL_PWR_EnterSTANDBYMode();
 }
 
-int Init_Threads_LCD (char songs[][30], int song_cnt) {
+int Init_Threads_LCD (char songs[][30], int song_cnt, int8_t *bands) {
     
     cnt_canciones = song_cnt;
     lista_canciones = (char*)songs;
+    for (int i = 0; i < 5; i++) band_amplitudes[i] = bands[i];
  
 	osThreadAttr_t att_task = {
 		.name = "LVGL Tasks",

@@ -22,6 +22,11 @@ extern osMessageQueueId_t lcdQueue;
 extern char* lista_canciones;
 
 /**
+ * @brief Amplitud inicial de las bandas
+ */
+extern int8_t band_amplitudes[5];
+
+/**
  * @brief Numero de canciones
  */
 extern int cnt_canciones;
@@ -43,7 +48,7 @@ typedef struct {
     uint16_t payload;
 } lcd_out_msg_t;
 
-int Init_Threads_LCD (char songs[][30], int song_cnt);
+int Init_Threads_LCD (char songs[][30], int song_cnt, int8_t *bands);
 void get_cadena(char *buf, float freq);
 void EnterStandbyMode(void);
 #endif
