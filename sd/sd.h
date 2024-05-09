@@ -9,7 +9,9 @@ typedef struct {
 } sd_config_t;
 
 int Init_SD();  																		/**< Inicializa la tarjeta sd */
-int read_file  (char *file, char *buf); 	   				/**< Lee un fichero y guarda el contenido en un buffer */
-int write_file (char *file, char *buf, int size);		/**< Escribe en un fichero el contenido de un buffer de un tamaño especifico */
-int append_file(char *file, char *buf, int size);		/**< Añade a un fichero el contenido de un buffer de un tamaño especifico */
+
+int SD_read_songs(char *file, char songs[][30]);
+int SD_read_config(sd_config_t* config);
+int SD_write_config(sd_config_t* config);
+
 #endif

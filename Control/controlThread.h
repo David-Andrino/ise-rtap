@@ -19,6 +19,7 @@
 #include <stdint.h>
 
 #include "../main.h"
+#include "../SD/sd.h"
 
 /**
  * @brief Cola de mensajes de entrada al módulo
@@ -30,7 +31,7 @@ extern osMessageQueueId_t ctrl_in_queue;
  *
  * @return 0 si se ha realizado correctamente. Otro valor si no.
  */
-int Init_Control(void);
+int Init_Control(sd_config_t* initial_config);
 
 // ==================================== MSG TYPES ======================================
 /**

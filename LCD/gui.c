@@ -1202,8 +1202,8 @@ static void crear_panel_snaps_mp3 (lv_obj_t * container){
 	
 	lv_obj_t * list_canciones = lv_list_create(container);
 	
-	for (int i = 0; i < data.num_canciones; i ++){
-		lv_obj_t * cancion = lv_list_add_btn(list_canciones, LV_SYMBOL_AUDIO, data.songs[i]);
+	for (int i = 0; i < cnt_canciones; i ++){
+		lv_obj_t * cancion = lv_list_add_btn(list_canciones, LV_SYMBOL_AUDIO, &lista_canciones[SONG_NAME_LENGTH * i]);
 		lv_obj_add_event_cb(cancion, mp3_list_cb, LV_EVENT_CLICKED, NULL);
 		lv_obj_add_style(cancion, &style_btn, 0);
 	}

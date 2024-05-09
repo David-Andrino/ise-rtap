@@ -81,9 +81,13 @@ static void MPU_Config(void);
 static void SystemClock_Config(void);
 static void Error_Handler(void);
 static void CPU_CACHE_Enable(void);
+static char songNames[25][30];
+static int  songCount = 0;
 
 /* Private functions ---------------------------------------------------------*/
 
+
+#include "SD/sd.h"
 /**
  * @brief  Main program
  * @param  None
@@ -117,6 +121,12 @@ int main(void) {
     /* Add your application code here
      */
 
+    Init_SD();
+    songCount = SD_read_songs("RTAP/Songs.txt", songNames);
+    
+    sd_config_t initial_config;
+    SD_read_config(&initial_config);
+
 #ifdef RTE_CMSIS_RTOS2
     /* Initialize CMSIS-RTOS2 */
     osKernelInitialize();
@@ -124,18 +134,18 @@ int main(void) {
     /* Create thread functions that start executing,
     Example: */
 		extern void Init_Thread_SD();
-		Init_Thread_SD();
+		// Init_Thread_SD();
 		
-		extern int RTC_thread_init(), Init_Web(), Init_I2C(), DSP_Init();
+		extern int RTC_thread_init(), Init_Web(char lista_canciones[][30], int cnt_canciones), Init_I2C(), DSP_Init();
 		Init_I2C();
 		RTC_thread_init();
 		DSP_Init();
-		Init_Web();
+		Init_Web(songNames, songCount);
 		
-		extern int Init_Control();
-		Init_Control();
-		extern int Init_Threads_LCD();
-		Init_Threads_LCD();
+		extern int Init_Control(sd_config_t* initial_config);
+		Init_Control(&initial_config);
+		extern int Init_Threads_LCD(char lista_canciones[][30], int cnt_canciones);
+		Init_Threads_LCD(songNames, songCount);
 		extern int Init_MP3();
 		Init_MP3();
 		extern int Init_Radio();
