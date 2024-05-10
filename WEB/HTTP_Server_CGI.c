@@ -34,7 +34,10 @@ typedef struct {
 } MY_BUF;
 #define MYBUF(p)        ((MY_BUF *)p)
 
-web_state_t web_state = {0};
+web_state_t web_state = {
+	.entrada = WEB_MP3,
+	.salida = WEB_AURICULARES
+};
 
 static void sendToQueue(web_msg_type_t type, uint16_t payload);
 static void searchSong(char* name);
