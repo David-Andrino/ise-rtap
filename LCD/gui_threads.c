@@ -89,13 +89,13 @@ int Init_Threads_LCD (char songs[][30], int song_cnt, int8_t *bands) {
 	osThreadAttr_t att_task = {
 		.name = "LVGL Tasks",
 		.stack_size = 12400,  // Subir a 12400 si falla
-		.priority = osPriorityHigh
+		// .priority = osPriorityHigh
 	};
 	
 	osThreadAttr_t att_time = {
 		.name = "LVGL Times",
 		.stack_size = 12400,
-		.priority = osPriorityHigh
+		// .priority = osPriorityHigh
 	};
 	
 	osMutexAttr_t att_mut = {
@@ -104,6 +104,11 @@ int Init_Threads_LCD (char songs[][30], int song_cnt, int8_t *bands) {
 	};
 	
 	mut = osMutexNew(&att_mut);
+	
+		lv_init();
+	
+	tft_init();
+	touchpad_init();
 	
 //	lcdQueue = osMessageQueueNew(128, sizeof(lcd_msg_t), NULL);
 	lcdQueue = osMessageQueueNew(128, sizeof(lcd_out_msg_t), NULL);
@@ -138,10 +143,10 @@ void Thread_time(void *arg){
 }
 
 void Thread_tasks (void *argument) {
-	lv_init();
-	
-	tft_init();
-	touchpad_init();	
+//	lv_init();
+//	
+//	tft_init();
+//	touchpad_init();	
 	
 	lv_gui();
 	
@@ -152,7 +157,7 @@ void Thread_tasks (void *argument) {
 		osMutexAcquire(mut, osWaitForever);
 		ms = lv_task_handler(); // devuelve el tiempo que necesita hasta la proxima llamada
 		osMutexRelease(mut);
-        osDelay(ms);
+    osDelay((ms <= 15) ? 15 : ms);
   }
 }
 

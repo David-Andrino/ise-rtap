@@ -20,7 +20,8 @@ static void fullBufferCb(void);
 osMessageQueueId_t dspQueue;
 
 int DSP_Init(void) {
-    dsp_tid = osThreadNew((osThreadFunc_t)DSP_Thread, NULL, NULL);
+		osThreadAttr_t attr = { .priority = osPriorityHigh };
+    dsp_tid = osThreadNew((osThreadFunc_t)DSP_Thread, NULL, &attr);
     if (dsp_tid == NULL) {
         return -1;
     }
