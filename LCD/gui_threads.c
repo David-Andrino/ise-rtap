@@ -79,19 +79,19 @@ int Init_Threads_LCD (void) {
  
 	osThreadAttr_t att_task = {
 		.name = "LVGL Tasks",
-		.stack_size = 7400,  // Subir a 12400 si falla
+		.stack_size = 12400,  // Subir a 12400 si falla
 		.priority = osPriorityHigh
 	};
 	
 	osThreadAttr_t att_time = {
 		.name = "LVGL Times",
-//		.stack_size = 12400,
+		.stack_size = 12400,
 		.priority = osPriorityHigh
 	};
 	
 	osMutexAttr_t att_mut = {
 		.name = "LVGL Mutex",
-//		.cb_size = 150000
+		.cb_size = 150000
 	};
 	
 	mut = osMutexNew(&att_mut);
