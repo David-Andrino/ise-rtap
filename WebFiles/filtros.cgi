@@ -28,35 +28,35 @@ t                   <form action="filtros.cgi" method="post">
 t                     <div>
 t                     <input type="range" id="eq1" name="eq1" min="-2" max="2"
 c f 1                          step="1" value="%d" onchange="submit();">
-t                         <label class="slider-label" for="eq1">20Hz</label>
+t                         <label class="slider-label" for="eq1">50Hz</label>
 t                     </div>
 t                   </form>
 t                   <form action="filtros.cgi" method="post">
 t                     <div>
 t                       <input type="range" id="eq2" name="eq2" min="-9" max="9"
 c f 2                       step="1" value="%d" onchange="submit();">
-t                        <label class="slider-label" for="eq2">110Hz</label>
+t                        <label class="slider-label" for="eq2">200Hz</label>
 t                     </div>
 t                   </form>
 t                   <form action="filtros.cgi" method="post">
 t                     <div>
 t                        <input type="range" id="eq3" name="eq3" min="-9" max="9"
 c f 3                       value="%d" onchange="submit();">
-t                         <label class="slider-label" for="eq3">630Hz</label>
+t                         <label class="slider-label" for="eq3">1kHz</label>
 t                     </div>
 t                   </form>
 t                   <form action="filtros.cgi" method="post">
 t                     <div>
 t                       <input type="range" id="eq4" name="eq4" min="-9" max="9"
 c f 4                        value="%d" onchange="submit();">
-t                         <label class="slider-label" for="eq4">3.5kHz</label>
+t                         <label class="slider-label" for="eq4">5kHz</label>
 t                     </div>
 t                   </form>
 t                   <form action="filtros.cgi" method="post">
 t                     <div>
 t                       <input type="range" id="eq5" name="eq5" min="-9" max="9"
 c f 5                       value="%d" onchange="submit();">
-t                         <label class="slider-label" for="eq5">20kHz</label>
+t                         <label class="slider-label" for="eq5">10kHz</label>
 t                     </div>
 t                   </form>
 t                 </div>

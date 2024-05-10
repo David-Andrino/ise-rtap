@@ -33,6 +33,7 @@
 #include "MP3/mp3.h"
 #include "Radio/radio.h"
 #include "SD/sd.h"
+#include "NFC/nfc.h"
 
 #ifdef RTE_CMSIS_RTOS2_RTX5
 /**
@@ -128,7 +129,6 @@ int main(void) {
 
     /* Add your application code here
      */
-
     Init_SD();
     songCount = SD_read_songs("RTAP/Songs.txt", songNames);
     
@@ -153,7 +153,8 @@ int main(void) {
     st |= Init_Threads_LCD(songNames, songCount, initial_config.bands);
     st |= Init_MP3();
     st |= Init_Radio();
-    
+    st |= Init_NFC();
+		
     if (st != 0) {
         Error_Handler();
     }
