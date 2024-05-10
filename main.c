@@ -22,6 +22,17 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "Board_LED.h"
+
+#include "i2c/i2c.h"
+#include "rtc/rtcThread.h"
+#include "dsp/dspThread.h"
+#include "WEB/ThreadWeb.h"
+#include "Control/controlThread.h"
+#include "LCD/gui_threads.h"
+#include "MP3/mp3.h"
+#include "Radio/radio.h"
+#include "SD/sd.h"
 
 #ifdef RTE_CMSIS_RTOS2_RTX5
 /**
@@ -81,9 +92,10 @@ static void MPU_Config(void);
 static void SystemClock_Config(void);
 static void Error_Handler(void);
 static void CPU_CACHE_Enable(void);
+static char songNames[25][30];
+static int  songCount = 0;
 
 /* Private functions ---------------------------------------------------------*/
-
 /**
  * @brief  Main program
  * @param  None
@@ -117,29 +129,34 @@ int main(void) {
     /* Add your application code here
      */
 
+    Init_SD();
+    songCount = SD_read_songs("RTAP/Songs.txt", songNames);
+    
+    sd_config_t initial_config;
+    SD_read_config(&initial_config);
+
 #ifdef RTE_CMSIS_RTOS2
     /* Initialize CMSIS-RTOS2 */
     osKernelInitialize();
 
     /* Create thread functions that start executing,
     Example: */
-		extern void Init_Thread_SD();
-		Init_Thread_SD();
-		
-		extern int RTC_thread_init(), Init_Web(), Init_I2C(), DSP_Init();
-		Init_I2C();
-		RTC_thread_init();
-		DSP_Init();
-		Init_Web();
-		
-		extern int Init_Control();
-		Init_Control();
-		extern int Init_Threads_LCD();
-		Init_Threads_LCD();
-		extern int Init_MP3();
-		Init_MP3();
-		extern int Init_Radio();
-		Init_Radio();
+    
+
+    int st = 0;
+    st |= Init_I2C();
+    st |= RTC_thread_init();
+    st |= DSP_Init();
+    st |= Init_Web(songNames, songCount);
+    
+    st |= Init_Control(&initial_config);
+    st |= Init_Threads_LCD(songNames, songCount, initial_config.bands);
+    st |= Init_MP3();
+    st |= Init_Radio();
+    
+    if (st != 0) {
+        Error_Handler();
+    }
     /* Start thread execution */
     osKernelStart();
 #endif
@@ -222,7 +239,12 @@ static void SystemClock_Config(void) {
  */
 static void Error_Handler(void) {
     /* User may add here some code to deal with this error */
+    LED_Initialize();
+    int cnt = 0x01;
     while (1) {
+        LED_SetOut(cnt);
+        cnt = ~cnt;
+        HAL_Delay(500);
     }
 }
 

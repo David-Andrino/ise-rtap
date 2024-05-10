@@ -7,11 +7,29 @@
 #include "tft.h"
 #include "cmsis_os2.h"
 #include "../Control/controlThread.h"
+
+#define SONG_NAME_LENGTH 30
+#define MAX_SONG_COUNT 25
+
 /**
  * @brief Enumeración de mensajes de salida al LCD
  */
-
 extern osMessageQueueId_t lcdQueue;
+
+/**
+ * @brief Lista de canciones
+ */
+extern char* lista_canciones;
+
+/**
+ * @brief Amplitud inicial de las bandas
+ */
+extern int8_t band_amplitudes[5];
+
+/**
+ * @brief Numero de canciones
+ */
+extern int cnt_canciones;
 
 typedef enum {
     LCD_OUT_VOL,            /*< Cambio de volumen. Contenido es el volumen [0, 10]*/
@@ -30,7 +48,7 @@ typedef struct {
     uint16_t payload;
 } lcd_out_msg_t;
 
-int Init_Threads_LCD (void);
+int Init_Threads_LCD (char songs[][30], int song_cnt, int8_t *bands);
 void get_cadena(char *buf, float freq);
 void EnterStandbyMode(void);
 #endif

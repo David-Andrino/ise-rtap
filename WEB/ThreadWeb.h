@@ -17,6 +17,18 @@
 #include "../main.h"
 #include "cmsis_os2.h"
 
+#define SONG_NAME_LENGTH 30
+
+/**
+ * @brief Lista de canciones
+ */
+extern char* web_lista_canciones;
+
+/**
+ * @brief Numero de canciones
+ */
+extern int web_cnt_canciones;
+
 /**
  * Inicializa el modulo del la pagina web
  *
@@ -24,7 +36,7 @@
  *
  * @return int 0 si se ha realizado correctamente. Otro valor si no.
  **/
-extern int Init_Web (void);
+extern int Init_Web (char lista_canciones[][SONG_NAME_LENGTH], int cnt_canciones);
 
 /**
  * @brief Cola de mensajes por la que la pagina web recibe los mensajes

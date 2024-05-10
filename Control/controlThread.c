@@ -9,6 +9,7 @@
 #include "../WEB/ThreadWeb.h"
 #include "../main.h"
 #include "controlConfig.h"
+#include "../SD/sd.h"
 
 #define QUEUE_SIZE 64
 
@@ -25,6 +26,7 @@ static web_out_msg_t webMsg;
 static uint8_t       mp3Playing = 0;
 static uint8_t       mp3Looping = 0;
 static uint32_t      exec1;  // Para el timer, ignorar
+static sd_config_t   sd_config = { .volume = 10 };
 
 static void Control_Thread(void* arg);
 static void Cons_Thread(void* arg);
@@ -39,7 +41,7 @@ static void ctrl_cons(uint16_t* msg);
 static void ctrl_lowPower(void);
 static void ctrl_saveConfig(void);
 
-int Init_Control(void) {
+int Init_Control(sd_config_t* initial_config) {
     ctrl_pins_init();
     ctrl_cons_init();
 
@@ -58,12 +60,31 @@ int Init_Control(void) {
     if (cons_tid == NULL) {
         return -1;
     }
+    
+    for (int i = 0; i < 5; i++) sd_config.bands[i] = initial_config->bands[i];
+    sd_config.volume = initial_config->volume;
 
     return 0;
 }
 
 static void Control_Thread(void* arg) {
+    msg_ctrl_t msg;
     
+    if (sd_config.bands[0] != 0 || sd_config.bands[1] != 0 || sd_config.bands[2] != 0
+        || sd_config.bands[3] != 0 || sd_config.bands[4] != 0 || sd_config.volume != 10) {
+
+        msg.type = MSG_LCD;
+        msg.lcd_msg.type = LCD_BANDS;
+        for (int i = 0; i < 5; i++) {
+            msg.lcd_msg.payload = (i << 8) | (sd_config.bands[i] & 0xFF);
+            osMessageQueuePut(ctrl_in_queue, &msg, NULL, 0);
+            osDelay(1);
+        }
+        
+        msg.lcd_msg.type = LCD_VOL;
+        msg.lcd_msg.payload = sd_config.volume;
+        osMessageQueuePut(ctrl_in_queue, &msg, NULL, 0);
+    }
     // Encender MP3
     mp3msg = MP3_WAKE_UP;
     osMessageQueuePut(MP3Queue, &mp3msg, NULL, osWaitForever);
@@ -76,15 +97,6 @@ static void Control_Thread(void* arg) {
     HAL_GPIO_WritePin(ENA_GPIO_PORT, ENA_GPIO_PIN, ENA_GPIO_ON);
     
     osTimerStart(cons_tim, 1000);
-
-    msg_ctrl_t msg;
-    
-    // TEST
-    msg.type = MSG_LCD;
-    msg.lcd_msg.type = LCD_RADIO_FREQ;
-    msg.lcd_msg.payload = 890;
-    osMessageQueuePut(ctrl_in_queue, &msg, NULL, osWaitForever);
-    // END TEST
     
     while (1) {
         osMessageQueueGet(ctrl_in_queue, &msg, NULL, osWaitForever);
@@ -398,7 +410,6 @@ static void ctrl_pins_init(void) {
     HAL_GPIO_WritePin(OUTPUT_SELECT_GPIO_PORT, OUTPUT_SELECT_GPIO_PIN, SELECT_OUTPUT_EAR);
 }
 
-// TODO: Low power mode
 static void ctrl_lowPower(void) {
     // Apagar MP3
     mp3msg = MP3_SLEEP_MODE;
@@ -411,12 +422,21 @@ static void ctrl_lowPower(void) {
     // Apagar amplificador de audio
     HAL_GPIO_WritePin(ENA_GPIO_PORT, ENA_GPIO_PIN, ENA_GPIO_OFF);
     
-    while (1) {}
+    osDelay(10); // Dar tiempo a que MP3 y RADIO acaben
+    
+    EnterStandbyMode();
 }
 
-// TODO: Save to SD
 static void ctrl_saveConfig() {
-    while (1) {}
+    sd_config_t config = {
+        .volume = dspMsg.vol,
+        .bands[0] = dspMsg.bandGains[0],
+        .bands[1] = dspMsg.bandGains[1],
+        .bands[2] = dspMsg.bandGains[2],
+        .bands[3] = dspMsg.bandGains[3],
+        .bands[4] = dspMsg.bandGains[4],
+    };
+    volatile int tmp = SD_write_config(&config); // No funciona :(
 }
 
 static void ctrl_cons_init(void) {
@@ -459,8 +479,6 @@ static void Cons_Thread(void* arg) {
         osDelay(1000);
         HAL_ADC_Stop(&hconsadc);
         msg.cons_msg = HAL_ADC_GetValue(&hconsadc);
-//				msg.cons_msg = 500;
         osMessageQueuePut(ctrl_in_queue, &msg, NULL, osWaitForever);
-        
     }
 }
