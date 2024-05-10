@@ -23,6 +23,7 @@ static dspMsg_t      dspMsg = {.vol = 10, .bandGains = {0}};
 static lcd_out_msg_t lcdMsg;
 static web_out_msg_t webMsg;
 static uint8_t       mp3Playing = 0;
+static uint8_t       mp3Looping = 0;
 static uint32_t      exec1;  // Para el timer, ignorar
 
 static void Control_Thread(void* arg);
@@ -338,7 +339,8 @@ static void ctrl_WEB(web_msg_t* msg) {
             break;
 
         case WEB_LOOP:
-            mp3msg = MP3_START_CYCLE;
+            mp3Looping = !mp3Looping;
+            mp3msg = (mp3Looping == 1 ? MP3_START_CYCLE : MP3_STOP_CYCLE);
             osMessageQueuePut(MP3Queue, &mp3msg, NULL, 0);
             break;
     }
