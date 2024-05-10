@@ -13,6 +13,9 @@
 
 #define INIT 1
 
+char* lista_canciones;
+int cnt_canciones;
+
 osThreadId_t tid_Thread_tasks, tid_Thread_time, tid_Thread_stuff;
 
 void Thread_tasks (void *argument);                   // thread function
@@ -22,6 +25,8 @@ void Thread_stuff (void *args);
 static osMutexId_t mut;
 
 extern lv_display_t * disp;
+
+int8_t band_amplitudes[5];
 
 RTC_HandleTypeDef hrtc;
 
@@ -55,9 +60,9 @@ void EnterStandbyMode(void){
 	if (__HAL_PWR_GET_FLAG(PWR_FLAG_SB) != RESET){
 	  __HAL_PWR_CLEAR_FLAG(PWR_FLAG_SB);          // clear the flag
 		__HAL_PWR_CLEAR_WAKEUP_FLAG(PWR_CR2_CWUPF1);
-  }
-  __HAL_PWR_CLEAR_FLAG(PWR_FLAG_WU);
-  __HAL_RTC_WAKEUPTIMER_CLEAR_FLAG(&hrtc, RTC_FLAG_WUTF);
+    }
+    __HAL_PWR_CLEAR_FLAG(PWR_FLAG_WU);
+    __HAL_RTC_WAKEUPTIMER_CLEAR_FLAG(&hrtc, RTC_FLAG_WUTF);
 	
 	__HAL_RCC_PWR_CLK_ENABLE();
 	
@@ -75,7 +80,11 @@ void EnterStandbyMode(void){
 	HAL_PWR_EnterSTANDBYMode();
 }
 
-int Init_Threads_LCD (void) {
+int Init_Threads_LCD (char songs[][30], int song_cnt, int8_t *bands) {
+    
+    cnt_canciones = song_cnt;
+    lista_canciones = (char*)songs;
+    for (int i = 0; i < 5; i++) band_amplitudes[i] = bands[i];
  
 	osThreadAttr_t att_task = {
 		.name = "LVGL Tasks",
@@ -99,7 +108,7 @@ int Init_Threads_LCD (void) {
 //	lcdQueue = osMessageQueueNew(128, sizeof(lcd_msg_t), NULL);
 	lcdQueue = osMessageQueueNew(128, sizeof(lcd_out_msg_t), NULL);
 	
-  tid_Thread_tasks = osThreadNew (Thread_tasks, NULL, &att_task);
+    tid_Thread_tasks = osThreadNew (Thread_tasks, NULL, &att_task);
 	tid_Thread_time  = osThreadNew (Thread_time,  NULL, &att_time);
 	tid_Thread_stuff = osThreadNew (Thread_stuff, NULL, NULL);
 	
@@ -111,10 +120,10 @@ int Init_Threads_LCD (void) {
 }
 void Thread_stuff (void *args){
 	lcd_out_msg_t msg_main_to_lcd = {};
-  while (1) {
+    while (1) {
 		osMessageQueueGet(lcdQueue, &msg_main_to_lcd, NULL, osWaitForever);
 		lv_async_call(async_cb, &msg_main_to_lcd);
-  }
+    }
 }
  
 void Thread_time(void *arg){
@@ -123,7 +132,7 @@ void Thread_time(void *arg){
 	while (1) {
 		osMutexAcquire(mut, osWaitForever);
 		lv_tick_inc(3);
-    osMutexRelease(mut);
+        osMutexRelease(mut);
 		osDelay(3);
   }
 }
@@ -143,7 +152,7 @@ void Thread_tasks (void *argument) {
 		osMutexAcquire(mut, osWaitForever);
 		ms = lv_task_handler(); // devuelve el tiempo que necesita hasta la proxima llamada
 		osMutexRelease(mut);
-    osDelay(ms);
+        osDelay(ms);
   }
 }
 

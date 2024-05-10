@@ -34,16 +34,6 @@ typedef struct {
 } MY_BUF;
 #define MYBUF(p)        ((MY_BUF *)p)
 
-
-char canciones [25][30] = {
-	"Cancion 1",
-	"Cancion 2",
-	"Cancion 3",
-	"Cancion 4",
-	"Cancion 5"
-};
-uint8_t song_cnt = 5;
-
 web_state_t web_state = {0};
 
 static void sendToQueue(web_msg_type_t type, uint16_t payload);
@@ -271,8 +261,8 @@ uint32_t netCGI_Script (const char *env, char *buf, uint32_t buflen, uint32_t *p
 				break;
 				default:
 				// Case for songs	
-					if (env[2] - 'a' < song_cnt) {
-						len = sprintf (buf, &env[4], canciones[env[2] - 'a']);
+					if (env[2] - 'a' < web_cnt_canciones) {
+						len = sprintf (buf, &env[4], &web_lista_canciones[SONG_NAME_LENGTH * (env[2] - 'a')]);
 					} else {
 						len = 0;
 					}

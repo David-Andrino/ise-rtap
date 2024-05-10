@@ -25,11 +25,11 @@ enum {BACKSPACE = 0x08,
       DEL       = 0x7F };
 
 /* Funciones privadas */
-static char *get_entry (char *cp, char **pNext);
-static int write_append_file (char *file, char *buf, bool append, int size);
-uint8_t Read_Songs();
-uint8_t Write_Conf();
-__NO_RETURN void thread_sd (void *arg);
+static char *get_entry         (char *cp, char **pNext);
+static int   write_append_file (char *file, char *buf, bool append, int size);
+uint8_t      Read_Songs();
+uint8_t      Write_Conf();
+// __NO_RETURN void thread_sd (void *arg);
 
 
 /**
@@ -60,12 +60,7 @@ int Init_SD(){
 }
 
 
-/**
-  *	@brief  Lee un fichero
-	* @param  Fichero que se quiere leer
-  * @param  Buffer donde guardar la salida
-	* @retval 0 si ok, -1 si error
-	*/
+
 int read_file (char *file, char *buf) {
   char *fname,*next;
   FILE *f;
@@ -74,13 +69,13 @@ int read_file (char *file, char *buf) {
   fname = get_entry (file, &next);
   if (fname == NULL) {
     printf ("\nFilename missing.\n");
-    return -1;
+    return 0;
   }
   
   f = fopen (fname,"r");                /* open the file for reading          */
   if (f == NULL) {
     printf ("\nFile not found!\n");
-    return -1;
+    return 0;
   }
 	
 	int i = 0;
@@ -90,7 +85,7 @@ int read_file (char *file, char *buf) {
   fclose (f);                           /* close the input file when done     */
   printf ("\nFile closed.\n");
 	
-	return 0;
+	return i;
 }
 
 /**
@@ -135,7 +130,7 @@ static int write_append_file (char *file, char *buf, bool append, int size) {
 		fputc(buf[i++], f);
 	}
   fclose (f);                         /* close the output file                */
-  return 0;
+  return ferror(f);
 }
 /*-----------------------------------------------------------------------------
  *        Process input string for long or short name entry
@@ -168,18 +163,95 @@ static char *get_entry (char *cp, char **pNext) {
 }
 
 
-void Init_Thread_SD(){
-	osThreadId_t sd = osThreadNew(thread_sd, NULL, NULL);
+//void Init_Thread_SD(){
+//	osThreadId_t sd = osThreadNew(thread_sd, NULL, NULL);
+//}
+//__NO_RETURN void thread_sd (void *arg) {
+//	char canciones[500] = "", contenido_test_1[] = "test\n";
+//	int tam_test = sizeof(contenido_test_1)/sizeof(char) - 1;
+//  
+//	Init_SD ();
+//  read_file("RTAP/Songs.txt", canciones);
+//	write_file("TEST.o", contenido_test_1, tam_test);
+//	append_file("TEST.o", canciones, 500);
+//  while (1) {
+//    osThreadYield();
+//  }
+//}
+
+int SD_read_songs(char *file, char songs[][30]) {
+    char SD_Data[25 * 30] = { 0 };
+    int bytesRead = 0;
+    if ((bytesRead = read_file("RTAP/songs.txt", SD_Data)) <= 0) {
+        return -1;
+    }
+    
+    uint8_t  numSongs   = 0;
+	int i, j = 0;
+    
+    for(i = 0; i < bytesRead; i++){
+		if(SD_Data[i] == '\n'){
+			while(j<30){
+				songs[numSongs][j] = '\0';
+				j++;
+			}
+			if(numSongs == 24){
+				break;
+			}
+			numSongs++;
+			j = 0;
+		} else if(SD_Data[i] != '\r') {
+		  songs[numSongs][j] = SD_Data[i];
+			j++;
+		}	
+        
+	}
+    
+    return numSongs+1;
 }
-__NO_RETURN void thread_sd (void *arg) {
-	char canciones[500] = "", contenido_test_1[] = "Habemus sd\n";
-	int tam_test = sizeof(contenido_test_1)/sizeof(char) - 1;
-  
-	Init_SD ();
-  read_file("RTAP/Songs.txt", canciones);
-	write_file("TEST.o", contenido_test_1, tam_test);
-	append_file("TEST.o", canciones, 500);
-  while (1) {
-    osThreadYield();
-  }
+
+
+int SD_read_config(sd_config_t* config) {
+    char tmpBuf[18];
+	
+	if(read_file("RTAP/Config.txt", tmpBuf) == 0){
+		config->bands[0] = 0;
+		config->bands[1] = 0;
+		config->bands[2] = 0;
+		config->bands[3] = 0;
+		config->bands[4] = 0;
+	
+		config->volume = 10;
+        return -1;
+	}
+	
+	sscanf(tmpBuf, "%2hhd %2hhd %2hhd %2hhd %2hhd %2hhu", &config->bands[0], &config->bands[1], &config->bands[2], &config->bands[3], &config->bands[4], &config->volume);
+	
+	for(int i = 0; i < 5; i++){
+		if(config->bands[i] < -9){
+			config->bands[i] = -9;
+		}
+	
+		if(config->bands[i] > 9){
+			config->bands[i] = 9;
+		}
+	}
+		
+	if(config->volume < 0){
+		config->volume = 0;
+	}
+	
+	if(config->volume > 10){
+		config->volume = 10;
+	}
+
+	return 0;
+}
+
+int SD_write_config(sd_config_t* config) {
+	char tmpBuf[18];
+	
+	snprintf((char*)tmpBuf, 18, "%2hhd %2hhd %2hhd %2hhd %2hhd %2hhu", config->bands[0], config->bands[1], config->bands[2], config->bands[3], config->bands[4], config->volume);
+	
+	return write_file("RTAP/Config.txt", tmpBuf, 18);
 }
