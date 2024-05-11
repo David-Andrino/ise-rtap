@@ -1,0 +1,56 @@
+Se encarga al inicio de la aplicación, de acceder a la tarjeta uSD para obtener la lista de canciones y la configuración guardada. Cuando se le indica, se encarga de guardar la configuración actual para poder iniciarse en el próximo encendido con la misma configuración. 
+
+Para su desarrollo, hemos utilizado el driver "SD" de la placa **STM32F769I-Disco**, la librería FatFs [1][2] y una tarjeta micro-SD.
+
+
+Contenido uSD (En la carpeta RTAP):
+- **songs.txt**: Lista de canciones. Máximo puede haber 25 canciones, de 30 caracteres cada una (29 en Windows debido al salto de línea). 
+- **config.txt**: Configuración del sistema. Valor de las 5 bandas de ecualización y del volumen.
+
+
+Estructura:
+- FatFs:
+	- **ff.c**, **ff.h**
+	- **ff_gen_drv.c**, **ff_gen_drv.h**
+	- **diskio.c**, **diskio.h**
+	- **sd_diskio.c**, **sd_diskio.h**
+- uSD:
+	- **sd.c**, **sd.h**
+	- **fatfs_storage.c**, **fatfs_storage.h**
+
+
+FatFs:
+Es un módulo genérico de sistena de archivos FAT/exFAT para pequeños sistemas embebidos. Es independiente de la plataforma en la que se utilice. Está compuesto por las librerías mencionadas en la estructura.
+
+FatFs se utiliza como abstracción sobre el sistema de ficheros Fat. En nuestro nivel de aplicación solo necesitamos llamar a las funciones de fichero **ff**. Sin embargo, tenemos que crear una clase que permita unir las librerias FatFs (mediante **diskio.h**) con la implementación hardware de la uSD. Nosotros utilizamos para ello la clase **sd_diskio**, mediante el Board Support Package (BSP) de la **STM32F769I-Disco**.
+
+Figura 1: Configuración del sistema implementando FatFs [FatFs_1.png]
+
+
+**sd.c** / **sd.h**: 
+Se encarga de inicializar la tarjeta, obtener la lista de canciones y la configuración guardada, y de guardar la configuración actual. Esto lo hace utilizando las funciones definidas en **fatfs_storage.h**. Además, se encarga de revisar que los valores son correctos y están en el rango adecuado. Si no están dentro del rango, los modifica al valor más cercano dentro del rango. También se encarga de adaptar todo lo obtenido a los tipos de variables correctos para la integración del proyecto.
+
+En primer lugar, se inicializa la uSD con la función pública **Init_SD**. Basicamente se monta la tarjeta y se obtienen el directorio, las canciones (**Get_Songs**) y la configuración guardada (**Get_Config**). Toda la información se guarda en punteros a variables del control. Después, cuando se quiere guardar la configuración, se llama a la función pública **Save_Config**.
+
+
+**fatfs_storage.c** / **fatfs_storage.h**:
+Se encarga de las operaciones de lectura y escritura de los archivos. Esto lo lleva a cabo mediante llamadas a las funciones de las librerías de FatFs. Tiene tres funciones diferentes:
+
+- Storage_GetDirectoryBitmapFiles: Se monta la tarjeta con f_mount y se obtiene el directorio de ficheros. El directorio se obtiene llamando a la función de FatFs **find_first** y después con **find_next** mientras existan más ficheros. Al final, se cierra el directorio con **closedir**. (**f_mount** -> **f_findfirst** -> **f_findnext** -> **f_closedir**).
+
+- Storage_OpenReadFile: Se lee un archivo. Primero se abre el archivo, después se lee y finalmente se cierra. (**f_open** -> **f_read** -> **f_close**).
+
+- Storage_OpenWriteFile: Se escribe en un archivo. Primero se abre el archivo, después se desplaza el puntero de escritura al principio del fichero .txt y se escribe en él. Finalmente se cierra. (**f_open** -> **f_lseek** -> **f_write** -> **f_close**).
+
+
+Pruebas:
+Para probar este módulo, hemos creado un hilo, el cual inicialice la uSD, obteniendo la lista de canciones y la configuración guardada, y después, mande a guardar una configuración aleatoria. A todo lo anterior le hemos añadido el uso del debugger y revisar la tarjeta uSD directamente en el ordenador.
+
+
+Problemas:
+A la hora de realizar la integración con el resto del proyecto, no funcionaba. La uSD llegaba a montarse de manera correcta, pero a la hora de buscar los ficheros, devolvía un RXOVER.
+
+
+REFERENCIAS:
+[1] FatFs Module Aplication Notes
+[2] FatFs - Generic FAT Filesystem Module
