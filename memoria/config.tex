@@ -1,3 +1,5 @@
+% chktex-file 1
+
 \usepackage{graphicx} 
 \usepackage[utf8]{inputenc}
 \usepackage[a4paper, margin=1in]{geometry}
@@ -22,6 +24,11 @@
 % \usepackage{tikz}
 \usepackage{epigraph}
 
+\addto\captionsspanish{%
+  \renewcommand\appendixname{Anexo}
+  \renewcommand\appendixpagename{Anexos}
+  \renewcommand\appendixautorefname{Anexo}
+}
 % \renewcommand{\arraystretch}{1.2} 
 \newcommand{\isc}{$I^2C$}
 \addto\extrasspanish{%
@@ -33,6 +40,9 @@
 
 % Bibliografia
 \addbibresource{ISE.bib}
+
+\setcounter{biburllcpenalty}{7000}
+\setcounter{biburlucpenalty}{8000}
 
 \makeatletter
 \def\thebibliography#1{\section{\refname\@mkboth

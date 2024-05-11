@@ -27,11 +27,22 @@
 \include{files/5-Presupuesto}
 \include{files/6-EquipoTrabajo}
 \include{files/7-Acronimos}
+
 \nocite{*}
 \printbibliography[title={Bibliografía}, heading=bibnumbered]
 
 \begin{appendices}
+
+% Anexo 1. Webench Report
+\includepdf[pages=1,offset=0 0,scale=0.8, pagecommand={\section{Webench Design Report}\label{anexo:webench-report}}]{./files/8-Anexos/WebenchDesignReport.pdf}
+\includepdf[pages=2-7,offset=0 0,scale=0.8, pagecommand={}]{./files/8-Anexos/WebenchDesignReport.pdf}
+
+% Anexo 2. Circuito alimentacion
+\includepdf[pages=1,offset=0 0,scale=0.8, pagecommand={\section{Circuito de alimentación}\label{anexo:circuito-alimentacion}}]{./files/8-Anexos/esquematicos.pdf}
+\includepdf[pages=2-3,offset=0 0,scale=0.8, pagecommand={}]{./files/8-Anexos/esquematicos.pdf}
+
 \end{appendices}
+
 
 
 \end{document}
