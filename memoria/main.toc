@@ -1,0 +1,21 @@
+\babel@toc {spanish}{}\relax 
+\contentsline {section}{\numberline {1}Introducción}{1}{section.1}%
+\contentsline {subsection}{\numberline {1.1}Especificaciones iniciales del sistema a diseñar y construir}{1}{subsection.1.1}%
+\contentsline {subsection}{\numberline {1.2}Especificaciones finales del sistema diseñado y construido}{1}{subsection.1.2}%
+\contentsline {section}{\numberline {2}Desarrollo de subsistemas}{2}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Subsistema de alimentación}{2}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Subsistema de audio}{2}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}Módulo de radio}{2}{subsection.2.3}%
+\contentsline {subsection}{\numberline {2.4}Módulo MP3}{2}{subsection.2.4}%
+\contentsline {subsection}{\numberline {2.5}Módulo NFC}{2}{subsection.2.5}%
+\contentsline {subsection}{\numberline {2.6}Entre Dos Tierras}{2}{subsection.2.6}%
+\contentsline {section}{\numberline {3}Software}{3}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Interfaz de usuario}{3}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Interfaz web}{3}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}Interfaz táctil}{3}{subsection.3.3}%
+\contentsline {section}{\numberline {4}Depuración y test}{4}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Pruebas software}{4}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Pruebas hardware}{4}{subsection.4.2}%
+\contentsline {section}{\numberline {5}Presupuesto final}{5}{section.5}%
+\contentsline {section}{\numberline {6}Equipo de trabajo}{6}{section.6}%
+\contentsline {section}{\numberline {7}Acrónimos utilizados}{7}{section.7}%
