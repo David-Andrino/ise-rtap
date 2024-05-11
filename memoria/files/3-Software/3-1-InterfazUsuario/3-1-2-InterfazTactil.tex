@@ -68,3 +68,7 @@ La pestaña correspondiente a los filtros muestra las opciones de ecualización 
     \item \textbf{Guardar config:} Es un pequeño panel con un único botón, para almacenar la configuración.
     \item \textbf{Configuración de audio:} Es parecido al panel de configuración rápida de la pestaña de inicio, manteniendo el estilo y todos los botones, excepto el de bajo consumo, que en este caso es reemplazado por un botón para restablecer el valor de los filtros. Pulsar el botón hace que se ejecuten 5 animaciones, una para cada slider, poniendo su valor a cero de forma suave.
 \end{itemize}
+
+\subsubsection{Consideraciones sobre LVGL}
+
+Después de haber repasado de forma general la interfaz del proyecto, se entiende que para representar un sistema tan complejo hace falta una cantidad considerable de memoria. En concreto, se asignan 81072 bytes de memoria a LVGL, y un stack de 7400 bytes al hilo que gestiona el funcionamiento de LVGL.
