@@ -366,6 +366,9 @@ INPUT files\2-Subsistemas\2-5-NFC.tex
 INPUT .\files\2-Subsistemas\2-6-Entre-Dos-Tierras.tex
 INPUT .\files\2-Subsistemas\2-6-Entre-Dos-Tierras.tex
 INPUT files\2-Subsistemas\2-6-Entre-Dos-Tierras.tex
+INPUT .\files\2-Subsistemas\2-7-RTC.tex
+INPUT .\files\2-Subsistemas\2-7-RTC.tex
+INPUT files\2-Subsistemas\2-7-RTC.tex
 INPUT .\files\3-Software\3-Software.tex
 INPUT .\files\3-Software\3-Software.tex
 OUTPUT files\3-Software\3-Software.aux
