@@ -1,4 +1,5 @@
 \subsubsection{Módulo de control}
+\label{subsubsec:modulo-control}
 
 El módulo de control es el encargado de orquestar la aplicación. Para incrementar el rendimiento, se ha decidido modelar con una arquitectura basada en eventos, por lo que el módulo se encuentra permanentemente esperando en una cola y sólamente reacciona cuando le llega un mensaje por ella, volviendo a esperar al finalizar la respuesta.
 
