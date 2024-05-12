@@ -32,11 +32,11 @@ static gui_data_t data = {
 	.songs[7] = "Cancion 7",
 	.songs[8] = "Cancion 8",
 	.songs[9] = "Cancion 197 mil millones",
-	.fcentral[0] = "20Hz",
-	.fcentral[1] = "110Hz",
-	.fcentral[2] = "630Hz",
-	.fcentral[3] = "3.5kHz",
-	.fcentral[4] = "15kHz",
+	.fcentral[0] = "50 Hz",
+	.fcentral[1] = "200 Hz",
+	.fcentral[2] = "1 kHz",
+	.fcentral[3] = "5 kHz",
+	.fcentral[4] = "10 kHz",
 };
 
 lv_obj_t * scale_consumo; 	// Tiene que ser global para modificarlo desde async_cb
