@@ -101,7 +101,7 @@ Se puede ver un diagrama de la solución que montamos en la \autoref{fig:2-2-amp
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.5\textwidth]{images/2/2-2/circuitoAmplificadorCascos.png}
+    \includegraphics[width=0.7\textwidth]{images/2/2-2/circuitoAmplificadorCascos.png}
     \caption{Circuito amplificador de auriculares}
     \label{fig:2-2-amp-cascos}
 \end{figure}
@@ -135,7 +135,32 @@ Al igual que los otros dos circuitos, se introducen los transistores en el lazo 
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.5\textwidth]{images/2/2-2/circuitoAmplificadorAltavoces.png}
+    \includegraphics[width=0.7\textwidth]{images/2/2-2/circuitoAmplificadorAltavoces.png}
     \caption{Circuito amplificador de altavoces}
-    \label{fig:label}
+    \label{fig:2-2-amp-altavoz}
+\end{figure}
+
+\subsubsection{Diseño de PCB}
+
+Todos estos sistemas se han integrado en una única PCB para intentar maximizar la integridad de la señal de audio, lo cual se consigue totalmente si se conecta el circuito sin tener en cuenta el \autoref{subsec:entre-dos-tierras}.
+
+Hemos utilizado conectores Jack hembra de 3.5 mm para las dos entradas de audio y la salida a los auriculares. Un problema de este tipo de conectores es que el número de anillos puede variar en función de si los auriculares tienen o no micrófono y si son mono o estéreo. Si se quiere utilizar unos auricules con micrófono con nuestro sistema, se deben dejar ligeramente extraidos del conector para que haga mejor contacto la banda de tierra y mejorar significativamente el sonido.
+
+La salida de altavoz se realiza a través de un terminal de dos tornillos para facilitar su conexión.
+
+Como ya hemos comentado anteriormente, el circuito de transistores cuenta con un condensador de estabilizacion que finalmente no hemos utilizado. 
+
+Además, hemos añadido la posibilidad de utilizar una red de Zobel, circuito que sirve para linealizar la respuesta en frecuencia de la inductancia intrínseca de los altavoces mediante un capacitor y una resistencia, pero finalmente no la hemos necesitado, por lo que tampoco está soldada.
+
+El circuito cuenta además con un potenciómetro que sirve para ajustar el offset de la tensión de la tierra virtual gracias a los terminales específicos del \texttt{OP07}.
+
+Hemos utilizado componentes SMT para los componentes pasivos y los conectores de audio y THT para los circuitos integrados, transistores y conectores de terminal.
+
+Se puede ver una imagen del circuito finalizado en la \autoref{fig:2-2-circuito-foto} y el esquemático completo en el \autoref{anexo:circuito-audio}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\textwidth]{images/2/2-2/circuito-foto.jpg}
+    \caption{Circuito de audio completo}
+    \label{fig:2-2-circuito-foto}
 \end{figure}
