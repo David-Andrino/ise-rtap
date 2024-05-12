@@ -26,7 +26,7 @@ Por tanto, el circuito generador de tierra virtual o divisor de rail queda como 
     \label{fig:2-2-tierra-virtual}
 \end{figure}
 
-\subsection{Habilitación del circuito}
+\subsubsection{Habilitación del circuito}
 
 Para eliminar el consumo parásito del circuito cuando el sistema entre en el modo bajo consumo, se ha implementado un subcircuito de habilitación el cual permite encender o apagar el resto de subsistema (aunque finalmente el consumo parásito es muy pequeño).
 
@@ -41,7 +41,7 @@ Por tanto, el circuito final es el que se ve en la \autoref{fig:2-2-circuito-hab
     \label{fig:2-2-circuito-habilitacion}
 \end{figure}
 
-\subsection{Multiplexación de audio}
+\subsubsection{Multiplexación de audio}
 
 Para la multiplexación de audio se va a utilizar un multiplexor integrado. Inicialmente tratamos de diseñar un circuito que multiplexara los caminos de audio mediante componentes discretos, encontrando la estructura de la Puerta de Transmisión \cite{TransmissionGate}, como la que se puede ver en la \autoref{fig:2-2-puerta-transmision}
 
@@ -62,7 +62,7 @@ Este multiplexor cuenta con tres canales en configuración \texttt{SPDT}, por lo
 
 Este multiplexor se utiliza para conectar las dos entradas de audio, que provienen de conectores Jack de audio de 3.5 mm a un GPIO que se conecta internamente a un ADC de la placa y para conectar otro GPIO que se conecta internamente a un DAC a las entradas de los dos caminos de amplificación de audio. 
 
-\subsection{Cambiador de nivel lógico}
+\subsubsection{Cambiador de nivel lógico}
 
 Un error que cometimos es no tener en cuenta la tensión de habilitación necesaria para conmutar un canal del multiplexor, por lo que los 3.3V de salida de un GPIO no son suficientes para cambiar el canal del multiplexor. Esto provoca que se esté siempre seleccionado el canal correspondiente al nivel bajo.
 
@@ -81,7 +81,7 @@ Se puede ver el diagrama de nuestra solución en la \autoref{fig:2-2-cambiador-n
 
 TODO: FOTO DEL CIRCUITO
 
-\subsection{Amplificador de audio para los auriculares}
+\subsubsection{Amplificador de audio para los auriculares}
 
 La salida del DAC de la placa es una señal entre 0 y 3.3 V con 12 bits de resolución. Por tanto, el audio que se genere tiene una componente continua que se debe eliminar. 
 
@@ -114,7 +114,7 @@ Experimentalmente probamos valores distintos determinando que el mejor balance e
 
 Otra cuestión a la que nos enfrentamos es la cantidad de canales. Inicialmente diseñamos el circuito para ofrecer un solo canal de audio y dirigirlo a ambos canales, pero se pierde bastante calidad por lo que decidimos dejarlo en audio por un solo canal. Si se quisiera obtener audio por ambos canales o incluso estéreo, se debería duplicar este circuito y colocar uno por canal.
 
-\subsection{Amplificador de altavoces}
+\subsubsection{Amplificador de altavoces}
 
 El circuito amplificador de altavoces cuenta con el mismo paso bajo que el amplificador de los auriculares, pero se utiliza otra resistencia para aportar ganancia al circuito. Además, ya que se introduce la rama a tierra se añaden un par de condensadores para realizar un filtrado de alta frecuencia y eliminar el ruido debido a la tensión y corrientes de offset.
 
