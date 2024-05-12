@@ -5,6 +5,8 @@ Este reproductor se comunica con el microcontrolador mediante UART, con una velo
 
 En cuento a la señal de audio obtenida a la salida del reproductor, podemos observar una salida bipolar entrada en 0V. Este comportamiento es totalmente inesperado ya que, al estar alimentado entre 3.3V y 0V, es extraño que la señal de salida pueda presentar valores negativos. Esto ha supuesto un gran problema en la unificación con el resto de módulos. Dicho problema y su solución serán comentados más adelante en este documento.
 
+Este módulo cuenta con una cola de mensajes por la que recibe los comandos deseados del módulo principal y dependiendo de dicho comando recibido, el reproductor MP3 ejecutará las ordenes recibidas.
+
 Todas las características del reproductor MP3 se han obtenido del datasheet ofrecido por el fabricante.
 
 \begin{figure}[h]

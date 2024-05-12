@@ -13,10 +13,14 @@
 \contentsline {section}{\numberline {3}Software}{4}{section.3}%
 \contentsline {subsection}{\numberline {3.1}Interfaz de usuario}{4}{subsection.3.1}%
 \contentsline {subsection}{\numberline {3.2}Interfaz web}{4}{subsection.3.2}%
-\contentsline {subsection}{\numberline {3.3}Interfaz táctil}{4}{subsection.3.3}%
-\contentsline {section}{\numberline {4}Depuración y test}{5}{section.4}%
-\contentsline {subsection}{\numberline {4.1}Pruebas software}{5}{subsection.4.1}%
-\contentsline {subsection}{\numberline {4.2}Pruebas hardware}{5}{subsection.4.2}%
-\contentsline {section}{\numberline {5}Presupuesto final}{6}{section.5}%
-\contentsline {section}{\numberline {6}Equipo de trabajo}{7}{section.6}%
-\contentsline {section}{\numberline {7}Acrónimos utilizados}{8}{section.7}%
+\contentsline {subsubsection}{\numberline {3.2.1}Configuración General}{4}{subsubsection.3.2.1}%
+\contentsline {subsubsection}{\numberline {3.2.2}Página Radio}{4}{subsubsection.3.2.2}%
+\contentsline {subsubsection}{\numberline {3.2.3}Página MP3}{5}{subsubsection.3.2.3}%
+\contentsline {subsubsection}{\numberline {3.2.4}Procesamiento de Audio}{5}{subsubsection.3.2.4}%
+\contentsline {subsection}{\numberline {3.3}Interfaz táctil}{5}{subsection.3.3}%
+\contentsline {section}{\numberline {4}Depuración y test}{7}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Pruebas software}{7}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Pruebas hardware}{7}{subsection.4.2}%
+\contentsline {section}{\numberline {5}Presupuesto final}{8}{section.5}%
+\contentsline {section}{\numberline {6}Equipo de trabajo}{9}{section.6}%
+\contentsline {section}{\numberline {7}Acrónimos utilizados}{10}{section.7}%
