@@ -1,0 +1,51 @@
+\subsubsection{Módulo de procesado digital}
+
+El módulo de procesado digital es el encargado de tomar las muestras, procesarlas y generar la señal de salida. Se utiliza un \texttt{ADC} de la placa para tomar muestras a $48\ kHz$ y un \texttt{DAC} para la generación de la salida, a la misma velocidad.
+
+\paragraph{Temporización}
+
+La temporización de este módulo es crítica, ya que es la que garantiza la calidad de la señal procesada. 
+
+Se utiliza un \textit{Timer} de la placa, concretamente el \texttt{TIM2} para la generación de dicha señal. Para ello, el \textit{Timer} cuenta con una señal específica de sincronización para disparar eventos de conversión, \texttt{TRGO2}. Para habilitarla, se necesita además configurar el \textit{timer} como \textit{master}, como se puede ver en el \autoref{lst:conf-tim2}.
+
+\begin{lstlisting}[captionpos=t, caption={Configuración del \textit{timer} de sincronización}]
+    int dsp_tim_init(void) {
+        __DSP_TIM_ENABLE();
+        htim.Instance = DSP_TIM_INSTANCE;
+
+        htim.Init.Prescaler = DSP_TIM_PRESCALER;
+        htim.Init.Period = DSP_TIM_PERIOD;
+
+        if (HAL_TIM_Base_Init(&htim)) {
+            return -1;
+        }
+
+        TIM_ClockConfigTypeDef sClockConfig = {.ClockSource = TIM_CLOCKSOURCE_INTERNAL};
+        if (HAL_TIM_ConfigClockSource(&htim, &sClockConfig)) {
+            return -1;
+        }
+
+        TIM_MasterConfigTypeDef sMasterConfig = {
+            .MasterOutputTrigger = TIM_TRGO_UPDATE,
+            .MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE,
+        };
+        if (HAL_TIMEx_MasterConfigSynchronization(&htim, &sMasterConfig)) {
+            return -1;
+        }
+
+        if (HAL_TIM_Base_Start(&htim)) {
+            return -1;
+        }
+
+        return 0;
+    }
+\end{lstlisting}
+
+Una vez configurado este timer, habrá que configurar al \texttt{ADC} y al \texttt{DAC} para que realicen las conversiones disparados por dicha señal, como se verá en los siguientes apartados.
+
+\paragraph{Adquisición de audio}
+
+La adquisición de audio, como ya se ha comentado, se realiza a través de un \texttt{ADC}. Este se configura con los siguientes parámetros:
+\begin{enumerate}
+    \item Adquisición a través del \texttt{GPIO A6}
+\end{enumerate}
