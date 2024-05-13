@@ -19,9 +19,9 @@ Por esto mismo, el código consiste en habilitar el RF (DIS = 0), esperar a una 
 A la hora de trabajar con el I2C, utilizaremos la familia de comandos NFC Forum Type 4 Tag, mientras que con RF se utiliza ISO/IEC 7816-4. En lo referente a I2C, tenemos que crear las tramas correspondientes a cada comando. Nosotros utilizaremos:
 
 \begin{enumerate}
-\item NDEF Tag Application Select: Selecciona la aplicación NDEF Tag.
-\item NDEF Select: Selecciona el fichero NDEF.
-\item Read Binary: Lee datos de un fichero.
+    \item NDEF Tag Application Select: Selecciona la aplicación NDEF Tag.
+    \item NDEF Select: Selecciona el fichero NDEF.
+    \item Read Binary: Lee datos de un fichero.
 \end{enumerate}
 
 Los utilizaremos de la siguiente manera:
@@ -33,12 +33,14 @@ Los utilizaremos de la siguiente manera:
     \label{fig:label}
 \end{figure}
 
-Todos los bytes para las transferencias los hemos calculado gracias al datasheet del componente M24SR64-Y. Además, antes de enviar el master recieve, hay que esperar por los tiempos de la tarjeta (\texttt{osDelay(5)}).
+Todos los bytes para las transferencias los hemos calculado gracias al datasheet del componente M24SR64-Y. Además, antes de enviar el master recieve, hay que esperar por los tiempos de la tarjeta.
 
 El módulo también utiliza CRC para la detección de errores en transferencias I2C. Cada byte I2C se calcula utilizando ese algoritmo, y al final de la trama se envían 2 bytes con el valor calculado. Para cacularlo, hemos utilizado la siguiente página web \cite{CalculoCRC}, introduciendo todos los bytes de la trama.
 
-Los mensajes que hemos definido para el NFC están compuestos por una letra ('S' = canción, 'R' = radio) y 4 números (Nº canción o emisora de radio).
+Los mensajes que hemos definido para el NFC están compuestos por una letra (\texttt{S} = canción, \texttt{R} = radio) y 4 números (Nº canción o emisora de radio).
 
 Ejemplos: 
-	- \texttt{S 0014}: Se quiere escuchar la canción nº 14.
-	- \texttt{R 1029}: Se quiere escuchar la emisora 102.9 FM.
+\begin{itemize}
+	\item \texttt{S 0014}: Se quiere escuchar la canción nº 14.
+	\item \texttt{R 1029}: Se quiere escuchar la emisora 102.9 FM.
+\end{itemize}
