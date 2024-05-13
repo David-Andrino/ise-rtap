@@ -1,3 +1,5 @@
+% chktex-file 1
+
 \usepackage{graphicx} 
 \usepackage[utf8]{inputenc}
 \usepackage[a4paper, margin=1in]{geometry}
@@ -21,7 +23,21 @@
 \usepackage{subcaption}
 % \usepackage{tikz}
 \usepackage{epigraph}
+\usepackage{bytefield}
+\usepackage{titlesec}
 
+\setcounter{secnumdepth}{4}
+
+\titleformat{\paragraph}
+{\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
+\titlespacing*{\paragraph}
+{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
+
+\addto\captionsspanish{%
+  \renewcommand\appendixname{Anexo}
+  \renewcommand\appendixpagename{Anexos}
+  \renewcommand\appendixautorefname{Anexo}
+}
 % \renewcommand{\arraystretch}{1.2} 
 \newcommand{\isc}{$I^2C$}
 \addto\extrasspanish{%
@@ -32,7 +48,10 @@
 \DeclarePairedDelimiter{\floot}{\lfloor}{\rfloor}
 
 % Bibliografia
-% \addbibresource{bibliografia.bib}
+\addbibresource{ISE.bib}
+
+\setcounter{biburllcpenalty}{7000}
+\setcounter{biburlucpenalty}{8000}
 
 \makeatletter
 \def\thebibliography#1{\section{\refname\@mkboth
