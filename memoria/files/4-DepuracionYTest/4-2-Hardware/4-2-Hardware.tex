@@ -24,7 +24,7 @@ Comprobando el circuito de habilitación, funciona adecuadamente pero a veces se
 
 Por otro lado, conectamos distintas cargas y medimos el consumo del circuito, obteniendo los siguientes valores de consumo en función de la impedancia nominal del altavoz. Obtenemos los siguientes valores:
 \begin{enumerate}
-    \item Auriculates ($~40\ \Omega$): Consumo de $4\ mA$
+    \item Auriculates de $~40\ \Omega$: Consumo de $4\ mA$
     \item Altavoz de $8\ \Omega$: Consumo $64\ mA$
     \item Altavoz de $4\ \Omega$: Consumo de $164\ mA$
 \end{enumerate}
@@ -48,3 +48,12 @@ Por otro lado, caracterizamos la regulación de carga para comprobar que nuestro
 \end{figure}
 
 Además, comprobamos que los indicadores luminosos funcionan correctamente ya que se enciende el verde cuando se conecta la alimentación y el rojo cuando se está cargando la batería. Al finalizar la carga, se apaga la luz roja y si se enchufa sin estar conectada parpadea el indicador rojo.
+
+Mediante el osciloscopio medimos la tensión de salida del circuito de alimentación, observando que presenta un ruido en muy alta frecuencia, como se puede ver en la \autoref{fig:4-2-2-ruido}. Creemos que este pico de ruido es el culpable de la inestabilidad de los relojes de la placa, pero al colocar condensadores en paralelo no conseguimos reducirlo.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\textwidth]{images/4/4-2/ruido.png}
+    \caption{Ruido en la señal de alimentación}
+    \label{fig:4-2-2-ruido}
+\end{figure}

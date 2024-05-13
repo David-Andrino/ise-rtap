@@ -52,7 +52,7 @@ El principal problema de estos transistores es su elevado precio y muy poca vari
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.3\textwidth]{images/2/2-2/puertaTransmisión.png}
-    \caption{Puerta de transmisión con transistores IGBT}
+    \caption{Puerta de transmisión con transistores con canal desconectado}
     \label{fig:2-2-puerta-transmision}
 \end{figure}
 
@@ -70,7 +70,7 @@ Para solucionar esto, hemos construido un circuito cambiador de nivel lógico qu
 
 La solución que hemos pensado consiste en un inversor lógico TTL, que consiste en un transistor bipolar NPN con una resistencia de \textit{Pull-up}. La única desventaja es la inversión de nivel, pero se corrige fácilmente en el software.
 
-Se puede ver el diagrama de nuestra solución en la \autoref{fig:2-2-cambiador-nivel}, en la que se muestra un cambiador. Hemos soldado dos de ellos en una placa de prototipado, que se puede ver en TODO.
+Se puede ver el diagrama de nuestra solución en la \autoref{fig:2-2-cambiador-nivel}, en la que se muestra un cambiador. Hemos soldado dos de ellos en una placa de prototipado, que se puede ver en la \autoref{fig:2-2-foto-cambiador}.
 
 \begin{figure}[h]
     \centering
@@ -79,8 +79,12 @@ Se puede ver el diagrama de nuestra solución en la \autoref{fig:2-2-cambiador-n
     \label{fig:label}
 \end{figure}
 
-TODO: FOTO DEL CIRCUITO
-
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\textwidth]{images/2/2-2/cambiadorNivel.jpg}
+    \caption{Foto del circuito cambiador de nivel}
+    \label{fig:2-2-foto-cambiador}
+\end{figure}
 \subsubsection{Amplificador de audio para los auriculares}
 
 La salida del DAC de la placa es una señal entre 0 y 3.3 V con 12 bits de resolución. Por tanto, el audio que se genere tiene una componente continua que se debe eliminar. 
