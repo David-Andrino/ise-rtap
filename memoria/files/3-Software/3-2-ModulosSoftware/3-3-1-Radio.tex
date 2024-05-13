@@ -1,4 +1,4 @@
-\subsection{Módulo Radio}
+\subsubsection{Módulo Radio}
 El módulo del Sintonizador FM consiste en un \textit{Thread} que se encarga de gestionar el funcionamiento del propio módulo. La comunicación entre el periférico y el microcontrolador se ha configuradao mediante el \textit{Driver I2C} proporcionado por \textit{CMSIS}.
 
 Cuenta con dos colas de mensajes, una en la que el programa principal introduce los mensajes con los comandos que desea que ejecute el Sintonizador, como sintonizar una frecuencia, hacer un \textit{Seekup} o un \textit{SeekDown}, etc. La otra cola se utiliza para que la radio introduzca mensajes con información sobre las frecuencias sintonizadas. Los mensajes mandados por esta cola son del tipo \textit{MSG\_RADIO}.

@@ -33,11 +33,11 @@ Los utilizaremos de la siguiente manera:
     \label{fig:label}
 \end{figure}
 
-Todos los bytes para las transferencias los hemos calculado gracias al datasheet del componente M24SR64-Y. Además, antes de enviar el master recieve, hay que esperar por los tiempos de la tarjeta (\texttt{osDelay(5)}).
+Todos los bytes para las transferencias los hemos calculado gracias al datasheet del componente M24SR64-Y. Además, antes de enviar el master recieve, hay que esperar por los tiempos de la tarjeta.
 
 El módulo también utiliza CRC para la detección de errores en transferencias I2C. Cada byte I2C se calcula utilizando ese algoritmo, y al final de la trama se envían 2 bytes con el valor calculado. Para cacularlo, hemos utilizado la siguiente página web \cite{CalculoCRC}, introduciendo todos los bytes de la trama.
 
-Los mensajes que hemos definido para el NFC están compuestos por una letra ('S' = canción, 'R' = radio) y 4 números (Nº canción o emisora de radio).
+Los mensajes que hemos definido para el NFC están compuestos por una letra (\texttt{S} = canción, \texttt{R} = radio) y 4 números (Nº canción o emisora de radio).
 
 Ejemplos: 
 	- \texttt{S 0014}: Se quiere escuchar la canción nº 14.

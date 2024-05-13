@@ -1,4 +1,4 @@
-\subsection{Módulo RTC}
+\subsubsection{Módulo RTC}
 El principal objetivo de este módulo es mostrar la hora y la fecha actual en el sistema. Esto se consigue mediante el periférico RTC del propio microcontrolador.
 
 Dicho reloj se ha configurado para que se conecte al oscilador interno LSE, que cuenta con una frecuencia de 32.768kHz. Debido a esta frecuencia, se ha configurado el periférico con unos valores \texttt{AsynchPrediv = 127} y \texttt{SynchPrediv = 255} para obtener un periodo de 1 segundo.
