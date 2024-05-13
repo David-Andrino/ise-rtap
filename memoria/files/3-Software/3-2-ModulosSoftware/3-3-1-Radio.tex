@@ -5,6 +5,6 @@ Cuenta con dos colas de mensajes, una en la que el programa principal introduce 
 
 También cuenta con un \textit{timer} periódico, con un periodo de medio segundo, que se encarga de leer los registros del sintonizador para comprobar su correcto funcionamiento.
 
-Debido a que nuestro sistema cuenta con dos periféricos que utilizan el protocolo \texttt{I2C}, nos hemos visto obligados a utilizar un módulo de gestión del propio protocolo de comunicación, del cual se hablará en el \textbf{REFERENCIA AL APARTADO DEL I2C}.
+Debido a que nuestro sistema cuenta con dos periféricos que utilizan el protocolo \texttt{I2C}, nos hemos visto obligados a utilizar un módulo de gestión del propio protocolo de comunicación, del cual se hablará en el \autoref{subsec:i2c}.
 
 El comportamiento básico de este módulo consiste en una espera mediante un \textit{osMessageQueueGet} de un mensaje proporcionado por el programa principal. Una vez el mensaje es recibido, es procesado y en función de su contenido, se ejecutará el comando correspondiente. En caso de ser un \textit{SeekUp} o un \textit{SeekDown}, el módulo del sintonizador informará al \textit{Thread} principal para que muestre la frecuencia en la que ha terminado.
