@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (MiKTeX 24.4) (preloaded format=pdflatex 2024.5.11)  13 MAY 2024 11:32
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (MiKTeX 24.4) (preloaded format=pdflatex 2024.5.11)  13 MAY 2024 19:35
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -957,7 +957,12 @@ Package hyperref Info: bookmark level for unknown lstlisting defaults to 0 on in
 ]) (files/4-DepuracionYTest/4-1-Software/4-1-4-Web/4-1-5-Web.tex) (files/4-DepuracionYTest/4-2-Hardware/4-2-Hardware.tex)) [11]
 \openout2 = `files/5-Presupuesto.aux'.
 
- (files/5-Presupuesto.tex) [12
+ (files/5-Presupuesto.tex
+Overfull \hbox (392.9679pt too wide) detected at line 19
+ [] 
+ []
+
+) [12
 
 
 
@@ -995,17 +1000,17 @@ Package logreq Info: Writing requests to 'main.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 25169 strings out of 474370
- 448090 string characters out of 5741007
+ 25177 strings out of 474370
+ 448236 string characters out of 5741007
  2033754 words of memory out of 5000000
- 46993 multiletter control sequences out of 15000+600000
+ 47000 multiletter control sequences out of 15000+600000
  564552 words of font info for 59 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  80i,12n,84p,1108b,2139s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <C:/Users/X421/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx10.pfb><C:/Users/X421/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Users/X421/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmcsc10.pfb><C:/Users/X421/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/X421/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/X421/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmti10.pfb><C:/Users/X421/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmti12.pfb><C:/Users/X421/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmtt10.pfb><C:/Users/X421/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmtt9.pfb>
-Output written on main.pdf (16 pages, 586299 bytes).
+Output written on main.pdf (16 pages, 587133 bytes).
 PDF statistics:
- 396 PDF objects out of 1000 (max. 8388607)
- 121 named destinations out of 1000 (max. 500000)
+ 398 PDF objects out of 1000 (max. 8388607)
+ 122 named destinations out of 1000 (max. 500000)
  287 words of extra memory for PDF output out of 10000 (max. 10000000)
 
