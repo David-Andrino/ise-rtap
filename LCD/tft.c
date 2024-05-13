@@ -477,7 +477,7 @@ static void DMA_Config(void)
   __HAL_RCC_DMA2_CLK_ENABLE();
 
   /*##-2- Select the DMA functional Parameters ###############################*/
-  DmaHandle.Init.Channel = DMA_CHANNEL;                     /* DMA_CHANNEL_0                    */
+  DmaHandle.Init.Channel = DMA_CHANNEL;                     /* DMA_CHANNEL_2                    */
   DmaHandle.Init.Direction = DMA_MEMORY_TO_MEMORY;          /* M2M transfer mode                */
   DmaHandle.Init.PeriphInc = DMA_PINC_ENABLE;               /* Peripheral increment mode Enable */
   DmaHandle.Init.MemInc = DMA_MINC_ENABLE;                  /* Memory increment mode Enable     */
@@ -495,7 +495,7 @@ static void DMA_Config(void)
   DmaHandle.Init.MemBurst = DMA_MBURST_SINGLE;              /* Memory burst                     */
   DmaHandle.Init.PeriphBurst = DMA_PBURST_SINGLE;           /* Peripheral burst                 */
 
-  /*##-3- Select the DMA instance to be used for the transfer : DMA2_Stream0 #*/
+  /*##-3- Select the DMA instance to be used for the transfer : DMA2_Stream2 #*/
   DmaHandle.Instance = DMA_STREAM;
 
   /*##-4- Initialize the DMA stream ##########################################*/

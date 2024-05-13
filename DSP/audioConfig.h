@@ -49,6 +49,6 @@
 #define DSP_TIM_INSTANCE   TIM2
 #define __DSP_TIM_ENABLE() __HAL_RCC_TIM2_CLK_ENABLE()
 #define DSP_TIM_PRESCALER  9
-#define DSP_TIM_PERIOD     174
+#define DSP_TIM_PERIOD     224
 
 #endif

@@ -13,8 +13,9 @@ osMessageQueueId_t webQueue;
 void Thread_Web (void *argument);                   
  
 int Init_Web (char lista_canciones[][SONG_NAME_LENGTH], int cnt_canciones) {
-    web_lista_canciones = (char*)lista_canciones;
- 
+  web_lista_canciones = (char*)lista_canciones;
+	web_cnt_canciones   = cnt_canciones;
+	
   tid_Web = osThreadNew(Thread_Web, NULL, NULL);
   if (tid_Web == NULL) {
     return(-1);

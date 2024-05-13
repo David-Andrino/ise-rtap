@@ -16,7 +16,6 @@
 osMessageQueueId_t ctrl_in_queue;
 ADC_HandleTypeDef  hconsadc;
 
-static osTimerId_t   cons_tim;
 static osThreadId_t  ctrl_tid, cons_tid;
 static radioMsg_t    radioMsg;
 static mp3Msg_t      mp3msg;
@@ -95,9 +94,7 @@ static void Control_Thread(void* arg) {
     
     // Encender amplificador de audio
     HAL_GPIO_WritePin(ENA_GPIO_PORT, ENA_GPIO_PIN, ENA_GPIO_ON);
-    
-    osTimerStart(cons_tim, 1000);
-    
+
     while (1) {
         osMessageQueueGet(ctrl_in_queue, &msg, NULL, osWaitForever);
         switch (msg.type) {
@@ -406,7 +403,7 @@ static void ctrl_pins_init(void) {
     HAL_GPIO_Init(OUTPUT_SELECT_GPIO_PORT, &mp3GPIO);
 
     HAL_GPIO_WritePin(ENA_GPIO_PORT, ENA_GPIO_PIN, ENA_GPIO_ON);
-    HAL_GPIO_WritePin(INPUT_SELECT_GPIO_PORT, INPUT_SELECT_GPIO_PIN, SELECT_INPUT_RADIO);
+    HAL_GPIO_WritePin(INPUT_SELECT_GPIO_PORT, INPUT_SELECT_GPIO_PIN, SELECT_INPUT_MP3);
     HAL_GPIO_WritePin(OUTPUT_SELECT_GPIO_PORT, OUTPUT_SELECT_GPIO_PIN, SELECT_OUTPUT_EAR);
 }
 

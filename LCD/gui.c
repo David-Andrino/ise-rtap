@@ -32,11 +32,11 @@ static gui_data_t data = {
 	.songs[7] = "Cancion 7",
 	.songs[8] = "Cancion 8",
 	.songs[9] = "Cancion 197 mil millones",
-	.fcentral[0] = "20Hz",
-	.fcentral[1] = "110Hz",
-	.fcentral[2] = "630Hz",
-	.fcentral[3] = "3.5kHz",
-	.fcentral[4] = "15kHz",
+	.fcentral[0] = "50 Hz",
+	.fcentral[1] = "200 Hz",
+	.fcentral[2] = "1 kHz",
+	.fcentral[3] = "5 kHz",
+	.fcentral[4] = "10 kHz",
 };
 
 lv_obj_t * scale_consumo; 	// Tiene que ser global para modificarlo desde async_cb
@@ -254,7 +254,7 @@ void lv_gui(){
 	lv_style_set_border_color(&btn_style_sel, lv_palette_darken(LV_PALETTE_BLUE, 3));
 	lv_style_set_text_color(&btn_style_sel, lv_color_black());
 	
-	lv_obj_t * t1 = lv_tabview_add_tab(tv, "Home");
+	lv_obj_t * t1 = lv_tabview_add_tab(tv, "Inicio");
 	lv_obj_t * t2 = lv_tabview_add_tab(tv, "Radio");
 	lv_obj_t * t3 = lv_tabview_add_tab(tv, "MP3");
 	lv_obj_t * t4 = lv_tabview_add_tab(tv, " Filtros");
@@ -1024,7 +1024,7 @@ static void crear_panel_consumo (lv_obj_t * container){
 	lv_obj_set_style_line_color(needle_consumo, lv_palette_main(LV_PALETTE_RED), 0);
 	
 	// Antes: static const char * custom_labels[] = {"0 A", "0'5 A", "1 A", "1'5 A", "2 A", "2'5 A    ", "3 A", NULL};
-	static const char * custom_labels[] = {"0 A", "0'25 A", "0'5 A", "0'75 A", "1 A", "1'25 A    ", "1'5 A", NULL};
+	static const char * custom_labels[] = {"0 A", "0'25 A", "0'5 A", "0'75 A", "1 A", "1'25 A     ", "1'5 A", NULL};
     lv_scale_set_text_src(scale_consumo, custom_labels);
 	
 	static int32_t grid_col_dsc[] = {LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
@@ -1406,7 +1406,7 @@ static void crear_panel_camino_audio(lv_obj_t * container){
 	btn_restablecer_flitros = lv_btn_create(container);
 	lv_obj_add_event_cb(btn_restablecer_flitros, restablecer_filtros_cb, LV_EVENT_CLICKED, NULL);
 	lv_obj_t * label_restablecer = lv_label_create(btn_restablecer_flitros);
-	lv_label_set_text_fmt(label_restablecer, LV_SYMBOL_REFRESH "Filtros");
+	lv_label_set_text_fmt(label_restablecer, LV_SYMBOL_REFRESH " Filtros");
 	lv_obj_add_style(btn_restablecer_flitros, &btn_style_base, 0);
 	
 	static int32_t grid_sal_col_dsc[] = {LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
