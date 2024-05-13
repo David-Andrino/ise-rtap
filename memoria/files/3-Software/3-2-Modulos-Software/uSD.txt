@@ -32,6 +32,12 @@ Se encarga de inicializar la tarjeta, obtener la lista de canciones y la configu
 
 En primer lugar, se inicializa la uSD con la función pública **Init_SD**. Basicamente se monta la tarjeta y se obtienen el directorio, las canciones (**Get_Songs**) y la configuración guardada (**Get_Config**). Toda la información se guarda en punteros a variables del control. Después, cuando se quiere guardar la configuración, se llama a la función pública **Save_Config**.
 
+Para parsear toda la información lo hacemos de la siguiente manera:
+
+	- Parseo de la lectura de la configuración: Utilizamos un **sscanf**.
+	- Parseo de la lectura de las canciones: Utilizamos un algoritmo de copia de cadena de caracteres de triple puntero.
+	- Parseo de la escritura de la configuración: Utilizamos un **sprintf**.
+
 
 **fatfs_storage.c** / **fatfs_storage.h**:
 Se encarga de las operaciones de lectura y escritura de los archivos. Esto lo lleva a cabo mediante llamadas a las funciones de las librerías de FatFs. Tiene tres funciones diferentes:
@@ -54,3 +60,8 @@ A la hora de realizar la integración con el resto del proyecto, no funcionaba. 
 REFERENCIAS:
 [1] FatFs Module Aplication Notes
 [2] FatFs - Generic FAT Filesystem Module
+
+ACRÓNIMOS:
+SD: Secure digital
+FAT: File Allocation Table
+exFAT: Extended FAT
