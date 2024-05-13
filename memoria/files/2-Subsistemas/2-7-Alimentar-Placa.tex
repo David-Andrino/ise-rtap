@@ -1,0 +1,9 @@
+\subsection{Conexión de la alimentación a la placa}
+
+Otro problema significativo que hemos encontrado es la conexión de la placa a la alimentación por baterías. La placa \texttt{STM32F769NI-Disco} indica que se puede alimentar con una tensión de entre 7 y 12 voltios en el pin de \texttt{Vin} siempre que se seleccione \texttt{ext5V} en los jumpers de selección de alimentación.
+
+Probamos a alimentarlo con una fuente de tensión de laboratorio y el circuito funcionaba adecuadamente, consumiendo aproximadamente $300\ mA$. Sin embargo, al alimentarlo desde nuestro subsistema analógico, la placa funciona adecuadamente durante aproximadamente cinco segundos para después quedarse congelado. Hemos podido comprobar que es únicamente la CPU que se congela ya que las DMAs de audio siguen funcionando, reproduciendo el último contenido del buffer en bucle.
+
+Hemos comprobado que no es un problema de tensión ya que, aunque en la hoja de catálogo indique que la placa requiere de mínimo 7 voltios, funciona bien incluso con $6.5\ V$ de la fuente de alimentación.
+
+Tampoco es un problema de corriente ya que, como se explica en el apartado de test hardware, la placa puede aportar mucha más corriente que el aproximadamente medio amperio que requiere la placa.
