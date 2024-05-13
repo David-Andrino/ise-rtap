@@ -1,0 +1,13 @@
+\subsubsection{Test Web}
+
+El objetivo de esta prueba es la comprobación del correcto funcionamiento del módulo del servidor web.
+
+Para ello, se va a dividir este test en dos partes. En la primera, se comprobrá si las peticiones que se generan desde las diferentes páginas web se crean de manera correcta.
+
+Para conseguir esto, se van pulsando sucesivamente todos los botones de todas lás páginas y se comprueba, en el módulo del servidor, si se generan de manera correcta.
+
+También se comprueba si los mensajes que se generan para las diferenctes peticiones creadas son correctos y se envían de forma exitosa al programa principal.
+
+A continuación, se procederá a comprobar si los valores mostrados en las páginas web se actualizan de manera correcta. Para ello, se enviará, desde un \textit{Thread} auxiliar, diferentes modificaciones en los datos mostrado y se comprobrára si se actualizan de manera correcta.
+
+Por último, se comprobará si tanto la hora y la fecha como el consumo se actualizan en tiempo real, implicitamente comprobrando el correcto funcionamiento de las funciones desarrolladas en JavaScript, por lo que se envían durante un cierto periodo de timepo y con una frecuencia de 1Hz, los valores de tiempo, fecha y consumo comprobando que en las diferentes páginas web se muestra de manera correcta.

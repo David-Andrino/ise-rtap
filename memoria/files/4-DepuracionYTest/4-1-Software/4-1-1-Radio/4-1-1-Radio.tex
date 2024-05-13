@@ -1,0 +1,15 @@
+\subsubsection{Test Radio}
+
+El objetivo de esta prueba es la comprobación del correcto funcionamiento del módulo del sintonizador FM. Para navegar entre las direfentes pruebas de este test, se ha utilizador el botón azul (B1) de la propia placa.
+
+Para ello, primero se manda el comando, mediante un \textit{Thread} auxiliar, para encender la radio y se commprueba si se obtiene señal de audio a la salida.
+
+A continuación, se sintoniza una frecuencia concreta y se comprueba, mediante una radio externa, si ambas señales de audio coincide.
+
+Ahora, se realiza un \textit{SeekUp} y se comprueba si la nueva frecuencia sintonizada es mayor a la anterior y si la calidad del audio a aumentado.
+
+De manera análoga, se realiza un \textit{SeekDown} y se comprueba si la frecuencia obtenida es menor a la anterior y también si la calidad de audio aumenta.
+
+A continuación, se intenta sintonizar una frecuencia fuera de rango y se comprueba que solo se obtiene ruido a la salida.
+
+Por último, se manda el comando para apagar la radio y se comprueba que ya no hay señal de auido a la salida.
