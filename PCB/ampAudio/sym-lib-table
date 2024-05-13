@@ -1,0 +1,10 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "lm386")(type "KiCad")(uri "${KIPRJMOD}/lib/lm386.kicad_sym")(options "")(descr ""))
+  (lib (name "mux")(type "KiCad")(uri "${KIPRJMOD}/lib/mux.kicad_sym")(options "")(descr ""))
+  (lib (name "mux2")(type "KiCad")(uri "${KIPRJMOD}/lib/mux2.kicad_sym")(options "")(descr ""))
+  (lib (name "BD139")(type "KiCad")(uri "${KIPRJMOD}/lib/BD139.kicad_sym")(options "")(descr ""))
+  (lib (name "BD140")(type "KiCad")(uri "${KIPRJMOD}/lib/BD140.kicad_sym")(options "")(descr ""))
+  (lib (name "IRFML8244TRPBF")(type "KiCad")(uri "${KIPRJMOD}/lib/IRFML8244TRPBF.kicad_sym")(options "")(descr ""))
+  (lib (name "SJ2-3514A-SMT-TR")(type "KiCad")(uri "${KIPRJMOD}/lib/SJ2-3514A-SMT-TR.kicad_sym")(options "")(descr ""))
+)

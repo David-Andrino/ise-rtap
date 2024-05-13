@@ -1,0 +1,5 @@
+(fp_lib_table
+  (version 7)
+  (lib (name "footprints")(type "KiCad")(uri "${KIPRJMOD}/lib/footprints.pretty")(options "")(descr ""))
+  (lib (name "Logos")(type "KiCad")(uri "E:/OneDrive - Universidad Politécnica de Madrid/Universidad/4. Cuarto/8. Primavera 2024/ISE/RTAP/Logos")(options "")(descr ""))
+)
