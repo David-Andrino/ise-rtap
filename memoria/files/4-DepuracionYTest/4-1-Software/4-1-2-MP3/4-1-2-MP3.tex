@@ -1,0 +1,17 @@
+\subsubsection{Test MP3}
+
+El objetivo de esta prueba es la comprobación del correcto funcionamiento del módulo del reproductor MP3. Para navegar entre las direfentes pruebas de este test, se ha utilizador el botón azul (B1) de la propia placa.
+
+Para ello, primero se inicia la reproducción de una canción concreta y se comprueba si a la salida se escucha esa canción.
+
+Ahora, se manda el comando, mediante un \textit{Thread} auxiliar, el comando que indica la reproducción de la siguiente canción de la lista y se comprueba si se obtiene a la salida.
+
+A continucación, se indica al reproductor que ponga la anteior canción y se comprueba si se escucha dicha canción.
+
+La siguiente comprobación es la puesta en pausa de la canción reproducida, para ella se manda dicho comando y se comprueba que no se obtiene salida.
+
+De forma análoga, se le indica al reproductor que continue con la reproduccón de la canción y se comprueba que se obtiene la canción esperada.
+
+Ahora, se intenta seleccionar una canción que no esté presente en la lista, comprobando que no se obitiene señal a la salida.
+
+Por último, se comprueba el modo \textit{loop}. Para ello se manda el comando indicado y se espera a que termine la canción actual y se comprueba que vuelve a comenzar y, de forma análoga, se indica al reproductor que termine dicho modo y se comprueba, al finalizar la canción actual, que no se obtiene señal a la salida.

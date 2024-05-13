@@ -1,0 +1,62 @@
+\subsubsection{Módulo de control}
+\label{subsubsec:modulo-control}
+
+El módulo de control es el encargado de orquestar la aplicación. Para incrementar el rendimiento, se ha decidido modelar con una arquitectura basada en eventos, por lo que el módulo se encuentra permanentemente esperando en una cola y sólamente reacciona cuando le llega un mensaje por ella, volviendo a esperar al finalizar la respuesta.
+
+Para evitar tener que realizar una estructura de polling de colas, en la que el hilo debe comprobar constantemente varias colas, se ha implementado una estructura unificada de mensajes de entrada al módulo de control, de forma que solo se tiene que esperar a una sola cola. Además, cuenta con acceso a las colas de entrada de todos los demás módulos, en las que introduce mensajes como reacción a los eventos que ocurran.
+
+Se podría realizar una estructura que contuviera todos los posibles parámetros de mensajes y un identificador para saber cuales son los útiles, pero esto es muy poco óptimo en memoria y puede tener un gran impacto en el rendimiento de la aplicación. Por ello, hemos decidido implementar una estructura basada en uniones con un campo que identifica cual es la forma de dicha unión. 
+
+\begin{lstlisting}[captionpos=t, caption={Estructura para los mensajes al control}]
+    /**
+    * @brief Enumeracion de los tipos de mensaje de entrada al modulo de control
+    */
+   typedef enum {
+       MSG_NFC,   /**< Lectura de una tarjeta del NFC */
+       MSG_LCD,   /**< Mensaje de entrada del LCD     */
+       MSG_WEB,   /**< Mensaje de entrada de la web   */
+       MSG_RTC,   /**< Mensaje de entrada del RTC     */
+       MSG_CONS,  /**< Mensaje de entrada del consumo */
+       MSG_RADIO, /**< Mensaje de entrada de la radio */
+   } msg_ctrl_type_t;
+
+    /**
+    * @brief Estructura para los mensajes de entrada
+    */
+    typedef struct {
+        msg_ctrl_type_t type;    /**< Tipo de mensaje de entrada. 
+                                    Dependiendo de este valor se debe interpretar el contenido */
+        union {
+            nfc_msg_t nfc_msg;   /**< Contenido de un mensaje de tipo MSG_NFC   */
+            lcd_msg_t lcd_msg;   /**< Contenido de un mensaje de tipo MSG_LCD   */
+            rtc_msg_t rtc_msg;   /**< Contenido de un mensaje de tipo MSG_RTC   */
+            web_msg_t web_msg;   /**< Contenido de un mensaje de tipo MSG_WEB   */
+            uint16_t  cons_msg;  /**< Contenido de un mensaje de tipo MSG_CONS  */
+            uint32_t  radio_msg; /**< Contenido de un mensaje de tipo MSG_RADIO */
+        };
+    } msg_ctrl_t;
+\end{lstlisting}
+
+Como se puede ver, dependiendo del valor del campo \texttt{type}, tenemos un contenido u otro. Esto permite reducir significativamente la estructura pero requiere de una comprobación de qué tipo de mensaje es antes de acceder a los campos, ya que si no se podrían malinterpretar los mensajes. Se puede ver el contenido de cada tipo de mensaje en el código del \autoref{anexo:mensajes-control}.
+
+Este módulo actua como una inteligencia central de redirección de eventos. A excepción de los GPIO de selección de canal, el módulo únicamente redirige eventos de un módulo a otros, realizando una conversión de datos en los casos que es necesaria.
+
+Por ejemplo, cuando alguien cambia una banda del ecualizador en la pantalla táctil, este módulo recibe un mensaje de tipo \texttt{MSG\_LCD}, por lo que interpreta su contenido como un \texttt{lcd\_msg}, que a su vez contiene un campo de subtipo de mensaje y una carga útil. En este ejemplo, el subtipo sería \texttt{LCD\_BANDS} y la carga útil, de dos bytes, contendría la banda seleccionada y la amplitud que se ha cambiado. Entonces, el módulo principal interpretaría este mensaje y realizaría las dos acciones pertinentes: Enviar un mensaje de tipo \texttt{WEB\_OUT\_BANDS} a la web para que se actualice la información y otro al módulo de procesado digital para que reconfiguren los filtros. Una vez finalizado, se volvería a esperar al siguiente mensaje de la cola.
+
+En tiempo de arranque, este módulo se encarga de habilitar el circuito de audio, enciende la radio y el MP3. Además, utiliza el módulo de la SD para leer la configuración almacenada en los ficheros y configurar tanto la lista de canciones como los filtros.
+
+Además, este módulo es el encargado de poner el sistema en modo bajo consumo. Al entrar en modo bajo consumo, bien por la web o por la pantalla táctil, se realiza el siguiente procedimiento:
+\begin{enumerate}
+    \item Apagar la radio y el MP3 
+    \item Deshabilitar el circuito de alimentación
+    \item Limpiar las flags del procesador de \textit{Wakeup}
+    \item Apagar la pantalla (ver \autoref{subsubsec:apagar-pantalla})
+    \item Desactivar el \textit{Wakeup} a través del RTC y sus alarmas
+    \item Entrar en modo Standby
+\end{enumerate}
+
+Hemos decidio utilizar el modo standby ya que nuestro sistema no necesita mantener ninguna información en memoria dinámica durante la ejecución del sistema. En este modo, se desactivan los periféricos y el procesador, quedando únicamente a la espera de una señal de \textit{Wakeup} para volver a despertarse. Como dicha señal hemos decidido utilizar el botón azul de la placa, ya que está conectado a un puerto con dicha capacidad.
+
+Como el sistema se desactiva por completo y se pierde el contenido de la memoria, el sistema vuelve a partir desde cero, como si se acabara de conectar la alimentación. Esto es un comportamiento favorable, ya que se vuelven a configurar todos los pines, periféricos y direcciones de memoria adecuadamente y permite un menor consumo que los modos \textit{Sleep} o \textit{Stop}.
+
+Otro factor destacable es que toda la configuración de este módulo en cuanto a pines y niveles lógicos, así como la configuración del módulo de medición de consumo se puede ajustar en el fichero \texttt{controlConfig.h}, permitiendo una reconfiguración rápida de ambos módulos.

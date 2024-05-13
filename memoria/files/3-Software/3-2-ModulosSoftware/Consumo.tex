@@ -1,0 +1,12 @@
+\subsubsection{Módulo de control de consumo}
+
+El módulo de medición de consumo se encarga simplemente de realizar medidas periódicas y enviarlas al módulo de control.
+
+Dicho módulo utiliza el \texttt{ADC3} de la placa para medir el consumo que reporta el módulo analógico de consumo (\autoref{subsubsec:medidor-consumo-analog}). Dicho módulo reporta la corriente con una ganancia de $1.1 V/A$, que junto a la resolución del \texttt{ADC} de 12 bits para $3.3\ V$, ofrece una resolución efectiva de:
+\[
+    S_{cons} = \frac{S_{ADC}}{S_{med}} = \frac{\frac{3.3\ V}{2^{12}}}{1.1\ V/A} = 244.14\ \mu A
+\]
+
+Para nuestra aplicación, es una precisión más que suficiente.
+
+El hilo arranca la medida del \texttt{ADC}, realiza una espera para dejar tiempo a que se complete, lee el contenido y lo envía a la cola del sistema operativo, volviendo al principio del proceso.
