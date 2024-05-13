@@ -12,7 +12,7 @@
 static TIM_HandleTypeDef htim = {0};
 
 static arm_biquad_cas_df1_32x64_ins_q31 lowStageHandlers[2];
-static arm_biquad_casd_df1_inst_q31     highStageHandlers[2];
+static arm_biquad_casd_df1_inst_q31     highStageHandlers[3];
 
 // Buffers para el DSP
 static q31_t midBuffer[DSP_BUFSIZE];
