@@ -1,0 +1,85 @@
+Permite que se seleccionen canciones y emisoras mediante el móvil con NFC.
+
+Para su desarrollo, hemos utilizado el periférico I2C1, el protocolo RF, la placa **ANT7-T-M24SR64** [1] de ST Microelectronics y la aplicación móvil **NFC Tools** [2]. Además, a la hora de realizar comprobaciones desarrollando el módulo, hemos utilizado la app **ST25** [3].
+
+**ANT7-T-M24SR64**: 
+La placa **ANT7-T-M24SR64** es una placa que incluye un **M24SR64-Y**. **M24SR64-Y** es una tag dinámica NFC/RFID, EEPROM de interfaz dual, con protocolos RF e I2C. Se puede operar desde una interfaz I2C, un lector RFID o un teléfono con NFC.
+
+Figura 1: **ANT7-T-M24SR64** [M24SR.png]
+
+Como se puede observar en la figura anterior, hay 6 pines:
+
+- VCC: Alimentación 3.3 V.
+- GND: Masa.
+- SDA: Línea de datos del bus I2C.
+- SCL: Señal de reloj del bus I2C.
+- GPO: A nivel bajo, RF o I2C está siendo utilizado. A nivel alto, está libre.
+- DIS: Activación/Desactivación de los comandos RF.
+
+
+Software:
+
+- Estructura:
+
+	- **nfc.c**: Hilo que gestiona el uso de la tag. Los datos obtenidos se envían por una cola al hilo de control.
+	- **nfc.h**: Exporta la función para el arranque del hilo.
+
+- RF vs I2C:
+El problema a la hora de utilizar este componente, es que no pueden estar activos al mismo tiempo, por lo que hemos tenido que adaptar la utilización de estos dos protocolos con el uso real de nuestro módulo NFC. A la hora de guardar y leer datos, en ambos casos, se guardan en NDEF. 
+
+Nosotros vamos a utilizar RF mediante el uso del teléfono móvil para escribir en el NDEF, mientras que el I2C para leer el contenido, por lo que solo contaremos con esos uso. Para escribir mediante RF, la tranferencia consiste en dos pulsos a nivel bajo en el GPO. 
+
+Figura 2: Pulsos RF GPO.
+
+Por esto mismo, el código consiste en habilitar el RF (DIS = 0), esperar a una subida en el GPO y esperar 500 ms (Asegurando que se ha completado la transferencia). Después, se deshabilita el RF (DIS = 1) y se procede a enviar todas las transmisiones por I2C. Finalmente, se envía la información al hilo de control y se procede a habilitar de nuevo el RF y volver a esperar al flanco de subida.
+
+- Diagrama de flujo:
+A la hora de trabajar con el I2C, utilizaremos la familia de comandos NFC Forum Type 4 Tag, mientras que con RF se utiliza ISO/IEC 7816-4. En lo referente a I2C, tenemos que crear las tramas correspondientes a cada comando. Nosotros utilizaremos:
+
+	- NDEF Tag Application Select: Selecciona la aplicación NDEF Tag.
+	- NDEF Select: Selecciona el fichero NDEF.
+	- Read Binary: Lee datos de un fichero.
+
+Los utilizaremos de la siguiente manera:
+
+Figura 3: Diagrama de flujo [Diagrama.png]
+
+Todos los bytes para las transferencias los hemos calculado gracias al datasheet del componente M24SR64-Y. Además, antes de enviar el master recieve, hay que esperar por los tiempos de la tarjeta (osDelay(5)).
+
+- Cálculo CRC: El CRC se utiliza para la detección de errores en transferencias I2C. Cada byte I2C se calcula utilizando ese algoritmo, y al final de la trama se envían 2 bytes con el valor calculado. Para cacularlo, hemos utilizado la siguiente página web [4], introduciendo todos los bytes de la trama.
+
+- Mensajes NFC:
+Compuestos por una letra ('S' = canción, 'R' = radio) y 4 números (Nº canción o emisora de radio).
+
+Ejemplos: 
+	- S 0014: Se quiere escuchar la canción nº 14.
+	- R 1029: Se quiere escuchar la emisora 102.9 FM.
+
+
+Pruebas:
+Para probar este módulo, hemos utilizado del debugger para revisar las lecturas y variables, al igual que el osciloscopio digital con PulseView, además de revisar directamente el contenido de la tarjeta con lecturas NFC con el móvil.
+
+
+Problemas:
+La documentación está incompleta y hay partes que no corresponden con la realidad. Además, la documentación y los recursos disponibles son casi nulos.
+
+
+REFERENCIAS:
+[1] M24SR64-Y - Pag Web
+[2] NFC Tools
+[3] ST25
+[4] Cálculo CRC
+
+
+ACRÓNIMOS:
+CRC: Cyclic Redundancy Check
+RF: Radio Frequency
+I2C: Inter Integrated Circuit
+NFC: Near Field Communication
+NDEF: NFC Data Exchange Format
+GPO: configurable General Purpose Output
+DIS: RF disable.
+SCL: Serial Clock
+SDA: Serial Data
+EEPROM: Electrical Erasable Programmable Read-Only Memory
+RFID: Radio Frequency Identification
