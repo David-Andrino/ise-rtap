@@ -1,0 +1,30 @@
+\section{Software}
+\subsection{Interfaz de usuario}
+
+Hemos desarrollado dos interfaces de usuario, una sobre una web y otra sobre una pantalla táctil.
+
+\input{files/3-Software/3-1-InterfazUsuario/3-1-1-InterfazWeb.tex}
+\input{files/3-Software/3-1-InterfazUsuario/3-1-1-1-Principal.tex}
+\input{files/3-Software/3-1-InterfazUsuario/3-1-1-2-Radio.tex}
+\input{files/3-Software/3-1-InterfazUsuario/3-1-1-3-MP3.tex}
+\input{files/3-Software/3-1-InterfazUsuario/3-1-1-4-Filtros.tex}
+\input{files/3-Software/3-1-InterfazUsuario/3-1-2-InterfazTactil.tex}
+
+\subsection{Módulos software}
+
+Para la implementación software se han diseñado módulos independientes para cada tarea, implementando casi todos como un hilo (o tarea) del sistema operativo de tiempo real de Keil, utilizado a través de la API CMSIS RTOS2.
+
+Para la comunicación entre hilos hemos utilizado principalmente colas de mensajes al ser la opción más cómoda y sencilla de implementar, aunque hay un par de candados de exclusión mutua (\texttt{mutex}) y alguna \textit{flag} de hilo.
+
+\input{files/3-Software/3-2-ModulosSoftware/LCD.tex}
+\input{files/3-Software/3-2-ModulosSoftware/Control.tex}
+\input{files/3-Software/3-2-ModulosSoftware/Consumo.tex}
+\input{files/3-Software/3-2-ModulosSoftware/I2C.tex}
+\input{files/3-Software/3-2-ModulosSoftware/DSP.tex}
+\input{files/3-Software/3-2-ModulosSoftware/NFC.tex}
+\input{files/3-Software/3-2-ModulosSoftware/SD.tex}
+\input{files/3-Software/3-2-ModulosSoftware/3-2-1-RTC.tex}
+\input{files/3-Software/3-2-ModulosSoftware/3-3-1-Radio.tex}
+\input{files/3-Software/3-2-ModulosSoftware/3-4-1-MP3.tex}
+\input{files/3-Software/3-2-ModulosSoftware/3-5-1-ModuloWeb.tex}
+

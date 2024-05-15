@@ -1,0 +1,54 @@
+\documentclass{article}
+\input{config.tex}
+
+\title{Procesador de audio en tiempo real}
+\author{Rubén Agustín \\ David Andrino \\ Estela Mora \\ Fernando Sanz}
+\date{Primavera 2024}
+
+\begin{document}
+\frontmatter
+\include{cover}
+
+\tableofcontents
+\listoffigures
+% \listoftables
+% \lstlistoflistings
+\mainmatter
+
+\pagestyle{fancy}
+\lhead[]{\url{https://github.com/David-Andrino/ise-rtap}{\textbf{Real-Time Audio Processor}}}
+\rhead[]{\textbf{Memoria del proyecto}}
+\cfoot{\thepage}
+
+\include{files/1-Especificaciones/1-Especificaciones}
+\include{files/2-Subsistemas/2-Subsistemas}
+\include{files/3-Software/3-Software}
+\include{files/4-DepuracionYTest/4-DepuracionTest}
+\include{files/5-Presupuesto}
+\include{files/6-EquipoTrabajo}
+\include{files/7-Acronimos}
+
+\nocite{*}
+\printbibliography[title={Bibliografía}, heading=bibnumbered]
+
+\begin{appendices}
+
+% Anexo 1. Webench Report
+\includepdf[pages=1,offset=0 0,scale=0.8, pagecommand={\section{Webench Design Report}\label{anexo:webench-report}}]{./files/8-Anexos/WebenchDesignReport.pdf}
+\includepdf[pages=2-7,offset=0 0,scale=0.8, pagecommand={}]{./files/8-Anexos/WebenchDesignReport.pdf}
+
+% Anexo 2. Circuito alimentacion
+\includepdf[pages=1,offset=0 0,scale=0.8, pagecommand={\section{Circuito de alimentación}\label{anexo:circuito-alimentacion}}]{./files/8-Anexos/esquematicos.pdf}
+\includepdf[pages=2-3,offset=0 0,scale=0.8, pagecommand={}]{./files/8-Anexos/esquematicos.pdf}
+
+% Anexo 3. Circuito de audio
+\includepdf[pages=4,offset=0 0,scale=0.8, pagecommand={\section{Circuito de alimentación}\label{anexo:circuito-audio}}]{./files/8-Anexos/esquematicos.pdf}
+
+% Anexo 4. ThreadControl.h
+\section{Estructura de los mensajes de control}
+\input{files/8-Anexos/mensajesControl.tex}
+\end{appendices}
+
+
+
+\end{document}

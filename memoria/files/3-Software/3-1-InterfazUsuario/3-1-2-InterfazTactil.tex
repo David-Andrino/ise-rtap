@@ -1,0 +1,55 @@
+\subsection{Interfaz táctil}
+
+\subsubsection{El alto nivel}
+\label{subsubsec:alto-nivel}
+Una vez se ha configurado una función de bajo nivel para representar los píxeles en la pantalla, que se explica en el apartado \ref{subsubsec:bajo-nivel}, se pueden utilizar las abstracciones de alto nivel que ofrece LVGL. 
+
+La interfaz gráfica de RTAP consta de 4 pestañas: Inicio, Radio, MP3 y Filtros. A su vez, cada pestaña dispone de un lienzo en color gris claro, sobre el que se añaden paneles, con un fondo blanco y un borde gris de 2 píxeles de grosor. Cada panel implementa una funcionalidad, o muestra la información relevante. Todas las pestañas comparten una filosofía: Los paneles principales ocupan la totalidad de la pantalla, haciendo la interfaz muy intuitiva, y, si se desliza el panel hacia la parte superior, se muestran los créditos del proyecto: El título, la asignatura y los estudiantes involucrados. Además, todo el proyecto utiliza la fuente \textit{Montserrat}, variando el tamaño según la importancia del contenido. A continuación, se explica cada una de las pestañas, excluyendo el panel de créditos. 
+
+\textbf{Inicio}
+
+La pestaña de inicio consta de dos paneles principales: Configuración rápida y Consumo.
+\begin{itemize}
+    \item \textbf{Configuración rápida:} Este panel está formado por tres grupos de botones. El primer y el segundo grupo se emplean para seleccionar la salida y la entrada, respectivamente. Como el sistema no permite la opción de seleccionar las dos entradas o las dos salidas simultáneamente, estos botones son excluyentes: marcar uno desmarca el otro. Como estilo, se ha optado por un color azul claro para representar la opción seleccionada, y un color más oscuro para la no seleccionada. Por último, este panel tiene un botón que hace que el sistema entre en modo de bajo consumo. Los botones se distribuyen según una rejilla fija, y los grupos de estos se dividen mediante un espaciado uniforme, calculado de manera dinámica por LVGL.
+    \item \textbf{Consumo:} Este panel está formado por una escala en forma de arco, que ocupa 225º de la circunferencia. Además, se le aplica una rotación de 180º para conseguir la posición deseada, que deja espacio suficiente para colocar una etiqueta de texto. 
+    
+    La escala, que se utiliza para representar de forma gráfica el consumo del sistema, admite valores entre 0 y 1500, que se interpretan como miliamperios. A la escala se le aplican tres formatos diferentes: El primero es un color verde, para los valores entre 0 y 375, el segundo, un color azul, entre 375 y 1125, y el tercero, en rojo, para los valores más altos, entre 1125 y 1500. En total, la escala cuenta con 25 \textit{ticks}, y cada 4 de estos, se introduce uno principal, es decir, para los valores más significativos, de 0 A, 0.25 A, 0.5 A, 0.75 A, 1 A , 1.25 A y 1.5 A. Estos \textit{ticks} principales tienen un grosor de 2 píxeles, mientras que los secundarios tienen un grosor de 1 píxel. LVGL calcula la longitud de cada \textit{tick} de manera dinámica. Por último, la escala cuenta con una aguja, en color rojo y con una longitud máxima de 80 píxeles, que apunta al valor del consumo instantáneo, que además se representa en la etiqueta de texto.
+
+    El panel se organiza según una rejilla flexible organizada en forma de columna. Esto significa que simplemente se declaran los objetos y se les da un tamaño, y LVGL los coloca de forma dinámica apilados verticalmente. Sin embargo, para conseguir que la etiqueta se muestre en el lugar apropiado, se le da una posición fija relativa al panel.
+\end{itemize}
+
+\textbf{Radio}
+
+La pestaña de radio está formada por tres paneles principales: Uno para la radio, otro para el volumen, y otro para la salida.
+
+\begin{itemize}
+    \item \textbf{Radio:} Este panel es el más grande de esta pestaña, ocupando dos terceras partes del espacio. Este panel es muy complejo, estando formado por una superposición de elementos. De manera simple: En la parte posterior encontramos un título, que indica que el panel es para sintonizar una frecuencia. En la posición inmediatamente inferior, se muestra un número, que en caso de no tener ningún valor, se mostrará en color sombreado. Hay varias formas de modificar este valor, que se detallan más adelante. Después encontramos una escala, que simula la apariencia de una radio clásica, y cuyos valores, entre 87 y 108, se interpretan como megahercios. Sin embargo, en un primer plano, encima de la escala, encontramos un slider, del cual solo se representa el mando, en color rojo y con un borde negro. En LVGL un slider solo puede tener valores enteros, por lo que este toma valores entre 870 y 1080, para mantener un decimal, interpretándose el valor como centenas de kilohercio. En la parte inferior hay un espacio en blanco, cuya utilidad se comenta a continuación, y después hay una fila con un objeto en forma de caja, inicialmente vacío, y a su derecha, tres botones.
+
+    Empezando por el slider, que puede ser la opción más intuitiva, un deslizamiento sobre la escala tendrá diferentes consecuencias: El texto que tiene encima se modificará, acompañando el valor del texto, y, en caso de ser una cadena conocida, en el espacio en blanco que se mencionó anteriormente, se representará el texto correspondiente al nombre de la cadena. Sin embargo, para no saturar la cola de mensajes ni a la radio, la cadena marcada sólo se sintoniza una vez se ha soltado el slider.
+
+    Otra posible forma de modificar el valor de la frecuencia es mediante los botones de \textit{Seek}. El sistema busca la siguiente cadena con una señal aceptable, la sintoniza, y modifica el valor del texto y del slider. Otra opción es tocar el valor del texto, y se desplegará un teclado numérico, que permite sintonizar de manera rápida y precisa una cadena, solo en caso de haber introducido un valor correcto. En caso de que el valor introducido no sea un valor posible, o sea un número mal formado, el slider se truncará hacia el valor correcto más próximo. Para cerrar el teclado, se puede utilizar cualquiera de los dos botones pensados para ello, o tocar en cualquier parte de la pantalla.
+
+    Además, se dispone de un botón de favoritos, que almacenará en la caja todas las cadenas que se quieran guardar (no es persistente). En caso de que se conozca el nombre de la cadena, será esto lo que se muestre en la lista, en caso contrario, se mostrará únicamente la frecuencia. Para recuperar cualquier cadena guardada, solo habrá que buscarla en la lista.
+
+    Por último, destacar que cualquier cambio en la web se verá reflejado de forma inmediata en el slider y en todos los cuadros de texto.
+    \item \textbf{Volumen:} Este panel permite ajustar el volumen global del sistema. Se mantiene sincronizado con los paneles de volumen de otras pestañas, y presenta un botón de mute, que ejecuta una animación, variando el valor hasta 0 de forma suave, o, en caso de estar ya en cero, aumentándolo hasta la posición previa. Igual que con otros sliders, para no saturar los mecanismos de sincronización, el valor solo es enviado una vez se ha soltado.
+    \item \textbf{Salida:} Este panel también permite seleccionar la salida del sistema. Se mantiene sincronizado con los botones que ofrecen la misma función en otras pestañas, y mantiene el mismo estilo que el de la pestaña de inicio para indicar cuál es la opción seleccionada.
+\end{itemize}
+
+\textbf{MP3}
+
+La pestaña del MP3 mantiene muchas similitudes con la de la radio: Se compone de tres paneles, de los cuales el principal también ocupa dos tercios de la pantalla, y los dos paneles de su derecha son idénticos a los explicados anteriormente. 
+
+El panel principal del MP3 también es un panel muy complejo. En este caso, el panel a su vez está compuesto por varios paneles. En un primer momento, se aprecian los 3 botones principales del MP3: anterior, play/pause y siguiente. El color de estos botones se ha pensado para romper con la monotonía del sistema, dando una impresión más alegre. El degradado se calcula automáticamente por LVGL, no se aplica ninguna textura que ocupe memoria.
+
+En la parte inferior del panel hay una pestaña, que si se desliza hacia arriba, pasa a ocupar el 70\% del subpanel. Sin embargo, a los botones se les permite ocupar el 40\% del panel, con esto se logra la impresión de que los botones no terminan de esconderse nunca. Esta pestaña representa la lista de canciones que se tiene almacenada en la tarjeta SD. Al hacer click sobre una canción, esta se envía al MP3, y además, se reproduce una animación, que sustituye durante unos segundos al título de la pestaña, representando la canción. Nuevamente, si se oculta la lista de canciones, los botones de control pasan a ocupar el 100\% de su panel.
+
+\textbf{Filtros}
+
+La pestaña correspondiente a los filtros muestra las opciones de ecualización del sistema, además de algunos ajustes para el audio. En concreto, esta pestaña consta de 4 paneles: 
+\begin{itemize}
+    \item \textbf{Ecualizador:} Es el panel principal de la pestaña, y ocupa la mitad de esta. Se compone de 5 sliders, que manejan cada uno una banda. Como en sliders anteriores, el valor únicamente se envía cuando se libera el slider. Modificar un valor en la página web ejecuta una animación para sincronizar el valor.
+    \item \textbf{Volumen:} Tiene un tamaño ligeramente inferior al de las pestañas anteriores, pero mantiene el mismo valor y funcionalidad.
+    \item \textbf{Guardar config:} Es un pequeño panel con un único botón, para almacenar la configuración.
+    \item \textbf{Configuración de audio:} Es parecido al panel de configuración rápida de la pestaña de inicio, manteniendo el estilo y todos los botones, excepto el de bajo consumo, que en este caso es reemplazado por un botón para restablecer el valor de los filtros. Pulsar el botón hace que se ejecuten 5 animaciones, una para cada slider, poniendo su valor a cero de forma suave.
+\end{itemize}

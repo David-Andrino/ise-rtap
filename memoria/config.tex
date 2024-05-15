@@ -1,0 +1,113 @@
+% chktex-file 1
+
+\usepackage{graphicx} 
+\usepackage[utf8]{inputenc}
+\usepackage[a4paper, margin=1in]{geometry}
+\usepackage[spanish, es-tabla]{babel}
+\usepackage{fancyhdr}
+\usepackage[hidelinks]{hyperref}
+\usepackage{pdfpages}
+\usepackage[style=ieee]{biblatex}
+\usepackage{csquotes}
+\usepackage{booktabs}
+\usepackage[parfill]{parskip}
+\usepackage{longtable}
+\usepackage{float}
+\usepackage{amstext}
+\usepackage{mathtools}
+\usepackage[titletoc, title]{appendix}
+\usepackage{multirow}
+\usepackage{listings}
+\usepackage{csquotes}
+\usepackage{caption}
+\usepackage{subcaption}
+% \usepackage{tikz}
+\usepackage{epigraph}
+\usepackage{bytefield}
+\usepackage{titlesec}
+
+\setcounter{secnumdepth}{4}
+
+\titleformat{\paragraph}
+{\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
+\titlespacing*{\paragraph}
+{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
+
+\addto\captionsspanish{%
+  \renewcommand\appendixname{Anexo}
+  \renewcommand\appendixpagename{Anexos}
+  \renewcommand\appendixautorefname{Anexo}
+}
+% \renewcommand{\arraystretch}{1.2} 
+\newcommand{\isc}{$I^2C$}
+\addto\extrasspanish{%
+  \def\subsectionautorefname{Apartado}%
+  \def\subsubsectionautorefname{Subapartado}%
+}
+\DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
+\DeclarePairedDelimiter{\floot}{\lfloor}{\rfloor}
+
+% Bibliografia
+\addbibresource{ISE.bib}
+
+\setcounter{biburllcpenalty}{7000}
+\setcounter{biburlucpenalty}{8000}
+
+\makeatletter
+\def\thebibliography#1{\section{\refname\@mkboth
+{\uppercase{\refname}}{\uppercase{\refname}}}\list
+{\@biblabel{\arabic{enumiv}}}{\settowidth\labelwidth{\@biblabel{#1}}%
+\leftmargin\labelwidth
+\advance\leftmargin\labelsep
+\usecounter{enumiv}%
+\let\***@enumiv\@empty
+\def\theenumiv{\arabic{enumiv}}}%
+\def\newblock{\hskip .11em plus.33em minus.07em}%
+\sloppy\clubpenalty4000\widowpenalty4000
+\sfcode`\.=1000\relax}
+\makeatother
+
+% Numeración de páginas
+\makeatletter
+\newcommand\frontmatter{%
+    \cleardoublepage
+  %\@mainmatterfalse
+  \pagenumbering{roman}}
+\newcommand\mainmatter{%
+    \cleardoublepage
+ % \@mainmattertrue
+  \pagenumbering{arabic}}
+\newcommand\backmatter{%
+  \if@openright
+    \cleardoublepage
+  \else
+    \clearpage
+  \fi
+ % \@mainmatterfalse
+   }
+\makeatother
+
+\renewcommand\lstlistingname{Fragmento}
+\renewcommand\lstlistlistingname{Índice de fragmentos}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+  language=c,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+

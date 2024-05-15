@@ -1,0 +1,18 @@
+\subsubsection{Módulo de acceso concurrente al I2C}\label{subsec:i2c}
+
+La placa \texttt{STM32F769NI-DISCO} ofrece únicamente un bus \texttt{I2C} en sus pines de extensión, por lo que nos vemos obligados a utilizarlo para tanto la radio como el NFC. Por tanto, hemos creado un módulo de protección para el acceso concurrente a este periférico. 
+
+Dicho módulo únicamente utiliza un candado de exclusión mutua (\texttt{Mutex}) para evitar que ambos módulos intenten acceder a dicho periférico. Hemos creado una interfaz homónima con CMSIS Driver para que no sea necesario modificar el código existente en demasiada medida.
+
+La principal dificultad del diseño de este módulo es la necesidad de cambiar el hilo al que se avisa en la \textit{callback} del periférico \texttt{I2C}, que se llama desde la interrupción cuando ha finalizado la transferencia. Para solucionarlo, hemos tenido que utilizar una variable estática que contiene el identificador del hilo que esta actualmente utilizando el periférico, obtenido mediante la función \texttt{osThreadGetId} que ofrece el sistema operativo.
+
+Por tanto, el proceso de las funciones de envío y recepción de información es:
+\begin{enumerate}
+    \item Cerrar el candado (\texttt{osMutexAcquire})
+    \item Colocar el ID del hilo actual en la variable estática
+    \item Llamar a la función homónima de CMSIS Driver
+    \item Esperar a la flag \texttt{FLAGS\_I2C\_DONE} que se envía cuando finaliza la transferencia
+    \item Liberar el candado (\texttt{osMutexRelease})
+\end{enumerate}
+
+Con este proceso conseguimos evitar una colisión en el acceso al periférico y las posibles condiciones de carrera que conllevaría. Al ser comunicación \texttt{I2C}, no hay problema de que se alternen la comunicación entre los dos módulos ya que los esclavos ignoran los paquetes que no son para ellos.

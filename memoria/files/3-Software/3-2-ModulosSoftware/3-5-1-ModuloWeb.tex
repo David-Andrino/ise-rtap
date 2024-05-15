@@ -1,0 +1,84 @@
+\subsubsection{Módulo Web}
+\label{subsec:modulo-web}
+Para la generación de las diferenctes páginas web del servidor y la creación de los diferentes scripts para interactuar con dichas páginas, hemos creados varios archivos con extension \texttt{CGI} como el que se adjunta a continuación:
+
+\begin{lstlisting}[captionpos=b, caption={Ejemplo archivo .CGI}, language=html]
+    t       <form action="index.cgi" method="post">
+    c i 1       <input type="radio" id="entrada_radio" name="entrada" value="radio" OnClick="submit();" %s>
+    t               <label for="entrada_radio" style="font-size: 20px;">Radio</label>
+    c i 2       <input type="radio" id="entrada_mp3" name="entrada" value="mp3" OnClick="submit();" %s>
+    t               <label for="entrada_mp3" style="font-size: 20px;">MP3</label>
+    t       </form>
+    t           <br><br>
+    t       <form action="index.cgi" method="post">
+    c i 3       <input type="radio" id="salida_altavoz" name="salida" value="altavoz" OnClick="submit();" %s>
+    t               <label for="salida_altavoz" style="font-size: 20px;">Altavoz</label>
+    c i 4       <input type="radio" id="salida_cascos" name="salida" value="cascos" OnClick="submit();" %s>
+    t               <label for="salida_cascos" style="font-size: 20px;">Cascos</label>
+    t       </form>
+    \end{lstlisting}
+
+Como se puede observar, existen dos tipos direfentes de líneas de código, las que empiezan por ``t'' y las que empiezan por ``c''. Las que empiezan por ``t'' son ignoradas por el compilador y no se procesan, en cambio, las que empiezan en  por ``c'' son atendidas y procesadas. A continuación, se comprueba la letra siguiente al espacio, en este caso la ``i'', debido a que nos encontramos en el archivo \textit{index.cgi}. Por último, se obtiene el siguiente carácter a continuación del espacio en blanco y, el propio programa del servidor web, tomará unas medidas u otras dependiendo de dicha letra o número. En todos los casos, se sustituirá el ``\%s'' que encontramos al final de dichas líneas de código por el conjunto de carácteres deseado mediante las función \textit{snprintf()}. A continuación se adjunta un trozo de código del programa principal del servidor web en el que se realiza dicha acción:
+
+\begin{lstlisting}[captionpos=b, caption={Ejemplo procesamiento archivo .CGI}]
+	switch(env[0]){
+		case 'i':
+			// Cases for index
+			switch (env[2]){
+				case '1':
+				// Case for Radio Input
+					len = sprintf (buf, &env[4], web_state.entrada == WEB_RADIO ? "checked" :"");
+				break;
+				case '2':
+				// Case for MP3 Input
+					len = sprintf (buf, &env[4], web_state.entrada == WEB_MP3 ? "checked" :"");
+				break;
+				case '3':
+				// Case for Altavoz Output
+					len = sprintf (buf, &env[4], web_state.salida == WEB_ALTAVOZ ? "checked" :"");
+				break;
+				case '4':
+				// Case for Auriculares Output
+					len = sprintf (buf, &env[4], web_state.salida == WEB_AURICULARES ? "checked" :"");
+				break;
+            }
+        break;
+    }
+\end{lstlisting}
+
+Por otra parte, para enviar los datos desde las páginas al programa principal del servidor, se ha optado por usar fótmularios con el método \textit{post}, los cuales se envían si se pulsa algún botón mediante la función \textit{OnClick="submit()"}.
+
+Por último, vamos a comentar la función utilizada para actualizar periódicamente tanto la fecha y la hora como el consumo medido. Esto se ha realizado mediante una función creada en JavaScript llamada \textit{periodicUpdate()}. A continuación se adjunta dicha función en la página denomianada \textit{index}:
+
+\begin{lstlisting}[captionpos=b, caption={Función updatePeriodic()}]
+<script language=JavaScript type="text/javascript" src="xml_http.js"></script>
+<script>
+    var timeUpdate = new periodicObj("time.cgx", 500);
+    function periodicUpdateRTC(){
+      updateMultiple(timeUpdate,  plotRTCTime);
+      rtc_elTime = setTimeout(periodicUpdateRTC, timeUpdate.period);
+    }
+    function plotRTCTime(){
+      timeVal = document.getElementById("rtcTime").value;
+      document.getElementById("rtc").textContent = timeVal;
+      consumo = document.getElementById("cons_ref").value;
+      jg1.refresh(consumo);
+    }
+</script>
+\end{lstlisting}
+
+Como se puede observar, dicha función consiste en una llamada, cada 500ms, al archivo \textit{time.cgx} de donde se obtienen periódicamente los valores de fecha y hora y de consumo. Cuando dichos valores son obtenido, se actualizan sus valores mostrados en las direfentes páginas web. A continuación se adjunta el código presente en el archivo \textit{time.cgx}, el cual tiene un comportamiento idéntico a los archivos con extension \texttt{.CGI} antes mencionados:
+
+\begin{lstlisting}[captionpos=b, caption={Archivo time.cgx}]
+t <form>
+t <text>
+t <id>rtcTime</id>
+c h <value>%02d-%02d-20%02d %02d:%02d:%02d</value>
+t </text>
+t <text>
+t <id>cons_ref</id>
+c z <value>%04d</value>
+t </text>
+t </form>
+.
+\end{lstlisting}

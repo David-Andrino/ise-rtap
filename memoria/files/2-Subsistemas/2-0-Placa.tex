@@ -1,0 +1,17 @@
+\subsection{La placa}
+Para este proyecto se ha utilizado la placa \texttt{STM32F769NI-DISCO}, que es una placa de desarrollo comercializada por STM. Dispone de un procesador ARM Cortex M7, que puede funcionar a una frecuencia de hasta 216 MHz. 
+
+Dispone de pines dispuestos de una forma adecuada para ser compatible con Arduino Uno.
+
+Entre los periféricos presentes en la placa, los más importantes que utilizamos son:
+\begin{itemize}
+    \item \textbf{La pantalla:} Dispone de una pantalla LCD táctil de 4.3 pulgadas, accesible a través del periférico DSI, con una resolución de 800 x 480 píxeles, con una profundidad del  color de 16 bits, lo que resulta en un total de $2^{16}$ colores posibles de representar. En concreto, se asignan 5 bits para las componentes roja y azul, siendo los 6 restantes para la verde, que es la más importante.
+    \item \textbf{La DMA2:} La pantalla restringe el uso de las DMA, siendo la 2 la única opción posible, puesto que es la única que tiene la opción de \textit{Memory-To-Memory}. Cualquier canal y flujo (\textit{Channel} y \textit{Stream}) son de libre elección.
+    \item \textbf{Los ADCs:} La placa dispone tres ADCs, que funcionan a una frecuencia de 48 kHz, de los cuales nuestro proyecto utiliza dos: el ADC1 se utiliza para medir el consumo, y el ADC3 se utiliza como pin de entrada para el audio. 
+    \item \textbf{El DAC:} La placa dispone de un DAC de 2 canales. En la documentación de la placa no se anuncia esta capacidad, únicamente se puede encontrar el la documentación del microcontrolador. El DAC también funciona a 48kHz, y se sincroniza con el ADC, como se explica en \autoref{para:temporizacion}.
+    \item \textbf{El I2C:} Utilizamos un I2C para la comunicación con el módulo del NFC.
+    \item \textbf{La SD:} Dispone de un puerto para introducir una tarjeta SD, a través del periférico SDMMC.
+\end{itemize} 
+
+\subsubsection{Algunas consideraciones}
+En algunos proyectos, hemos intentado utilizar la sentencia \texttt{printf}, pero a priori parecía una tarea imposible. Revisando la documentación, constatamos que el pin \texttt{SW0} está desconectado en la configuración por defecto. Para que funcione dicha función, hay que soldar \texttt{R92}, que conecta \texttt{SW0} con el pin adecuado. Esta resistencia funciona como un jumper, ya que el valor anunciado por el fabricante es de 0 $\Omega$. Tras sujetar un cable de forma manual, conseguimos visualizar la salida de la \texttt{UART} desde el panel del debugger.

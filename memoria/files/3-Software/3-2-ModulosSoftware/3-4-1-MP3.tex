@@ -1,0 +1,10 @@
+\subsubsection{Módulo MP3}
+El módulo del reproductor MP3 consiste en un \textit{Thread} que se encarga de controlar la gestión del propio módulo.
+
+Cuenta con una cola de mensajes en la que el programa principal introduce mensajes con el comando a ejecutar. Algunos de estos comandos son reproducir una cancion, pausar su reproducción, siguiente cancion, etc.
+
+Para gestionar la comunicación entre este módulo y el principal, se ha utilizado la USART6 mediante el \textit{Driver\_USART6} proporcionado por CMSIS. Dicha USART se ha configurado atendiendo a las necesidades del reporductor, modo asíncrono, datos de 8 bits sin paridad, utlizando 1 bit de stop y con una velocidad de 9600 bps.
+
+Este módulo no envía mensajes al programa principal debido a que el reproductor no ofrece la posibilidad de leer sus registros mediante la UART.
+
+El comportamiento básico de este módulo consiste en una espera mediante un \textit{osMessageQueueGet} de un mensaje proporcionado por el programa principal. Una vez el mensaje es recibido, es procesado y en función de su contenido, se ejecutará el comando correspondiente. Una vez la canción es seleccionada, se realiza otra espera mediante un \textit{osThreadFlagsWait} hasta que la transferencia es completada, en cuyo caso el módulo continua con su funcionamiento.

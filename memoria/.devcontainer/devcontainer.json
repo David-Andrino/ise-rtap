@@ -1,0 +1,9 @@
+{
+    "name": "latex-env",
+    "extensions": [
+        "james-yu.latex-workshop"
+    ],
+    "dockerFile": "Dockerfile",
+    "mounts": [
+    ]
+} 
