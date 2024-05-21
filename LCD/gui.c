@@ -168,7 +168,7 @@ void async_cb(void * new_data){
 //			case LCD_OUT_SONG:
 //				
 //			break;
-			case LCD_OUT_INPUT_SEL: // No hace nada
+			case LCD_OUT_INPUT_SEL:
 				cambiar_estilo_entrada(msg->payload);
 			break;
 			case LCD_OUT_OUTPUT_SEL:

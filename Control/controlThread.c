@@ -251,10 +251,6 @@ static void ctrl_NFC(nfc_msg_t* msg) {
     }
 }
 
-// ========================================================
-// TODOs de controlador de web
-// TODO: Guardar datos en SD. Bucle infinito para acordarme
-// ========================================================
 static void ctrl_WEB(web_msg_t* msg) {
     switch (msg->type) {
         case WEB_INPUT_SEL:
@@ -433,7 +429,7 @@ static void ctrl_saveConfig() {
         .bands[3] = dspMsg.bandGains[3],
         .bands[4] = dspMsg.bandGains[4],
     };
-    volatile int tmp = SD_write_config(&config); // No funciona :(
+    volatile int tmp = SD_write_config(&config); 
 }
 
 static void ctrl_cons_init(void) {

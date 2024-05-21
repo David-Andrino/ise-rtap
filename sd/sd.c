@@ -85,14 +85,14 @@ int read_file (char *file, char *buf) {
   fclose (f);                           /* close the input file when done     */
   printf ("\nFile closed.\n");
 	
-	return i;
+	return i; // Numero de caracteres que ha leÃ­do
 }
 
 /**
   *	@brief  Escribe un fichero
 	* @param  Fichero que se quiere escribir
   * @param  Buffer con la informacion
-	* @param  Tamaño del buffer
+	* @param  Tamaï¿½o del buffer
 	* @retval 0 si ok, -1 si error
 	*/
 int write_file (char *file, char *buf, int size){
@@ -100,10 +100,10 @@ int write_file (char *file, char *buf, int size){
 }
 
 /**
-  *	@brief  Añade a un fichero
+  *	@brief  Aï¿½ade a un fichero
 	* @param  Fichero que se quiere escribir
   * @param  Buffer con la informacion
-	* @param  Tamaño del buffer
+	* @param  Tamaï¿½o del buffer
 	* @retval 0 si ok, -1 si error
 	*/
 int append_file(char *file, char *buf, int size){

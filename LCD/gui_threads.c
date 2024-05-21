@@ -58,7 +58,7 @@ void EnterStandbyMode(void){
 	BSP_LCD_MspDeInit();
 	
 	if (__HAL_PWR_GET_FLAG(PWR_FLAG_SB) != RESET){
-	  __HAL_PWR_CLEAR_FLAG(PWR_FLAG_SB);          // clear the flag
+		__HAL_PWR_CLEAR_FLAG(PWR_FLAG_SB);          // clear the flag
 		__HAL_PWR_CLEAR_WAKEUP_FLAG(PWR_CR2_CWUPF1);
     }
     __HAL_PWR_CLEAR_FLAG(PWR_FLAG_WU);
@@ -105,7 +105,7 @@ int Init_Threads_LCD (char songs[][30], int song_cnt, int8_t *bands) {
 	
 	mut = osMutexNew(&att_mut);
 	
-		lv_init();
+	lv_init();
 	
 	tft_init();
 	touchpad_init();

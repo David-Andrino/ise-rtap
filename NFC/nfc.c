@@ -109,12 +109,12 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin){
 void Leer_NFC(void){
   HAL_GPIO_WritePin(DIS_GPIO_PORT, DIS_GPIO_PIN, DIS_GPIO_ON); //Deshabilitar RF - Habilitar I2C
 	
-	OpenSession();	
-	SelectNFC();	
-  SelectNDEF();
-  ReadNDEFLength();
-  ReadNDEF();
-  Deselect();
+	OpenSession();	 // Empezar trasferencia I2C
+	SelectNFC();	 // Protocolo NFC
+  SelectNDEF();      // Memoria del periferico (donde están los datos)
+  ReadNDEFLength();  // Con nuestros mensajes: 13 bytes siempre. Cosas del NFC (8 bytes) + Letra (R de radio o S de song), espacio e índice
+  ReadNDEF();        // Aqui lees los 13 bytes de antes
+  Deselect();        // Acabar trasferencia I2C
 
 	HAL_GPIO_WritePin(DIS_GPIO_PORT, DIS_GPIO_PIN, DIS_GPIO_OFF); //Habilitar RF - Deshabilitar I2C
 }
@@ -128,7 +128,7 @@ void SelectNFC(void){
 	uint8_t selectNFCResponse[5];
 													 
 	i2c_MasterTransmit(0x56, selectNFC, 16, false);	
-	osDelay(5);
+	osDelay(5);   // Tiempo para que el periferico procese los datos
 	i2c_MasterReceive(0x56,selectNFCResponse,5,false);
 
 }
@@ -137,7 +137,7 @@ void SelectNDEF(void){
 	uint8_t selectNDEFResponse[5];
 	
 	i2c_MasterTransmit(0x56, selectNDEF, 10, false);		
-	osDelay(5);	
+	osDelay(5);   // Tiempo para que el periferico procese los datos
 	i2c_MasterReceive(0x56,selectNDEFResponse,5,false);						
 	
 }
@@ -146,7 +146,7 @@ void ReadNDEFLength(void){
 	uint8_t readNDEFLengthResponse[7];
 	
 	i2c_MasterTransmit(0x56, readNDEFLength, 8, false);			
-	osDelay(5);	
+	osDelay(5);   // Tiempo para que el periferico procese los datos
 	i2c_MasterReceive(0x56,readNDEFLengthResponse,7,false);	
 
 }
@@ -155,7 +155,7 @@ void ReadNDEF(void){
 	uint8_t* bufferLectura = (uint8_t*) readNDEFResponse;
 	
 	i2c_MasterTransmit(0x56, readNDEF, 8, false);	
-	osDelay(5);
+	osDelay(5);   // Tiempo para que el periferico procese los datos
 	i2c_MasterReceive(0x56,bufferLectura,18,false);		
 
 }
@@ -164,7 +164,7 @@ void Deselect(void){
 	uint8_t deselectResponse[3];
 	
 	i2c_MasterTransmit(0x56, deselect, 3, false);	
-	osDelay(5);	
+	osDelay(5);   // Tiempo para que el periferico procese los datos
 	i2c_MasterReceive(0x56,deselectResponse,3,false);
 
 }
