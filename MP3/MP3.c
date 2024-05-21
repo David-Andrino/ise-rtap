@@ -98,10 +98,10 @@ void ThreadMP3(void* argument) {
                 USARTcmd[3] = 0x1A;
                 USARTcmd[6] = 0x01;
                 break;
-            default:
-                USARTcmd[3] = 0x0F;
-                USARTcmd[5] = 0x01;
-                USARTcmd[6] = (uint8_t)(msg & 0x00FF);
+            default: // Si en vez de llegar un msg llega un num: Play with folder and file name
+                USARTcmd[3] = 0x0F; // cmd
+                USARTcmd[5] = 0x01; // Carpeta (en nuestro caso es unica)
+                USARTcmd[6] = (uint8_t)(msg & 0x00FF); // El num de la cancion
                 break;
         }
         USARTdrv->Send(USARTcmd, USART_LEN);

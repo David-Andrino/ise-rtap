@@ -46,7 +46,11 @@
 #define AUDIO_DMA_CHANNEL     DMA_CHANNEL_7
 #define AUDIO_DMA_HANDLE      DMA_Handle1
 
-#define DSP_TIM_INSTANCE   TIM2
+/*  El timer va al APB1 (que va a 1/4 de la freq del procesador)
+ *  El procesador va a 216 MHz.
+ *  La freq del tim2 es: 216M / ((9 + 1) * (224 + 1)) = 24kHz
+ */
+#define DSP_TIM_INSTANCE   TIM2 
 #define __DSP_TIM_ENABLE() __HAL_RCC_TIM2_CLK_ENABLE()
 #define DSP_TIM_PRESCALER  9
 #define DSP_TIM_PERIOD     224

@@ -144,8 +144,8 @@ void tft_init(void)
 
 	DMA_Config();
 
-	static uint8_t buf1[TFT_HOR_RES * 48 * 2];
-	static uint8_t buf2[TFT_HOR_RES * 48 * 2];
+	static uint8_t buf1[TFT_HOR_RES * 48 * 2];   // 20% of the screen   
+	static uint8_t buf2[TFT_HOR_RES * 48 * 2];   // 20% of the screen 
 	disp = lv_display_create(800, 480);
 	lv_display_set_buffers(disp, buf1, buf2, TFT_HOR_RES * 48 * 2, LV_DISP_RENDER_MODE_PARTIAL);
 	lv_display_set_flush_cb(disp, tft_flush_cb);

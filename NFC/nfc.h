@@ -11,10 +11,13 @@
  * @author Estela Mora
  * @author Fernando Sanz
  *
- * Utilizando el periférico I2C1, lee el contenido NDEF de la Dynamic Tag M24SR 
- * y se lo envía al hilo principal. Lee si es una canción o una emisora 
- * de radio y cuál es.
- *
+ * Utilizando el perifï¿½rico I2C1, lee el contenido NDEF de la Dynamic Tag M24SR 
+ * y se lo envï¿½a al hilo principal. Lee si es una canciï¿½n o una emisora 
+ * de radio y cuï¿½l es.
+ * La direccion I2C del NFC es 0x56
+ * 
+ * GPO: A nivel alto cuando no hay comunicaciÃ³n en marcha
+ * DisableRF: Cuando esta a nivel alto deshabilita la comunicaciÃ³n RF.
  */
 
 #include <stdint.h>
