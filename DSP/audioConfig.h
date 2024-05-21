@@ -48,7 +48,7 @@
 
 /*  El timer va al APB1 (que va a 1/4 de la freq del procesador)
  *  El procesador va a 216 MHz.
- *  La freq del tim2 es: 216M / ((9 + 1) * (224 + 1)) = 24kHz
+ *  La freq del tim2 es: 216M / (4 * (4 + 1) * (224 + 1)) = 48kHz
  */
 #define DSP_TIM_INSTANCE   TIM2 
 #define __DSP_TIM_ENABLE() __HAL_RCC_TIM2_CLK_ENABLE()
